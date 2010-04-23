@@ -5,26 +5,24 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.Vector;
 
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueWriter;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.fmap.DriverException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.jeta.forms.components.panel.FormPanel;
 
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
 public class TramosCarreterasForm extends AbstractNavTable {
-	
+
 	private  FormPanel formBody;
-	
+
 	public final String ID_FASE = "fase";
 	private JTextField fase;
 	private int fase_idx = -1;
@@ -106,57 +104,59 @@ public class TramosCarreterasForm extends AbstractNavTable {
 
 
 
+	@Override
 	protected Vector checkChangedValues() {
 		// TODO Auto-generated method stub
 		return new Vector();
 	}
 
 
+	@Override
 	public void fillValues() {
 		// TODO Auto-generated method stub
 		try {
-			
+
 			if (currentPosition >= recordset.getRowCount()) {
 				currentPosition = recordset.getRowCount()-1;
 			}
 			if (currentPosition < 0) {
 				currentPosition = 0;
 			}
-			
+
 			Value value = recordset.getFieldValue(currentPosition, fase_idx);
 			String textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
 			fase.setText(textValue);
-			
+
 			value = recordset.getFieldValue(currentPosition, prov_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
 			prov.setText(textValue);
-			
+
 			value = recordset.getFieldValue(currentPosition, mun_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
 			mun.setText(textValue);
-			
+
 			value = recordset.getFieldValue(currentPosition, cod_carrt_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
-			
-			
+
+
 			value = recordset.getFieldValue(currentPosition, pk_inicial_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
 			pk_inicial.setText(textValue);
-			
+
 			value = recordset.getFieldValue(currentPosition, pk_final_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
 			pk_final.setText(textValue);
-			
+
 			value = recordset.getFieldValue(currentPosition, titular_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
-			
+
 			if (textValue.equalsIgnoreCase("CA")) {
 				titular.setSelectedIndex(0);
 			}
@@ -172,11 +172,11 @@ public class TramosCarreterasForm extends AbstractNavTable {
 			if (textValue.equalsIgnoreCase("PR")) {
 				titular.setSelectedIndex(4);
 			}
-			
+
 			value = recordset.getFieldValue(currentPosition, gestion_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
-			
+
 			if (textValue.equalsIgnoreCase("CA")) {
 				gestion.setSelectedIndex(0);
 			}
@@ -195,12 +195,12 @@ public class TramosCarreterasForm extends AbstractNavTable {
 			if (textValue.equalsIgnoreCase("NO")) {
 				gestion.setSelectedIndex(5);
 			}
-			
-			
+
+
 			value = recordset.getFieldValue(currentPosition, senaliza_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
-			
+
 			if (textValue.equalsIgnoreCase("A")) {
 				senaliza.setSelectedIndex(0);
 			}
@@ -214,11 +214,11 @@ public class TramosCarreterasForm extends AbstractNavTable {
 				senaliza.setSelectedIndex(3);
 			}
 
-			
+
 			value = recordset.getFieldValue(currentPosition, firme_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
-			
+
 			if (textValue.equalsIgnoreCase("AD")) {
 				firme.setSelectedIndex(0);
 			}
@@ -247,7 +247,7 @@ public class TramosCarreterasForm extends AbstractNavTable {
 			value = recordset.getFieldValue(currentPosition, estado_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
-			
+
 			if (textValue.equalsIgnoreCase("B")) {
 				estado.setSelectedIndex(0);
 			}
@@ -265,7 +265,7 @@ public class TramosCarreterasForm extends AbstractNavTable {
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
 			ancho.setText(textValue);
-			
+
 			value = recordset.getFieldValue(currentPosition, longitud_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
@@ -275,7 +275,7 @@ public class TramosCarreterasForm extends AbstractNavTable {
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
 			pasos_nive.setText(textValue);
-			
+
 			value = recordset.getFieldValue(currentPosition, dimensiona_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
@@ -311,7 +311,7 @@ public class TramosCarreterasForm extends AbstractNavTable {
 			if (textValue.equalsIgnoreCase("SI")) {
 				pte_excesi.setSelectedIndex(1);
 			}
-			
+
 			value = recordset.getFieldValue(currentPosition, fre_estrec_idx);
 			textValue = value.getStringValue(ValueWriter.internalValueWriter);
 			textValue = textValue.replaceAll("'", "");
@@ -322,14 +322,15 @@ public class TramosCarreterasForm extends AbstractNavTable {
 			if (textValue.equalsIgnoreCase("SI")) {
 				fre_estrec.setSelectedIndex(1);
 			}
-			
+
 		} catch (com.hardcode.gdbms.engine.data.driver.DriverException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	
+
+	@Override
 	public WindowInfo getWindowInfo() {
 		if (viewInfo == null) {
 			viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.PALETTE);
@@ -339,25 +340,27 @@ public class TramosCarreterasForm extends AbstractNavTable {
 		}
 		return viewInfo;
 	}
-	
-	
-	
 
+
+
+
+	@Override
 	public JPanel getCenterPanel() {
-		
+
 		JPanel panel = new JPanel();
 		//panel.setPreferredSize(new Dimension(400, 400));
-		formBody = new FormPanel("tramo_carretera.jfrm");
+		formBody = new FormPanel("forms/tramo_carretera.jfrm");
 		initWidgets();
-        JScrollPane scrollPane = new JScrollPane(formBody);
-        scrollPane.setPreferredSize(new Dimension(465, 420));
-        panel.add(scrollPane, "0, 0");
-        
-        return panel;
-		
+		JScrollPane scrollPane = new JScrollPane(formBody);
+		scrollPane.setPreferredSize(new Dimension(465, 420));
+		panel.add(scrollPane, "0, 0");
+
+		return panel;
+
 	}
 
 
+	@Override
 	public boolean init() {
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -389,31 +392,33 @@ public class TramosCarreterasForm extends AbstractNavTable {
 		c.anchor = GridBagConstraints.SOUTH;
 		JPanel southPanel = super.getSouthPanel();
 		super.add(southPanel, c);
-		
+
 		super.repaint();
 		super.setVisible(true);
 		super.setFocusCycleRoot(true);
-		
+
 		fillValues();
 		return true;
 
 	}
 
-	
+
+	@Override
 	protected void saveRegister() {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void selectRow(int row) {
 		// TODO Auto-generated method stub
 
 	}
 
 	public void initWidgets() {
-		 
+
 		if (formBody == null){
-			formBody = new FormPanel("tramo_carretera.jfrm");
+			formBody = new FormPanel("forms/tramo_carretera.jfrm");
 		}
 		fase = ((JTextField)formBody.getComponentByName( ID_FASE));
 		prov = ((JTextField)formBody.getComponentByName( ID_PROV));
@@ -455,71 +460,71 @@ public class TramosCarreterasForm extends AbstractNavTable {
 		//fre_estrec.removeAllItems();
 
 	}
-	
-	   protected void getIndexes() {
-			String[] fieldNames;
-			try {
-			    fieldNames = recordset.getFieldNames();
-			    for (int i = 0; i < fieldNames.length; i++){
-					if (fieldNames[i].toLowerCase().compareTo("fase") == 0) {
-					    fase_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("prov") == 0) {
-					    prov_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("mun") == 0) {
-					    mun_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("cod_carrt") == 0) {
-					    cod_carrt_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("pk_inicial") == 0) {
-					    pk_inicial_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("pk_final") == 0) {
-					    pk_final_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("titular") == 0) {
-					    titular_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("gestion") == 0) {
-					    gestion_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("senaliza") == 0) {
-					    senaliza_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("firme") == 0) {
-					    firme_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("estado") == 0) {
-					    estado_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("ancho") == 0) {
-					    ancho_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("longitud") == 0) {
-					    longitud_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("pasos_nive") == 0) {
-					    pasos_nive_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("dimensiona") == 0) {
-					    dimensiona_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("muy_sinuos") == 0) {
-					    muy_sinuos_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("pte_excesi") == 0) {
-					    pte_excesi_idx = i;
-					}
-					if (fieldNames[i].toLowerCase().compareTo("fre_estrec") == 0) {
-					    fre_estrec_idx = i;
-					}
-			    }
-			} catch (com.hardcode.gdbms.engine.data.driver.DriverException e) {
-			    // TODO Auto-generated catch block
-			    e.printStackTrace();
+
+	protected void getIndexes() {
+		String[] fieldNames;
+		try {
+			fieldNames = recordset.getFieldNames();
+			for (int i = 0; i < fieldNames.length; i++){
+				if (fieldNames[i].toLowerCase().compareTo("fase") == 0) {
+					fase_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("prov") == 0) {
+					prov_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("mun") == 0) {
+					mun_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("cod_carrt") == 0) {
+					cod_carrt_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("pk_inicial") == 0) {
+					pk_inicial_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("pk_final") == 0) {
+					pk_final_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("titular") == 0) {
+					titular_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("gestion") == 0) {
+					gestion_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("senaliza") == 0) {
+					senaliza_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("firme") == 0) {
+					firme_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("estado") == 0) {
+					estado_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("ancho") == 0) {
+					ancho_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("longitud") == 0) {
+					longitud_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("pasos_nive") == 0) {
+					pasos_nive_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("dimensiona") == 0) {
+					dimensiona_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("muy_sinuos") == 0) {
+					muy_sinuos_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("pte_excesi") == 0) {
+					pte_excesi_idx = i;
+				}
+				if (fieldNames[i].toLowerCase().compareTo("fre_estrec") == 0) {
+					fre_estrec_idx = i;
+				}
 			}
-	   }
-			    
+		} catch (com.hardcode.gdbms.engine.data.driver.DriverException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

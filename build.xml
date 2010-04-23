@@ -40,10 +40,16 @@
   	</copy>
 
   	<copy file="config/config.xml" todir="${dist}"/>
+  	
     <copy todir="${dist}">
     	<fileset dir="config" includes="text*.properties"/>
     </copy>
-	  	
+	
+  	<mkdir dir="${dist}/forms"/>
+  	<copy todir="${dist}/forms">
+      	<fileset dir="forms"/> 
+    </copy>
+  	  	
     <move todir="${extensionsDir}/${plugin}/">
     	<fileset dir="${dist}" includes="**/**"/>
     </move>
@@ -66,9 +72,12 @@
 		<copy todir="${dist}">
 			<fileset dir="config" includes="text*.properties"/>
 		</copy>
-		<copy todir="${dist}">
-			<fileset dir="forms" includes="*" />
-		</copy>		
+		
+	  	<mkdir dir="${dist}/forms"/>
+	  	<copy todir="${dist}/forms">
+	      	<fileset dir="forms"/> 
+	    </copy>
+
 	</target>
 
 	<target name="move-to-andami">
@@ -76,7 +85,6 @@
 	    	<fileset dir="${dist}" includes="**/**"/>
 	    </move>
 	</target>
-
 
 	<target name="clean"
 	        description="clean up" >

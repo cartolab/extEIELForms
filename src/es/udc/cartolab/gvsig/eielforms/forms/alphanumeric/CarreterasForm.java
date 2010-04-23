@@ -16,62 +16,62 @@ import javax.swing.JTextField;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.SelectionEvent;
-import com.iver.utiles.swing.JComboBox;
 import com.jeta.forms.components.panel.FormPanel;
 
 import es.udc.cartolab.gvsig.eielforms.AbstractNoNavTable;
-import es.udc.cartolab.gvsig.elle.gui.ConstantSelectionWindow;
-import es.udc.cartolab.gvsig.elle.utils.Constants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class CarreterasForm extends AbstractNoNavTable {
 	private  FormPanel formBody;
-	
-	public final String ID_FASE = "fase";                                                                                                                                            
-	private JTextField fase;                                                                                                            
-	private int fase_idx = -1;                                                                                                                                                      
-	                                                                                                                                                                                
-	public final String ID_PROV = "prov";                                                                                                                                            
-	private JTextField prov;                                                                                                                                                        
-	private int prov_idx = -1;                                                                                                                                                      
-	                                                                                                                                                                                
-	public final String ID_DENOMINACI = "denominaci";                                                                                                                                              
-	private JTextField denominaci;                                                                                                                                                         
-	private int denominaci_idx = -1;                                                                                                                                                       
-	                                                                                                                                                                                
-	public final String ID_COD_CARRT = "cod_carrt";                                                                                                                              
-	private javax.swing.JComboBox cod_carrtCB;                                                                                                                                                  
+
+	public final String ID_FASE = "fase";
+	private JTextField fase;
+	private int fase_idx = -1;
+
+	public final String ID_PROV = "prov";
+	private JTextField prov;
+	private int prov_idx = -1;
+
+	public final String ID_DENOMINACI = "denominaci";
+	private JTextField denominaci;
+	private int denominaci_idx = -1;
+
+	public final String ID_COD_CARRT = "cod_carrt";
+	private javax.swing.JComboBox cod_carrtCB;
 	private int cod_carrt_idx = -1;
-	
+
 	private JButton addButton;
 	private JButton deleteButton;
 	private JButton editButton;
 	private String currentCod = null;
 	private boolean addNewItem = false; //true if we want to add a new item, false to modify an existed one
-	
+
 	public CarreterasForm(String formName) {
 		super(formName);
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public WindowInfo getWindowInfo() {
 		if (viewInfo == null) {
 			viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.PALETTE);
 			viewInfo.setTitle(formName);
 			viewInfo.setWidth(450);
-			viewInfo.setHeight(300);	
+			viewInfo.setHeight(300);
 		}
-			return viewInfo;
-		}
-
-	public JPanel getCenterPanel() {
-		JPanel panel = new JPanel();
-		formBody = new FormPanel("carretera.jfrm");                                                                                                                      
-        JScrollPane scrollPane = new JScrollPane(formBody);                                                                                                              
-        panel.add(scrollPane, "0, 0");                                                                                                                                   
-        return panel;
+		return viewInfo;
 	}
 
+	@Override
+	public JPanel getCenterPanel() {
+		JPanel panel = new JPanel();
+		formBody = new FormPanel("forms/carretera.jfrm");
+		JScrollPane scrollPane = new JScrollPane(formBody);
+		panel.add(scrollPane, "0, 0");
+		return panel;
+	}
+
+	@Override
 	public boolean init() {
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -110,45 +110,45 @@ public class CarreterasForm extends AbstractNoNavTable {
 		southPanel.add(deleteButton);
 		southPanel.add(editButton);
 		super.add(southPanel, c);
-		
+
 		super.repaint();
 		super.setVisible(true);
 		super.setFocusCycleRoot(true);
-		
+
 		fillValues();
 
 		return true;
 	}
-	
+
 	public void fillValues() {
 		fase = formBody.getTextField("fase");
 		fase.setText("2009");
 		fase.setEditable(false);
-			
+
 		prov = formBody.getTextField("prov");
 		prov.setText("Pontevedra");
 		prov.setEditable(false);
-				
+
 		try {
 			cod_carrtCB = formBody.getComboBox("cod_carrt");
 			DBSession dbs = DBSession.getCurrentSession();
 			if (dbs != null) {
-				
+
 				Connection con = dbs.getJavaConnection();
 				Statement stat = con.createStatement();
 				String schema = dbs.getSchema();
 				String query = "SELECT " + "cod_carrt" + " FROM " + schema + "." + "carretera";
 				query = query + " ORDER BY " + "cod_carrt" + ";";
-				
+
 				cod_carrtCB.removeAllItems();
-				
+
 				ResultSet rs = stat.executeQuery(query);
-				
-		        while (rs.next()) {
-		        	String text = rs.getString("cod_carrt");
-		        	cod_carrtCB.addItem(text);
-		        }
-		        rs.close();
+
+				while (rs.next()) {
+					String text = rs.getString("cod_carrt");
+					cod_carrtCB.addItem(text);
+				}
+				rs.close();
 			}
 			cod_carrtCB.addActionListener(this);
 			//cod_carrtCB.setEditable(true);
@@ -158,7 +158,7 @@ public class CarreterasForm extends AbstractNoNavTable {
 		}
 		refreshForm(cod_carrtCB.getSelectedItem().toString());
 	}
-	
+
 	public void refreshForm(String codigo) {
 		denominaci = formBody.getTextField("denominaci");
 		denominaci.setEditable(false);
@@ -171,26 +171,28 @@ public class CarreterasForm extends AbstractNoNavTable {
 				String query = "SELECT " + "denominaci" + " FROM " + schema + "." + "carretera";
 				query = query + " WHERE cod_carrt = " + "'" + codigo + "'" + " ORDER BY " + "cod_carrt" + ";";
 				System.out.println(query);
-				
+
 				ResultSet rs = stat.executeQuery(query);
 				rs.next();
 				String text = rs.getString("denominaci");
 				denominaci.setText(text);
 				rs.close();
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
 	}
-	
+
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		super.actionPerformed(event);
 
 		if (event.getSource() == cod_carrtCB) {
-			if (cod_carrtCB.getSelectedItem() != null && addNewItem == false)
+			if ((cod_carrtCB.getSelectedItem() != null) && (addNewItem == false)) {
 				refreshForm(cod_carrtCB.getSelectedItem().toString());
+			}
 		}
 		if (event.getSource() == addButton) {
 			addNewItem = true;
@@ -201,8 +203,8 @@ public class CarreterasForm extends AbstractNoNavTable {
 			editButton.setEnabled(false);
 			addButton.setEnabled(false);
 			deleteButton.setEnabled(false);
-			
-//			this.getSouthPanel().repaint();
+
+			//			this.getSouthPanel().repaint();
 		}
 		if (event.getSource() == deleteButton) {
 			delete();
@@ -217,28 +219,29 @@ public class CarreterasForm extends AbstractNoNavTable {
 			deleteButton.setEnabled(false);
 		}
 	}
-	
+
 	public void selectionChanged(SelectionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void windowActivated() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	@Override
 	public void save() {
 		try {
 			String cod = cod_carrtCB.getSelectedItem().toString();
 			String denominacion = denominaci.getText();
-			
+
 			DBSession dbs = DBSession.getCurrentSession();
 			if (dbs != null) {
 				Connection con = dbs.getJavaConnection();
 				Statement stat;
 				stat = con.createStatement();
-		
+
 				String query = null;
 				String schema = dbs.getSchema();
 				if (addNewItem == true) {
@@ -264,22 +267,22 @@ public class CarreterasForm extends AbstractNoNavTable {
 		addButton.setEnabled(true);
 		deleteButton.setEnabled(true);
 	}
-	
+
 	public void delete() {
 		try {
 			String cod = cod_carrtCB.getSelectedItem().toString();
-			
+
 			DBSession dbs = DBSession.getCurrentSession();
 			if (dbs != null) {
 				Connection con = dbs.getJavaConnection();
 				Statement stat;
 				stat = con.createStatement();
-				
+
 				String schema = dbs.getSchema();
 				String query = "DELETE FROM " + schema + "." + "carretera";
 				query = query + " WHERE cod_carrt = " + "'" + cod + "'" + ";";
 				System.out.println(query);
-				
+
 				stat.executeUpdate(query);
 				con.commit();
 			}
@@ -289,7 +292,8 @@ public class CarreterasForm extends AbstractNoNavTable {
 		}
 		fillValues();
 	}
-	
+
+	@Override
 	public void cancel() {
 		editButton.setEnabled(true);
 		addButton.setEnabled(true);
