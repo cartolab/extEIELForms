@@ -18,6 +18,7 @@ import com.iver.cit.gvsig.fmap.DriverException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.jeta.forms.components.panel.FormPanel;
+import com.jeta.forms.gui.common.FormException;
 
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
@@ -413,7 +414,12 @@ public class TramosCarreterasForm extends AbstractNavTable {
 	public void initWidgets() {
 		 
 		if (formBody == null){
-			formBody = new FormPanel("tramo_carretera.jfrm");
+			try {
+				formBody = new FormPanel(getClass().getResourceAsStream("/tramo_carretera.jfrm"));
+			} catch (FormException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		fase = ((JTextField)formBody.getComponentByName( ID_FASE));
 		prov = ((JTextField)formBody.getComponentByName( ID_PROV));

@@ -8,17 +8,47 @@
 	<resourceBundle name="text"/>
 	<extensions>
 		<extension class-name="es.udc.cartolab.gvsig.eielforms.AlumbradoFormExtension" description="NoNavTable" active="true">
-			<menu text="Datos EIEL/Alumbrado"
+			<menu text="Datos EIEL/Abastecimiento/Alumbrado"
+				action-command="NoNavTable"
+				icon="" position="1501"/> 
+		</extension>
+		<extension class-name="es.udc.cartolab.gvsig.eielforms.AlumbradoFormExtension" description="NoNavTable" active="true">
+			<menu text="Datos EIEL/Núcleos/Alumbrado"
+				action-command="NoNavTable"
+				icon="" position="1501"/> 
+		</extension>
+		<extension class-name="es.udc.cartolab.gvsig.eielforms.AlumbradoFormExtension" description="NoNavTable" active="true">
+			<menu text="Datos EIEL/Energía y Alumbrado/Alumbrado"
+				action-command="NoNavTable"
+				icon="" position="1501"/> 
+		</extension>
+		<extension class-name="es.udc.cartolab.gvsig.eielforms.AlumbradoFormExtension" description="NoNavTable" active="true">
+			<menu text="Datos EIEL/Comunicación/Alumbrado"
+				action-command="NoNavTable"
+				icon="" position="1501"/> 
+		</extension>
+		<extension class-name="es.udc.cartolab.gvsig.eielforms.AlumbradoFormExtension" description="NoNavTable" active="true">
+			<menu text="Datos EIEL/Equipamientos/Alumbrado"
+				action-command="NoNavTable"
+				icon="" position="1501"/> 
+		</extension>
+		<extension class-name="es.udc.cartolab.gvsig.eielforms.AlumbradoFormExtension" description="NoNavTable" active="true">
+			<menu text="Datos EIEL/Recogida de Residuos/Alumbrado"
+				action-command="NoNavTable"
+				icon="" position="1501"/> 
+		</extension>
+		<extension class-name="es.udc.cartolab.gvsig.eielforms.AlumbradoFormExtension" description="NoNavTable" active="true">
+			<menu text="Datos EIEL/Saneamiento/Alumbrado"
 				action-command="NoNavTable"
 				icon="" position="1501"/> 
 		</extension>
 		<extension class-name="es.udc.cartolab.gvsig.eielforms.CarreterasFormExtension" description="NoNavTable" active="true">
-			<menu text="Datos EIEL/Carreteras"
+			<menu text="Datos EIEL/Viario/Carreteras"
 				action-command="NoNavTable"
 				icon="" position="1502"/> 
 		</extension> 
 		<extension class-name="es.udc.cartolab.gvsig.eielforms.TramosCarreterasFormExtension" description="TramosNavTable" active="true">
-			<menu text="Datos EIEL/Tramos Carret."
+			<menu text="Datos EIEL/Viario/Tramos Carreteras"
 				action-command="TramosCarreterasNavTable"
 				icon="" position="1503"/> 
 		</extension> 

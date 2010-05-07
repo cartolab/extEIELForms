@@ -35,6 +35,7 @@
 
   	<jar jarfile="${dist}/lib/${plugin}.jar" basedir="${build}" includes="es/udc/cartolab/**"
     />
+  	<jar update="true" jarfile="${dist}/lib/${plugin}.jar" basedir="forms" includes="*"/>
   	<copy todir="${dist}/images">
   	    	<fileset dir="images" includes="*"/>
   	</copy>

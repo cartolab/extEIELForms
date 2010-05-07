@@ -18,6 +18,7 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.SelectionEvent;
 import com.iver.utiles.swing.JComboBox;
 import com.jeta.forms.components.panel.FormPanel;
+import com.jeta.forms.gui.common.FormException;
 
 import es.udc.cartolab.gvsig.eielforms.AbstractNoNavTable;
 import es.udc.cartolab.gvsig.elle.gui.ConstantSelectionWindow;
@@ -66,7 +67,12 @@ public class CarreterasForm extends AbstractNoNavTable {
 
 	public JPanel getCenterPanel() {
 		JPanel panel = new JPanel();
-		formBody = new FormPanel("carretera.jfrm");                                                                                                                      
+		try {
+			formBody = new FormPanel(getClass().getResourceAsStream("/carretera.jfrm"));
+		} catch (FormException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}                                                                                                               
         JScrollPane scrollPane = new JScrollPane(formBody);                                                                                                              
         panel.add(scrollPane, "0, 0");                                                                                                                                   
         return panel;

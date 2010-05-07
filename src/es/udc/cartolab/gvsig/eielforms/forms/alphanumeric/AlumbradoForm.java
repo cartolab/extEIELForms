@@ -13,6 +13,7 @@ import com.iver.cit.gvsig.fmap.layers.SelectionEvent;
 import com.iver.utiles.swing.JComboBox;
 import es.udc.cartolab.gvsig.eielforms.AbstractNoNavTable;
 import com.jeta.forms.components.panel.FormPanel;
+import com.jeta.forms.gui.common.FormException;
 
 public class AlumbradoForm extends AbstractNoNavTable {
 
@@ -75,7 +76,12 @@ public class AlumbradoForm extends AbstractNoNavTable {
 	
 	public JPanel getCenterPanel() {
 		JPanel panel = new JPanel();
-		formBody = new FormPanel("alumbrado.jfrm");                                                                                                                      
+		try {
+			formBody = new FormPanel(getClass().getResourceAsStream("/alumbrado.jfrm"));
+		} catch (FormException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}                                                                                                                      
         JScrollPane scrollPane = new JScrollPane(formBody);                                                                                                              
         panel.add(scrollPane, "0, 0");                                                                                                                                   
         return panel;
