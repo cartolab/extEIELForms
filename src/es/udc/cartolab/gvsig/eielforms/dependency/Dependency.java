@@ -1,0 +1,154 @@
+package es.udc.cartolab.gvsig.eielforms.dependency;
+
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.swing.JComponent;
+import javax.swing.border.TitledBorder;
+
+import es.udc.cartolab.gvsig.eielforms.groups.SingleFieldGroup;
+import es.udc.cartolab.gvsig.eielforms.field.ComboFieldInterface;
+import es.udc.cartolab.gvsig.eielforms.field.FieldController;
+import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
+import es.udc.cartolab.gvsig.eielforms.field.TextFieldInterface;
+
+public class Dependency extends SingleFieldGroup
+{
+  private String table;
+  private String dataBase;
+  private ArrayList foreignKey;
+  private ArrayList ownFields;
+  private ArrayList ownFieldsInterface;
+  private String masterFieldName;
+  private DependencyMasterField dependencyMasterField;
+  private boolean knowOwnFields;
+  private boolean knowOwnFieldsInterface;
+  private String groupName;
+  private String layout;
+
+  public Dependency(String groupName, String layout, String table, String dataBase, ArrayList foreignKey)
+  {
+    super(groupName, layout);
+    this.groupName = groupName;
+    this.layout = layout;
+    this.table = table;
+    this.dataBase = dataBase;
+    this.foreignKey = foreignKey;
+    this.knowOwnFields = false;
+    this.knowOwnFieldsInterface = false;
+    this.ownFields = new ArrayList();
+    this.ownFieldsInterface = new ArrayList();
+    this.dependencyMasterField = null;
+
+    getInterface().setBorder(new TitledBorder(groupName));
+  }
+
+  public void setMasterFieldName(String name) {
+    this.masterFieldName = name;
+  }
+
+  public String getTable() {
+    return this.table;
+  }
+
+  public String getDataBase() {
+    return this.dataBase;
+  }
+
+  public ArrayList getForeignKey() {
+    return this.foreignKey;
+  }
+
+  public void setOwnFields(ArrayList ownFields) {
+    this.ownFields = ownFields;
+  }
+
+  public ArrayList getOwnFields()
+  {
+    ArrayList allFields = getFields();
+
+    fillFields();
+    if (!(this.knowOwnFields)) {
+      for (int i = 0; i < allFields.size(); ++i) {
+        String oneFieldName = ((FieldController)allFields.get(i)).getName();
+        if (this.foreignKey.contains(oneFieldName) == true) {
+          this.ownFields.add(allFields.get(i));
+        }
+      }
+      this.knowOwnFields = true;
+    }
+    return this.ownFields;
+  }
+
+  public ArrayList getOwnFieldsInterface()
+  {
+    ArrayList allFields = getFieldsInterface();
+
+    fillFields();
+    if (!(this.knowOwnFieldsInterface)) {
+      for (int i = 0; i < allFields.size(); ++i) {
+        String oneFieldName = ((FieldInterface)allFields.get(i)).getField().getName();
+        if (this.foreignKey.contains(oneFieldName) == true) {
+          this.ownFieldsInterface.add((FieldInterface)allFields.get(i));
+        }
+      }
+      this.knowOwnFieldsInterface = true;
+    }
+    return this.ownFieldsInterface;
+  }
+
+  public void addMasterField(DependencyMasterField masterField)
+  {
+    if (this.dependencyMasterField == null) {
+      this.dependencyMasterField = masterField;
+      addField(masterField);
+      this.masterFieldName = masterField.getField().getName();
+      this.foreignKey.add(this.masterFieldName);
+    } else {
+      System.out.println("No puedes introducir otro campo Master en la dependencia!!!");
+    }
+  }
+
+  public DependencyMasterField getDependencyMasterField() {
+    return this.dependencyMasterField;
+  }
+
+  protected void updateSlaveFields(HashMap values) {
+    ArrayList allFields = getFields();
+
+    for (int i = 0; i < allFields.size(); ++i)
+    {
+      FieldController oneFieldController = (FieldController)allFields.get(i);
+      if (oneFieldController.getDomain().getName().compareTo("dependencyMasterDomain") != 0) {
+        oneFieldController.setValue((String)values.get(oneFieldController.getName()));
+      }
+    }
+
+    loadData();
+  }
+
+  public Dependency clonar() {
+    Dependency dependency = new Dependency(this.groupName, this.layout, this.table, this.dataBase, this.foreignKey);
+    dependency.setMasterFieldName(this.masterFieldName);
+    dependency.setOwnFields(getOwnFields());
+    ArrayList listFields = new ArrayList();
+    listFields = getFields();
+    for (int i = 0; i < listFields.size() - 1; ++i) {
+      FieldController fieldController = (FieldController)listFields.get(i);
+      FieldInterface fieldInterface;
+      if (fieldController.getDomain().getType().compareTo("usuario") == 0)
+      {
+        fieldInterface = new ComboFieldInterface(fieldController);
+        fieldInterface.loadValue();
+      }
+      else {
+        fieldInterface = new TextFieldInterface(fieldController);
+        fieldInterface.loadValue();
+      }
+      dependency.addField(fieldInterface);
+    }
+    dependency.addMasterField(this.dependencyMasterField);
+
+    return dependency;
+  }
+}

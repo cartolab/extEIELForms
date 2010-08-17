@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<plugin-config>
+	<depends plugin-name="com.iver.cit.gvsig"/>
+	<depends plugin-name="com.iver.cit.gvsig.cad"/>
+	<depends plugin-name="com.iver.cit.gvsig.wms"/>
+	<depends plugin-name="es.gva.cit.gvsig.catalogClient"/>
+	<depends plugin-name="es.udc.cartolab.gvsig.navtable"/>
+	<depends plugin-name="es.udc.cartolab.gvsig.users"/>
+	<depends plugin-name="es.udc.cartolab.gvsig.eielutils"/>
+	<libraries library-dir="lib"/>
+	<resourceBundle name="text"/>
+	<extensions>
+		<extension class-name="es.udc.cartolab.gvsig.eielforms.FormExtension" description="form" active="true">
+			<menu text="data_base_menu/form"
+				action-command="form"
+				position="03"/> 
+		</extension>
+	</extensions>
+</plugin-config>

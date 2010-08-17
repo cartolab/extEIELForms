@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="src" path="/_fwAndami"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/xerces_2_5_0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/extNavTable"/>
 	<classpathentry kind="src" path="/libFMap"/>
 	<classpathentry kind="src" path="/appgvSIG"/>
-	<classpathentry kind="src" path="/libGDBMS"/>
-	<classpathentry kind="src" path="/libDriverManager"/>
-	<classpathentry kind="src" path="/libCq CMS for java"/>
-	<classpathentry kind="lib" path="lib/iver-utiles.jar"/>
-	<classpathentry kind="lib" path="/extELLE/lib/formsrt.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extUsers"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/extELLE"/>
-	<classpathentry kind="lib" path="lib/es.udc.cartolab.gvsig.navtable.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGDBMS"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/extUtilEIEL"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
