@@ -23,7 +23,7 @@ public class DomainGenerator
 
   public DomainGenerator()
   {
-    this.domainDAO = new DomainReader();
+    this.domainDAO = new DomainFileReader();
     this.domParser = new DOMParser();
     this.domainCache = new DomainCache();
   }

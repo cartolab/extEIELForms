@@ -41,7 +41,7 @@ public class FormGenerator
 
   public FormGenerator()
   {
-    this.formDAO = new FormReader();
+    this.formDAO = new FormFileReader();
     this.domParser = new DOMParser();
     this.dependencyGenerator = new DependencyGenerator();
     this.groupGenerator = new GroupGenerator();
