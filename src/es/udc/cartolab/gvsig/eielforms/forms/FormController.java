@@ -16,7 +16,6 @@ import es.udc.cartolab.gvsig.eielforms.formgenerator.Subject;
 import es.udc.cartolab.gvsig.eielforms.groups.FieldGroup;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubForm;
 import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
-import es.udc.cartolab.gvsig.eielutils.constants.Constants;
 
 public class FormController extends Subject
 {
@@ -312,10 +311,10 @@ public class FormController extends Subject
 				  String oneForeignKeyField = foreignKey.get(j);
 				  String oneForeignKeyValue = (String) formFields.get(oneForeignKeyField);
 				  if (oneForeignKeyValue == null) {
-					  Constants cts = Constants.getCurrentConstants();
-					  if (cts != null) {
+//					  Constants cts = Constants.getCurrentConstants();
+//					  if (cts != null) {
 						  //obtener los valores de las constantes
-					  }
+//					  }
 					  oneForeignKeyValue = "";
 				  }
 				  dependencyFK.put(oneForeignKeyField, oneForeignKeyValue);
