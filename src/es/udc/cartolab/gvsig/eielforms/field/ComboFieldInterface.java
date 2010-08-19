@@ -1,6 +1,8 @@
 package es.udc.cartolab.gvsig.eielforms.field;
 
 import java.awt.Dimension;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JComboBox;
@@ -27,6 +29,22 @@ public class ComboFieldInterface extends FieldInterface
     this.comboField.setPreferredSize(new Dimension(this.WIDTH_DEFAULT, 20));
     this.comboField.setEnabled(fieldController.getEditable());
     this.comboField.setLightWeightPopupEnabled(false);
+    this.comboField.addFocusListener(new FocusListener() {
+
+		@Override
+		public void focusGained(FocusEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent arg0) {
+			// TODO Auto-generated method stub
+			fillField();
+			validate();
+		}
+    	
+    });
   }
 
   public JComponent getComponent() {
