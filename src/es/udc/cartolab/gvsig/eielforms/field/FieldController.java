@@ -16,11 +16,12 @@ public class FieldController
   private boolean required;
   private boolean isKey;
   private boolean constantValue;
+  private boolean isOrden;
   private String value;
   private String memoryValue;
 //  private ConstantsManager constantsManager;
 
-  public FieldController(String label, String name, Domain domain, String defaultValue, boolean editable, boolean required, boolean isKey, boolean constantValue)
+  public FieldController(String label, String name, Domain domain, String defaultValue, boolean editable, boolean required, boolean isKey, boolean constantValue, boolean isOrden)
   {
     this.label = label;
     this.name = name;
@@ -32,6 +33,7 @@ public class FieldController
     this.isKey = isKey;
     this.constantValue = constantValue;
     this.memoryValue = "";
+    this.isOrden = isOrden;
 //    this.constantsManager = constantsManager;
   }
 
@@ -99,6 +101,10 @@ public class FieldController
   public boolean getIsConstant() {
     return this.constantValue;
   }
+  
+  public boolean isOrden() {
+	  return this.isOrden;
+  }
 
   public boolean validate()
   {
@@ -129,7 +135,7 @@ public class FieldController
 
   public FieldController clonar()
   {
-    FieldController fieldController = new FieldController(this.label, this.name, this.domain, this.defaultValue, this.editable, this.required, this.isKey, this.constantValue);
+    FieldController fieldController = new FieldController(this.label, this.name, this.domain, this.defaultValue, this.editable, this.required, this.isKey, this.constantValue, this.isOrden);
     fieldController.setValue(getValue());
     fieldController.setMemoryValue(getMemoryValue());
     if (fieldController.getDefaultValue().equals("")) {

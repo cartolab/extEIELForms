@@ -14,9 +14,13 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.border.TitledBorder;
 
+import es.udc.cartolab.gvsig.eielforms.domain.UserDomain;
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 import es.udc.cartolab.gvsig.eielforms.forms.FormInterface;
+import es.udc.cartolab.gvsig.eielforms.util.CampoVO;
+import es.udc.cartolab.gvsig.eielforms.util.ClaveForaneaVO;
+import es.udc.cartolab.gvsig.eielforms.util.OtrosDatosVO;
 
 public class SubFormInterface extends JDialog
 {
@@ -31,16 +35,17 @@ public class SubFormInterface extends JDialog
   private GridBagConstraints gridbagconst;
   private GridBagConstraints gridbagconst2;
   private boolean visible;
-//  private PanelBotones panelBotones;
-//  private PanelEdicion panelEdicion;
-//  private PanelTipos panelTipos;
+  private PanelBotones panelBotones;
+
+  private PanelTipos panelTipos;
   private FormInterface formInterface;
   private String fase;
-//  private ClaveForaneaVO claveForanea;
+  private ClaveForaneaVO claveForanea;
   private FieldInterface primaryField;
-//  private PanelOtrosCampos panelOtrosCampos;
+
+  private SubFormPanel subformPanel; 
   private JDialog dialog;
-//  private PanelBotonesModificarRestoCampos panelBotonesModificarRestoCampos;
+  private PanelBotonesModificarRestoCampos panelBotonesModificarRestoCampos;
   private String item;
   private Vector datos;
   private boolean asignar = false;
@@ -63,6 +68,7 @@ public class SubFormInterface extends JDialog
     initSubFormInterface();
     setLocation(500, 100);
     setDefaultCloseOperation(2);
+    setModal(true);
   }
 
   private void initSubFormInterface() {
@@ -70,18 +76,15 @@ public class SubFormInterface extends JDialog
     this.mainPane = getRootPane();
     this.mainPane.setLayout(new BorderLayout());
     String name = this.subformController.getName();
-//    this.titlePanel = new TitlePanel(this.subformController.getName(), 25);
 
     this.panel = new JPanel();
     this.panel.setVisible(true);
 
-//    this.panelBotonesModificarRestoCampos = new PanelBotonesModificarRestoCampos(this);
-//    this.panelBotones = new PanelBotones(this);
-//    this.panelEdicion = new PanelEdicion(this);
+    this.panelBotonesModificarRestoCampos = new PanelBotonesModificarRestoCampos(this);
+    this.panelBotones = new PanelBotones(this);
 
-    this.mainPane.add(this.titlePanel, "North");
     this.mainPane.add(this.panel, "Center");
-//    this.mainPane.add(this.panelBotones, "South");
+    this.mainPane.add(this.panelBotones, "South");
 
     setSize(500, 650);
     addWindowListener(new WindowAdapter() {
@@ -113,20 +116,12 @@ public class SubFormInterface extends JDialog
   {
     this.primaryField = field;
     this.formInterface.setEnabled(false);
-//    this.panelTipos = new PanelTipos(this.subformController, field, this.claveForanea);
-//    this.panelTipos.setEnabled(false);
-//    this.datos = this.panelTipos.obtenerDatosIniciales(this.subform, this.datos, this.primaryField.getField().getName());
-//    this.panel.add(this.panelTipos, "South");
+    this.panelTipos = new PanelTipos(this.subformController, field, this.claveForanea);
+    this.panelTipos.setEnabled(true);
+    this.panelTipos.habilitarBotones();
+    this.datos = this.panelTipos.obtenerDatosIniciales(this.subform, this.datos, this.primaryField.getField().getName());
+    this.panel.add(this.panelTipos, "South");
     this.mainPane.add(this.panel, "Center");
-  }
-
-  protected void startEdition()
-  {
-//    this.titlePanel.setVisible(true);
-//    this.panelEdicion.setVisible(true);
-//    this.panelBotones.setVisible(false);
-//    this.mainPane.add(this.panelEdicion, "South");
-//    this.panelTipos.habilitarBotones();
   }
 
   public boolean getAsignar() {
@@ -142,132 +137,110 @@ public class SubFormInterface extends JDialog
 
   public void confirmEdition()
   {
-    int retValue = JOptionPane.showConfirmDialog(this, "Está seguro que desea confirmar la edición?");
-    if (retValue == 0)
-    {
-//      this.panelTipos.borrarDatos();
-//
-//      this.panelTipos.insertarAsignados(this.datos);
-//
-//      this.panelTipos.deshabilitar();
-//      this.panelTipos.reasignarDominiosIniciales();
-//      this.panelBotones.setVisible(true);
-//      this.panelEdicion.setVisible(false);
-      this.mainPane.add(this.titlePanel, "North");
-      this.titlePanel.setVisible(true);
-    } else {
-//      this.panelTipos.reasignarDominiosIniciales();
+      this.panelTipos.borrarDatos();
+
+      this.panelTipos.insertarAsignados(this.datos);
+
+      this.panelTipos.reasignarDominiosIniciales();
+      this.panelBotones.setVisible(true);
+
+  }
+
+  public void addDatos(OtrosDatosVO otroDato)
+  {
+    boolean encontrado = false;
+
+    for (int i = 0; i < this.datos.size(); ++i) {
+      OtrosDatosVO otrosDatosAux = (OtrosDatosVO)this.datos.get(i);
+      if (otrosDatosAux.getCodigo().equals(otroDato.getCodigo())) {
+        this.datos.remove(i);
+      }
+
+    }
+
+    this.datos.add(otroDato);
+  }
+
+  public void eliminarDatos(String nombre)
+  {
+    for (int i = 0; i < this.datos.size(); ++i) {
+      OtrosDatosVO otrosDatos = (OtrosDatosVO)this.datos.get(i);
+      if (otrosDatos.getCodigo().equals(nombre))
+        this.datos.remove(i);
     }
   }
 
-  public void cancelEdition() {
-//    this.panelTipos.reasignarDominiosIniciales();
-//
-//    this.panelTipos.deshabilitar();
-//    this.panelBotones.setVisible(true);
-//    this.panelEdicion.setVisible(false);
-    this.mainPane.add(this.titlePanel, "North");
-    this.titlePanel.setVisible(true);
-//    this.panelTipos.setVisible(true);
-    this.mainPane.setVisible(true);
-    setVisible(true);
+  public void insertarDatosParaDisponibles(Vector items)
+  {
+    this.subformPanel = new SubFormPanel((UserDomain)this.panelTipos.getDomain(), this, this.subform, this.item, this.primaryField, this.claveForanea, true);
+
+    this.dialog = new JDialog();
+
+    this.dialog.setTitle("Datos del nivel: " + this.item);
+    this.dialog.add(this.subformPanel, "Center");
+    this.dialog.setSize(500, 250);
+    this.dialog.setVisible(true);
+    this.dialog.show();
+    this.dialog.addWindowListener(new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {
+        SubFormInterface.this.dialog.setVisible(false);
+        SubFormInterface.this.dialog.dispose();
+      }
+    });
   }
 
-//  public void addDatos(OtrosDatosVO otroDato)
-//  {
-//    boolean encontrado = false;
-//
-//    for (int i = 0; i < this.datos.size(); ++i) {
-//      OtrosDatosVO otrosDatosAux = (OtrosDatosVO)this.datos.get(i);
-//      if (otrosDatosAux.getCodigo().equals(otroDato.getCodigo())) {
-//        this.datos.remove(i);
-//      }
-//
-//    }
-//
-//    this.datos.add(otroDato);
-//  }
+  public void insertarDatosParaDisponibles(String item)
+  {
+    if (this.subform.getFields().size() != 0) {
+      this.subformPanel = new SubFormPanel((UserDomain)this.panelTipos.getDomain(), this, this.subform, item, this.primaryField, this.claveForanea, true);
 
-//  public void eliminarDatos(String nombre)
-//  {
-//    for (int i = 0; i < this.datos.size(); ++i) {
-//      OtrosDatosVO otrosDatos = (OtrosDatosVO)this.datos.get(i);
-//      if (otrosDatos.getCodigo().equals(nombre))
-//        this.datos.remove(i);
-//    }
-//  }
+      this.dialog = new JDialog();
+      this.dialog.add(this.panelBotonesModificarRestoCampos, "South");
 
-//  public void insertarDatosParaDisponibles(Vector items)
-//  {
-//    this.panelOtrosCampos = new PanelOtrosCampos((UserDomain)this.panelTipos.getDomain(), this, this.subform, this.item, this.primaryField, this.claveForanea, true);
-//
-//    this.dialog = new JDialog();
-//    this.dialog.add(this.panelBotonesModificarRestoCampos, "South");
-//
-//    this.dialog.setTitle("Datos del nivel: " + this.item);
-//    JPanel titlePanelDatos = new TitlePanel("Datos del nivel: " + this.item, 10);
-//
-//    this.dialog.add(titlePanelDatos, "North");
-//    this.dialog.add(this.panelOtrosCampos, "Center");
-//    this.dialog.setSize(500, 250);
-//    this.dialog.setVisible(true);
-//    this.dialog.show();
-//    this.dialog.addWindowListener(new WindowAdapter() {
-//      public void windowClosing(WindowEvent e) {
-//        SubFormInterface.this.dialog.setVisible(false);
-//        SubFormInterface.this.dialog.dispose();
-//      }
-//    });
-//  }
+      this.dialog.setTitle("Datos del nivel: " + item);
 
-//  public void insertarDatosParaDisponibles(String item)
-//  {
-//    if (this.subform.getFields().size() != 0) {
-//      this.panelOtrosCampos = new PanelOtrosCampos((UserDomain)this.panelTipos.getDomain(), this, this.subform, item, this.primaryField, this.claveForanea, true);
-//
-//      this.dialog = new JDialog();
-//      this.dialog.add(this.panelBotonesModificarRestoCampos, "South");
-//
-//      this.dialog.setTitle("Datos del nivel: " + item);
-//
-//      this.dialog.add(this.titlePanel, "North");
-//      this.dialog.add(this.panelOtrosCampos, "Center");
-//      this.dialog.setSize(500, 250);
-//      this.dialog.setVisible(true);
-//      this.dialog.show();
-//      this.dialog.addWindowListener(new WindowAdapter() {
-//        public void windowClosing(WindowEvent e) {
-//          SubFormInterface.this.dialog.setVisible(false);
-//          SubFormInterface.this.dialog.dispose();
-//        }
-//
-//      });
-//    }
-//    else
-//    {
-//      aceptarModificacion();
-//    }
-//  }
+      this.dialog.add(this.subformPanel, "Center");
+      setModal(false);
+      this.dialog.setModal(true);
+      this.dialog.setSize(500, 250);
+      this.dialog.setVisible(true);
+      this.dialog.addWindowListener(new WindowAdapter() {
+        public void windowClosing(WindowEvent e) {
+          SubFormInterface.this.dialog.setVisible(false);
+          SubFormInterface.this.dialog.dispose();
+          setModal(true);
+        }
 
-//  public void mostrarDatos(boolean editable)
-//  {
-//    this.item = ((String)this.panelTipos.getJListAsignados().getSelectedValue());
-//    if ((this.subform.getFields().size() == 0) || 
-//      (this.item == null))
-//      return;
-//    this.panelOtrosCampos = new PanelOtrosCampos((UserDomain)this.panelTipos.getDomain(), this, this.subform, this.item, this.primaryField, this.claveForanea, editable);
-//    this.dialog = new JDialog();
-//
-//    this.dialog.add(this.panelBotonesModificarRestoCampos, "South");
-//    JPanel titlePanel2 = new TitlePanel(this.subformController.getName(), 25);
-//    this.dialog.setTitle("Datos del nivel: " + this.item);
-//    this.dialog.add(titlePanel2, "North");
-//    this.dialog.add(this.panelOtrosCampos, "Center");
-//    this.dialog.setSize(500, 250);
-//    this.dialog.setVisible(true);
-//
-//    this.dialog.show();
-//  }
+      });
+    }
+    else
+    {
+      aceptarModificacion();
+    }
+  }
+
+  public void mostrarDatos(boolean editable)
+  {
+    this.item = ((String)this.panelTipos.getJListAsignados().getSelectedValue());
+    if ((this.subform.getFields().size() == 0) || 
+      (this.item == null))
+      return;
+    this.subformPanel = new SubFormPanel((UserDomain)this.panelTipos.getDomain(), this, this.subform, this.item, this.primaryField, this.claveForanea, editable);
+    this.dialog = new JDialog();
+
+    this.dialog.add(this.panelBotonesModificarRestoCampos, "South");
+
+    this.dialog.setTitle("Datos del nivel: " + this.item);
+
+    this.dialog.add(this.subformPanel, "Center");
+    setModal(false);
+    this.dialog.setSize(500, 250);
+    this.dialog.setModal(true);
+    this.dialog.setVisible(true);
+    setModal(true);
+
+    
+  }
 
   public void setItem(String nombre)
   {
@@ -280,33 +253,33 @@ public class SubFormInterface extends JDialog
 
   public void aceptarModificacion()
   {
-//    OtrosDatosVO otrosDatos = new OtrosDatosVO();
-//    Vector datosHash = new Vector();
+    OtrosDatosVO otrosDatos = new OtrosDatosVO();
+    Vector datosHash = new Vector();
 
-//    otrosDatos.setCodigo(this.item);
+    otrosDatos.setCodigo(this.item);
 
     for (int i = 0; i < this.subform.getFields().size(); ++i)
     {
       FieldInterface field = (FieldInterface)this.subform.getFields().get(i);
       field.fillField();
-//      FieldController fieldControl = field.getField();
+      FieldController fieldControl = field.getField();
 
-//      CampoVO campo = new CampoVO();
-//      campo.setNombre(fieldControl.getName());
-//      campo.setValor(fieldControl.getValue());
-//      datosHash.add(campo);
+      CampoVO campo = new CampoVO();
+      campo.setNombre(fieldControl.getName());
+      campo.setValor(fieldControl.getValue());
+      datosHash.add(campo);
     }
 
-//    otrosDatos.setDatos(datosHash);
+    otrosDatos.setDatos(datosHash);
 
-//    addDatos(otrosDatos);
+    addDatos(otrosDatos);
 
-//    if (this.dialog != null) {
-//      this.dialog.setVisible(false);
-//      this.dialog.dispose();
-//    }
-//    this.asignar = true;
-//    this.procesado = true;
+    if (this.dialog != null) {
+      this.dialog.setVisible(false);
+      this.dialog.dispose();
+    }
+    this.asignar = true;
+    this.procesado = true;
   }
 
   public void showInterface(boolean visible)
@@ -330,21 +303,21 @@ public class SubFormInterface extends JDialog
     this.dependencies = this.formInterface.getDependencies();
     this.groups = this.formInterface.getGroups();
 
-//    this.claveForanea = new ClaveForaneaVO();
+    this.claveForanea = new ClaveForaneaVO();
     Vector campos = new Vector();
     panelClaveForanea.setBorder(new TitledBorder(this.formInterface.getTitle()));
 
     for (int i = 0; i < this.subform.getForeignKey().size(); ++i) {
       String claveForanea = (String)this.subform.getForeignKey().get(i);
-//      CampoVO campo = new CampoVO();
+      CampoVO campo = new CampoVO();
       for (int j = 0; j < this.formInterface.getFormController().getFields().size(); ++j) {
         FieldController field = (FieldController)this.formInterface.getFormController().getFields().get(j);
         FieldInterface fieldInterface = (FieldInterface)this.formInterface.getFormController().getFieldsInterface().get(j);
 
         if (claveForanea.equals(field.getName())) {
-//          campo.setNombre(claveForanea);
-//          campo.setValor(field.getValue());
-//          campos.add(campo);
+          campo.setNombre(claveForanea);
+          campo.setValor(field.getValue());
+          campos.add(campo);
           FieldInterface clonFieldInterface = fieldInterface.clonar();
           clonFieldInterface.loadValue();
 
@@ -362,7 +335,7 @@ public class SubFormInterface extends JDialog
 
     }
 
-//    this.claveForanea.setCampos(campos);
+    this.claveForanea.setCampos(campos);
 
     panelClaveForanea.setVisible(true);
     this.panel.add(panelClaveForanea, "North");

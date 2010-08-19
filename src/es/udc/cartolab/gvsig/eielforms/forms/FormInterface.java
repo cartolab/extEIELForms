@@ -79,9 +79,9 @@ public class FormInterface extends JPanel
     this.queryPanel = new QueryPanel(this);
     this.editPanel = new EditPanel(this);
 //
-//    this.subFormPanel = new SubFormButtonPanel(this);
+    this.subFormPanel = new SubFormButtonPanel(this);
 
-//    this.subFormPanel.setVisible(true);
+    this.subFormPanel.setVisible(true);
 //
     this.insertPanel = new InsertPanel(this);
 
@@ -183,7 +183,7 @@ public class FormInterface extends JPanel
     this.queryPanel.setVisible(true);
     if (this.hasSubform)
       this.subFormPanel.setVisible(true);
-//    else this.subFormPanel.setVisible(false);
+    else this.subFormPanel.setVisible(false);
     this.panel.setVisible(true);
 //    this.mainPane.add(this.queryPanel, "South");
 //    pack();

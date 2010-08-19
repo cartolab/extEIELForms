@@ -27,6 +27,8 @@ public class FieldGenerator
     boolean bool_editable = false;
     boolean bool_required = false;
     boolean bool_constant_value = false;
+    String isOrden = "";
+    boolean bool_isOrden = false;
 
     Node atributos = fieldNode.getFirstChild();
 
@@ -77,19 +79,23 @@ public class FieldGenerator
         }
 
       }
+      else if (atributos.getNodeName().compareTo("IsOrden") == 0) {
+    	  isOrden = atributos.getFirstChild().getNodeValue();
+    	  bool_isOrden = getBoolean(isOrden);
+      }
 
       atributos = atributos.getNextSibling();
     }
     Domain domain = this.domainGenerator.getDomain(string_dominio);
 
-    FieldController fieldController = new FieldController(label, name, domain, defaultValue, bool_editable, bool_required, bool_isKey, bool_constant_value);
+    FieldController fieldController = new FieldController(label, name, domain, defaultValue, bool_editable, bool_required, bool_isKey, bool_constant_value, bool_isOrden);
     FieldInterface fieldInterface;
     if (domain.getType().compareTo("usuario") == 0)
     {
       fieldInterface = new ComboFieldInterface(fieldController);
     }
     else {
-      fieldInterface = new TextFieldInterface(fieldController);
+    		fieldInterface = new TextFieldInterface(fieldController);
     }
     return fieldInterface;
   }

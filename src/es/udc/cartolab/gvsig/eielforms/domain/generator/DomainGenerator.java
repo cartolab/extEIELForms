@@ -23,7 +23,7 @@ public class DomainGenerator
 
   public DomainGenerator()
   {
-    this.domainDAO = new DomainFileReader();
+    this.domainDAO = new DomainDBReader();
     this.domParser = new DOMParser();
     this.domainCache = new DomainCache();
   }
@@ -114,29 +114,29 @@ public class DomainGenerator
 
   private void processBasicDomain(String name, Node basicDomainNode)
   {
-    String basicType = "";
-    String table = "";
-    ArrayList restricciones = new ArrayList();
+	    String basicType = "";
 
-    Node attributes = basicDomainNode.getFirstChild();
+	    ArrayList restricciones = new ArrayList();
 
-    while (attributes != null) {
-      if (attributes.getNodeName().compareTo("BasicType") == 0) {
-        basicType = attributes.getFirstChild().getNodeValue();
-      }
-      else if (attributes.getNodeName().compareTo("Restrictions") == 0) {
-        restricciones = processRestrictions(attributes);
-      }
+	    Node attributes = basicDomainNode.getFirstChild();
 
-      attributes = attributes.getNextSibling();
-    }
+	    while (attributes != null) {
+	      if (attributes.getNodeName().compareTo("BasicType") == 0) {
+	        basicType = attributes.getFirstChild().getNodeValue();
+	      }
+	      else if (attributes.getNodeName().compareTo("Restrictions") == 0) {
+	        restricciones = processRestrictions(attributes);
+	      }
 
-    this.domain = new BasicDomain(name, basicType);
+	      attributes = attributes.getNextSibling();
+	    }
+    	
+	    	this.domain = new BasicDomain(name, basicType);
 
-    for (int i = 0; i < restricciones.size(); ++i)
-      ((BasicDomain)this.domain).addRestriction((Restriction)restricciones.get(i));
+	    for (int i = 0; i < restricciones.size(); ++i)
+	      ((BasicDomain)this.domain).addRestriction((Restriction)restricciones.get(i));
   }
-
+  
   private ArrayList processRestrictions(Node restrictionsNode)
   {
     String name = ""; String subclass = "";

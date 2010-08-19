@@ -71,4 +71,5 @@ public abstract class DomainReader {
 		return domain;
 
 	}
+	
 }

@@ -28,10 +28,12 @@ public class DependencyMasterFieldGenerator
     String editable = new String();
     String required = new String();
     String defaultValue = new String();
+    String isOrden;
     boolean bool_isKey = false;
     boolean bool_editable = false;
     boolean bool_required = false;
     boolean bool_constant_value = false;
+    boolean bool_isOrden = false;
     ArrayList secondaryFields = new ArrayList();
 
     Node atributos = fieldNode.getFirstChild();
@@ -60,7 +62,10 @@ public class DependencyMasterFieldGenerator
       else if (atributos.getNodeName().compareTo("Required") == 0) {
         required = atributos.getFirstChild().getNodeValue();
         bool_required = getBoolean(required);
-      } else {
+      } else if (atributos.getNodeName().compareTo("IsOrden") == 0) {
+    	  isOrden = atributos.getFirstChild().getNodeValue();
+    	  bool_isOrden = getBoolean(isOrden);
+      }else {
         if (atributos.getNodeName().compareTo("DefaultValue") == 0)
         {
           if (atributos.getFirstChild() == null) break;
@@ -139,7 +144,7 @@ public class DependencyMasterFieldGenerator
 //      }
 
       Domain domain = new UserDomain("dependencyMasterDomain", dependencyDomainValues);
-      FieldController fieldController = new FieldController(label, name, domain, defaultValue, bool_editable, bool_required, bool_isKey, bool_constant_value);
+      FieldController fieldController = new FieldController(label, name, domain, defaultValue, bool_editable, bool_required, bool_isKey, bool_constant_value, bool_isOrden);
       DependencyMasterField fieldInterface = new DependencyMasterField(fieldController, dependency, dependencyValuesHashMap, visibleField, secondaryFields, foreignName);
 
       return fieldInterface;

@@ -30,7 +30,7 @@ public class FormController extends Subject
 
   public FormController(String layer, String dataBase, String table, String layout, String name, String title)
   {
-	  this.dependencyMasterFieldRetriever = new DependencyMasterFieldRetriever();
+	this.dependencyMasterFieldRetriever = new DependencyMasterFieldRetriever();
     this.layer = layer;
     this.dataBase = dataBase;
     this.table = table;
@@ -90,23 +90,21 @@ public class FormController extends Subject
 //  {
 //    this.formInterface.setModal(modal);
 //  }
-
+  
   public ArrayList getFields()
   {
     ArrayList grupos = getGroups();
     ArrayList dependencias = getDependencies();
     ArrayList temporal = new ArrayList();
-
     for (int i = 0; i < grupos.size(); ++i) {
       temporal.addAll(((FieldGroup)grupos.get(i)).getFields());
     }
-
     for (int i = 0; i < dependencias.size(); ++i) {
       temporal.addAll(((Dependency)dependencias.get(i)).getOwnFields());
     }
-
     return temporal;
   }
+
 
   public ArrayList getFieldsInterface()
   {
@@ -145,6 +143,26 @@ public class FormController extends Subject
   public void showInterface(boolean visible) {
     this.formInterface.showInterface(visible);
   }
+  
+  private HashMap getEielKey(HashMap fields) {
+		HashMap aux = new HashMap();
+		
+		ArrayList<String> keyFields = new ArrayList<String>();
+		keyFields.add("fase");
+		keyFields.add("provincia");
+		keyFields.add("municipio");
+		
+		Set keySet = fields.keySet();
+		Iterator iterator = keySet.iterator();
+		while (iterator.hasNext()) {
+			String kStr = (String) iterator.next();
+			if (keyFields.contains(kStr.toLowerCase())) {
+				aux.put(kStr, fields.get(kStr));
+			}
+		}
+		
+		return aux;
+  }
 
   public void executeQuery(HashMap fields)
   {
@@ -154,7 +172,24 @@ public class FormController extends Subject
 
       for (int j = 0; j < groupOfFields.size(); ++j) {
         FieldController oneField = (FieldController)groupOfFields.get(j);
-        oneField.setValue((String)fields.get(oneField.getName()));
+        String value = (String)fields.get(oneField.getName());
+        if (value == null && oneField.isOrden()) {
+        	FormsDAO fdao = new FormsDAO();
+        	try {
+				String highestVal = fdao.getHighestValue(getEielKey(fields), dataBase, table, oneField.getName());
+				Integer val = Integer.parseInt(highestVal) + 1;
+				if (val < 10) {
+					value = "0" + Integer.toString(val);
+				} else {
+					value = Integer.toString(val);
+				}
+			} catch (FormException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				value = "00";
+			}
+        }
+        oneField.setValue(value);
       }
 
     }
@@ -240,6 +275,7 @@ public class FormController extends Subject
   }
   
   public void fillForm(HashMap keys) {
+	  
 	  ArrayList fields = getFields();
 	  ArrayList<String> fieldNames = new ArrayList<String>();
 	  for (int i=0; i<fields.size(); i++){

@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/extUsers"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libGDBMS"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
+	<classpathentry kind="src" path="/libIverUtiles"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

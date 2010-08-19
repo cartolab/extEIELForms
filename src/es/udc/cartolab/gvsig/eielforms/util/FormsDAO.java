@@ -227,6 +227,63 @@ public class FormsDAO {
 		      closeStatement(statement);
 		    }
 	  }
+	  
+	  public String getHighestValue(HashMap key, String schemaName, String table, String field) throws FormException {
+		  Connection connection = null;
+		  Statement statement = null;
+		  ResultSet resultSet = null;
+
+		  ArrayList fieldsCollection = new ArrayList();
+		  String condition = getWhereCondition(key);
+		  condition = condition + " AND " + field + " IS NOT NULL";
+
+		  String queryString = "SELECT " + field + " ";
+
+		  if (!(schemaName.equals("")))
+			  queryString = queryString + "FROM \"" + schemaName + "\"." + table + " " + condition;
+		  else {
+			  queryString = queryString + "FROM " + table + " " + condition;
+		  }
+
+		  queryString = queryString + " ORDER BY " + field + " DESC LIMIT 1";
+		  System.out.println("CONSULTA EJECUTADA >>>>>>>>> \n" + queryString);
+
+		  String highestValue = null;
+		  try
+		  {
+			  DBSession dbs = DBSession.getCurrentSession();
+			  if (dbs != null) {
+				  connection = dbs.getJavaConnection();
+				  statement = connection.createStatement();
+
+				  resultSet = statement.executeQuery(queryString);
+
+				  
+				  while (resultSet.next()) {
+					  highestValue = resultSet.getString(1);
+				  }
+			  } else {
+				  throw new FormException("La sesion no se ha iniciado");
+			  }
+		  }
+		  catch (Exception e)
+		  {
+			  try {
+				  DBSession.reconnect();
+			  } catch (DBException e1) {
+				  throw new FormException(e1);
+			  } 
+			  throw new FormException(e);
+		  } finally {
+			  closeResultSet(resultSet);
+			  closeStatement(statement);
+		  }
+		  
+		  if (highestValue == null) {
+			  highestValue = "00";
+		  }
+		  return highestValue;
+	  }
 
 	  public ArrayList getFieldsCollection(HashMap key, String schemaName, String table, ArrayList fields)
 	    throws FormException
