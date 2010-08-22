@@ -12,21 +12,21 @@ import es.udc.cartolab.gvsig.eielforms.domain.generator.DomainReader;
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
-import es.udc.cartolab.gvsig.eielforms.util.ClaveForaneaVO;
+import es.udc.cartolab.gvsig.eielforms.util.ForeignKeyVO;
 import es.udc.cartolab.gvsig.eielforms.util.ObtenerDominioDAO;
 
-public class SubFormPanel extends JPanel
+public class SubFormOtherFieldsPanel extends JPanel
 {
   private SubFormInterface subformInterfaz;
   private SubForm subform;
   private String item;
   private GridBagConstraints gridbagconst;
   private FieldInterface primaryField;
-  private ClaveForaneaVO claveForanea;
+  private ForeignKeyVO claveForanea;
   private boolean editable;
   private UserDomain domain;
 
-  public SubFormPanel(UserDomain domain, SubFormInterface subformInterfaz, SubForm subform, String item, FieldInterface primaryField, ClaveForaneaVO claveForanea, boolean editable)
+  public SubFormOtherFieldsPanel(UserDomain domain, SubFormInterface subformInterfaz, SubForm subform, String item, FieldInterface primaryField, ForeignKeyVO claveForanea, boolean editable)
   {
     this.claveForanea = claveForanea;
     this.subformInterfaz = subformInterfaz;

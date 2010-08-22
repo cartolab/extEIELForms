@@ -25,7 +25,7 @@ public class ObtenerDominioDAO
 		}
 	}
 	
-  public Vector obtenerDominiosAsignados(String nombreCampo, String dominio, String database, String tabla, ClaveForaneaVO claveForanea) throws FormException
+  public Vector obtenerDominiosAsignados(String nombreCampo, String dominio, String database, String tabla, ForeignKeyVO claveForanea) throws FormException
   {
     Vector dominiosAsignados = new Vector();
 
@@ -72,7 +72,7 @@ public class ObtenerDominioDAO
     return dominiosAsignados;
   }
 
-  public void borrarDatos(String database, String tabla, ClaveForaneaVO claveForanea) throws FormException
+  public void borrarDatos(String database, String tabla, ForeignKeyVO claveForanea) throws FormException
   {
     Vector dominiosAsignados = new Vector();
 
@@ -114,7 +114,7 @@ public class ObtenerDominioDAO
     }
   }
 
-  public OtrosDatosVO obtenerDatosIniciales(UserDomain dominio, Vector campos, String nombreCampoPrimario, String valorCampoPrimario, String database, String tabla, ClaveForaneaVO claveForanea) throws FormException
+  public OtrosDatosVO obtenerDatosIniciales(UserDomain dominio, Vector campos, String nombreCampoPrimario, String valorCampoPrimario, String database, String tabla, ForeignKeyVO claveForanea) throws FormException
   {
     OtrosDatosVO dato = new OtrosDatosVO();
     Vector datos = new Vector();
@@ -188,7 +188,7 @@ public class ObtenerDominioDAO
     return dato;
   }
 
-  public void insertarDatos(UserDomain dominio, String nombreCampo, OtrosDatosVO datos, String database, String tabla, ClaveForaneaVO claveForanea) throws FormException
+  public void insertarDatos(UserDomain dominio, String nombreCampo, OtrosDatosVO datos, String database, String tabla, ForeignKeyVO claveForanea) throws FormException
   {
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
@@ -256,7 +256,7 @@ public class ObtenerDominioDAO
     }
   }
 
-  public Object obtenerValorCampo(UserDomain dominio, String itemSeleccionado, String nombreCampo, String campoPrimario, String database, String tabla, ClaveForaneaVO claveForanea) throws FormException
+  public Object obtenerValorCampo(UserDomain dominio, String itemSeleccionado, String nombreCampo, String campoPrimario, String database, String tabla, ForeignKeyVO claveForanea) throws FormException
   {
     Object resultado = null;
     PreparedStatement preparedStatement = null;

@@ -7,7 +7,7 @@ import java.io.PrintStream;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class PanelBotones extends JPanel
+public class SubFormButtonsPanel extends JPanel
 {
   private SubFormInterface subformInterface;
   private JButton editButton;
@@ -15,7 +15,7 @@ public class PanelBotones extends JPanel
   private JButton exitButton;
   private JButton datosButton;
 
-  public PanelBotones(SubFormInterface subformInterface)
+  public SubFormButtonsPanel(SubFormInterface subformInterface)
   {
     this.subformInterface = subformInterface;
 
@@ -42,7 +42,7 @@ public class PanelBotones extends JPanel
     {
       try
       {
-        PanelBotones.this.subformInterface.mostrarDatos(false);
+        SubFormButtonsPanel.this.subformInterface.mostrarDatos(false);
       }
       catch (Exception e) {
         System.out.println("Ocurrio algún error inesperado...");
@@ -58,7 +58,7 @@ public class PanelBotones extends JPanel
     {
       try
       {
-        PanelBotones.this.subformInterface.showInterface(false);
+        SubFormButtonsPanel.this.subformInterface.showInterface(false);
       }
       catch (Exception e) {
         System.out.println("Ocurrio algún error inesperado...");

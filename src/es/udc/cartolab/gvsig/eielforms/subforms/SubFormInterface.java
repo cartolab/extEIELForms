@@ -19,7 +19,7 @@ import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 import es.udc.cartolab.gvsig.eielforms.forms.FormInterface;
 import es.udc.cartolab.gvsig.eielforms.util.CampoVO;
-import es.udc.cartolab.gvsig.eielforms.util.ClaveForaneaVO;
+import es.udc.cartolab.gvsig.eielforms.util.ForeignKeyVO;
 import es.udc.cartolab.gvsig.eielforms.util.OtrosDatosVO;
 
 public class SubFormInterface extends JDialog
@@ -35,17 +35,17 @@ public class SubFormInterface extends JDialog
   private GridBagConstraints gridbagconst;
   private GridBagConstraints gridbagconst2;
   private boolean visible;
-  private PanelBotones panelBotones;
+  private SubFormButtonsPanel panelBotones;
 
-  private PanelTipos panelTipos;
+  private SubFormListsPanel panelTipos;
   private FormInterface formInterface;
   private String fase;
-  private ClaveForaneaVO claveForanea;
+  private ForeignKeyVO claveForanea;
   private FieldInterface primaryField;
 
-  private SubFormPanel subformPanel; 
+  private SubFormOtherFieldsPanel subformPanel; 
   private JDialog dialog;
-  private PanelBotonesModificarRestoCampos panelBotonesModificarRestoCampos;
+  private SubFormOtherFieldsButtonsPanel panelBotonesModificarRestoCampos;
   private String item;
   private Vector datos;
   private boolean asignar = false;
@@ -80,8 +80,8 @@ public class SubFormInterface extends JDialog
     this.panel = new JPanel();
     this.panel.setVisible(true);
 
-    this.panelBotonesModificarRestoCampos = new PanelBotonesModificarRestoCampos(this);
-    this.panelBotones = new PanelBotones(this);
+    this.panelBotonesModificarRestoCampos = new SubFormOtherFieldsButtonsPanel(this);
+    this.panelBotones = new SubFormButtonsPanel(this);
 
     this.mainPane.add(this.panel, "Center");
     this.mainPane.add(this.panelBotones, "South");
@@ -116,7 +116,7 @@ public class SubFormInterface extends JDialog
   {
     this.primaryField = field;
     this.formInterface.setEnabled(false);
-    this.panelTipos = new PanelTipos(this.subformController, field, this.claveForanea);
+    this.panelTipos = new SubFormListsPanel(this.subformController, field, this.claveForanea);
     this.panelTipos.setEnabled(true);
     this.panelTipos.habilitarBotones();
     this.datos = this.panelTipos.obtenerDatosIniciales(this.subform, this.datos, this.primaryField.getField().getName());
@@ -172,7 +172,7 @@ public class SubFormInterface extends JDialog
 
   public void insertarDatosParaDisponibles(Vector items)
   {
-    this.subformPanel = new SubFormPanel((UserDomain)this.panelTipos.getDomain(), this, this.subform, this.item, this.primaryField, this.claveForanea, true);
+    this.subformPanel = new SubFormOtherFieldsPanel((UserDomain)this.panelTipos.getDomain(), this, this.subform, this.item, this.primaryField, this.claveForanea, true);
 
     this.dialog = new JDialog();
 
@@ -192,7 +192,7 @@ public class SubFormInterface extends JDialog
   public void insertarDatosParaDisponibles(String item)
   {
     if (this.subform.getFields().size() != 0) {
-      this.subformPanel = new SubFormPanel((UserDomain)this.panelTipos.getDomain(), this, this.subform, item, this.primaryField, this.claveForanea, true);
+      this.subformPanel = new SubFormOtherFieldsPanel((UserDomain)this.panelTipos.getDomain(), this, this.subform, item, this.primaryField, this.claveForanea, true);
 
       this.dialog = new JDialog();
       this.dialog.add(this.panelBotonesModificarRestoCampos, "South");
@@ -225,7 +225,7 @@ public class SubFormInterface extends JDialog
     if ((this.subform.getFields().size() == 0) || 
       (this.item == null))
       return;
-    this.subformPanel = new SubFormPanel((UserDomain)this.panelTipos.getDomain(), this, this.subform, this.item, this.primaryField, this.claveForanea, editable);
+    this.subformPanel = new SubFormOtherFieldsPanel((UserDomain)this.panelTipos.getDomain(), this, this.subform, this.item, this.primaryField, this.claveForanea, editable);
     this.dialog = new JDialog();
 
     this.dialog.add(this.panelBotonesModificarRestoCampos, "South");
@@ -303,7 +303,7 @@ public class SubFormInterface extends JDialog
     this.dependencies = this.formInterface.getDependencies();
     this.groups = this.formInterface.getGroups();
 
-    this.claveForanea = new ClaveForaneaVO();
+    this.claveForanea = new ForeignKeyVO();
     Vector campos = new Vector();
     panelClaveForanea.setBorder(new TitledBorder(this.formInterface.getTitle()));
 

@@ -29,16 +29,16 @@ import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 import es.udc.cartolab.gvsig.eielforms.util.CampoVO;
-import es.udc.cartolab.gvsig.eielforms.util.ClaveForaneaVO;
+import es.udc.cartolab.gvsig.eielforms.util.ForeignKeyVO;
 import es.udc.cartolab.gvsig.eielforms.util.ObtenerDominioDAO;
 import es.udc.cartolab.gvsig.eielforms.util.OtrosDatosVO;
 
-public class PanelTipos extends JPanel
+public class SubFormListsPanel extends JPanel
 {
   private ArrayList entityIds;
   private FieldInterface field;
   private UserDomain domain;
-  private ClaveForaneaVO claveForanea;
+  private ForeignKeyVO claveForanea;
   private ObtenerDominioDAO obtenerDominioDAO;
   private String database;
   private String tabla;
@@ -58,7 +58,7 @@ public class PanelTipos extends JPanel
   private MouseAdapter eventButton3;
   private MouseAdapter eventButton4;
 
-  public PanelTipos(SubFormController subformController, FieldInterface field, ClaveForaneaVO claveForanea)
+  public SubFormListsPanel(SubFormController subformController, FieldInterface field, ForeignKeyVO claveForanea)
   {
     this.subformController = subformController;
     this.claveForanea = claveForanea;
@@ -269,27 +269,27 @@ public class PanelTipos extends JPanel
         Vector valoresFinalesList2 = new Vector();
         Vector vacio = new Vector();
 
-        int[] indicesValoresSeleccionados = PanelTipos.this.jList2.getSelectedIndices();
+        int[] indicesValoresSeleccionados = SubFormListsPanel.this.jList2.getSelectedIndices();
 
         for (int i = 0; i < indicesValoresSeleccionados.length; ++i) {
-          String nombre = (String)PanelTipos.this.jList2.getModel().getElementAt(indicesValoresSeleccionados[i]);
-          PanelTipos.this.subformController.getInterface().setItem(nombre);
-          while ((i > 0) && (!(PanelTipos.this.subformController.getInterface().getProcesado())));
-          PanelTipos.this.subformController.getInterface().insertarDatosParaDisponibles(nombre);
+          String nombre = (String)SubFormListsPanel.this.jList2.getModel().getElementAt(indicesValoresSeleccionados[i]);
+          SubFormListsPanel.this.subformController.getInterface().setItem(nombre);
+          while ((i > 0) && (!(SubFormListsPanel.this.subformController.getInterface().getProcesado())));
+          SubFormListsPanel.this.subformController.getInterface().insertarDatosParaDisponibles(nombre);
 //          if (PanelTipos.this.subformController.getInterface().getSubForm().getFields().size() != 0) {
 //            PanelTipos.this.subformController.getInterface().setProcesado(false);
 //          }
-          while (!(PanelTipos.this.subformController.getInterface().getProcesado()));
-          if (PanelTipos.this.subformController.getInterface().getAsignar()) {
-            valoresSeleccionados.add(PanelTipos.this.subformController.getInterface().getItem());
+          while (!(SubFormListsPanel.this.subformController.getInterface().getProcesado()));
+          if (SubFormListsPanel.this.subformController.getInterface().getAsignar()) {
+            valoresSeleccionados.add(SubFormListsPanel.this.subformController.getInterface().getItem());
           }
 
         }
 
         Vector list2Vector = new Vector();
 
-        for (int i = 0; i < PanelTipos.this.jList2.getModel().getSize(); ++i) {
-          list2Vector.add(PanelTipos.this.jList2.getModel().getElementAt(i));
+        for (int i = 0; i < SubFormListsPanel.this.jList2.getModel().getSize(); ++i) {
+          list2Vector.add(SubFormListsPanel.this.jList2.getModel().getElementAt(i));
         }
 
         for (int j = 0; j < valoresSeleccionados.size(); ++j) {
@@ -299,17 +299,17 @@ public class PanelTipos extends JPanel
           }
         }
 
-        PanelTipos.this.jList2.setListData(list2Vector);
+        SubFormListsPanel.this.jList2.setListData(list2Vector);
 
-        for (int i = 0; i < PanelTipos.this.jList1.getModel().getSize(); ++i) {
-          valoresList1.add(PanelTipos.this.jList1.getModel().getElementAt(i));
+        for (int i = 0; i < SubFormListsPanel.this.jList1.getModel().getSize(); ++i) {
+          valoresList1.add(SubFormListsPanel.this.jList1.getModel().getElementAt(i));
         }
 
         for (int j = 0; j < valoresSeleccionados.size(); ++j) {
           valoresList1.add(valoresSeleccionados.get(j));
         }
 
-        PanelTipos.this.jList1.setListData(valoresList1);
+        SubFormListsPanel.this.jList1.setListData(valoresList1);
 
         return null;
       }
@@ -352,23 +352,23 @@ public class PanelTipos extends JPanel
         Vector valoresList1 = new Vector();
         Vector valoresList2 = new Vector();
 
-        for (int i = 0; i < PanelTipos.this.jList1.getModel().getSize(); ++i) {
-          valoresList1.add(PanelTipos.this.jList1.getModel().getElementAt(i));
+        for (int i = 0; i < SubFormListsPanel.this.jList1.getModel().getSize(); ++i) {
+          valoresList1.add(SubFormListsPanel.this.jList1.getModel().getElementAt(i));
         }
 
-        for (int i = 0; i < PanelTipos.this.jList2.getModel().getSize(); ++i) {
-          valoresList2.add(PanelTipos.this.jList2.getModel().getElementAt(i));
+        for (int i = 0; i < SubFormListsPanel.this.jList2.getModel().getSize(); ++i) {
+          valoresList2.add(SubFormListsPanel.this.jList2.getModel().getElementAt(i));
         }
 
-        for (int i = 0; i < PanelTipos.this.jList2.getModel().getSize(); ++i) {
-          String nombre = (String)PanelTipos.this.jList2.getModel().getElementAt(i);
-          PanelTipos.this.subformController.getInterface().setItem(nombre);
-          while ((i > 0) && (!(PanelTipos.this.subformController.getInterface().getProcesado())));
-          PanelTipos.this.subformController.getInterface().insertarDatosParaDisponibles(nombre);
-          PanelTipos.this.subformController.getInterface().setProcesado(false);
-          while (!(PanelTipos.this.subformController.getInterface().getProcesado()));
-          if (PanelTipos.this.subformController.getInterface().getAsignar()) {
-            valoresSeleccionados.add(PanelTipos.this.subformController.getInterface().getItem());
+        for (int i = 0; i < SubFormListsPanel.this.jList2.getModel().getSize(); ++i) {
+          String nombre = (String)SubFormListsPanel.this.jList2.getModel().getElementAt(i);
+          SubFormListsPanel.this.subformController.getInterface().setItem(nombre);
+          while ((i > 0) && (!(SubFormListsPanel.this.subformController.getInterface().getProcesado())));
+          SubFormListsPanel.this.subformController.getInterface().insertarDatosParaDisponibles(nombre);
+          SubFormListsPanel.this.subformController.getInterface().setProcesado(false);
+          while (!(SubFormListsPanel.this.subformController.getInterface().getProcesado()));
+          if (SubFormListsPanel.this.subformController.getInterface().getAsignar()) {
+            valoresSeleccionados.add(SubFormListsPanel.this.subformController.getInterface().getItem());
           }
         }
         for (int j = 0; j < valoresSeleccionados.size(); ++j) {
@@ -377,12 +377,12 @@ public class PanelTipos extends JPanel
             valoresList2.remove(posicion);
           }
         }
-        PanelTipos.this.jList2.setListData(valoresList2);
+        SubFormListsPanel.this.jList2.setListData(valoresList2);
 
         for (int i = 0; i < valoresSeleccionados.size(); ++i) {
           valoresList1.add(valoresSeleccionados.get(i));
         }
-        PanelTipos.this.jList1.setListData(valoresList1);
+        SubFormListsPanel.this.jList1.setListData(valoresList1);
 
         return null;
       }
@@ -412,28 +412,28 @@ public class PanelTipos extends JPanel
   {
     this.eventButton1 = new MouseAdapter() {
       public void mouseClicked(MouseEvent evt) {
-        PanelTipos.this.jButtonDesasignarMouseClicked(evt);
+        SubFormListsPanel.this.jButtonDesasignarMouseClicked(evt);
       }
     };
     this.jButton1.addMouseListener(this.eventButton1);
 
     this.eventButton2 = new MouseAdapter() {
       public void mouseClicked(MouseEvent evt) {
-        PanelTipos.this.jButtonAsignarMouseClicked(evt);
+        SubFormListsPanel.this.jButtonAsignarMouseClicked(evt);
       }
     };
     this.jButton2.addMouseListener(this.eventButton2);
 
     this.eventButton3 = new MouseAdapter() {
       public void mouseClicked(MouseEvent evt) {
-        PanelTipos.this.jButtonDesasignarTodosMouseClicked(evt);
+        SubFormListsPanel.this.jButtonDesasignarTodosMouseClicked(evt);
       }
     };
     this.jButton3.addMouseListener(this.eventButton3);
 
     this.eventButton4 = new MouseAdapter() {
       public void mouseClicked(MouseEvent evt) {
-        PanelTipos.this.jButtonAsignarTodosMouseClicked(evt);
+        SubFormListsPanel.this.jButtonAsignarTodosMouseClicked(evt);
       }
     };
     this.jButton4.addMouseListener(this.eventButton4);

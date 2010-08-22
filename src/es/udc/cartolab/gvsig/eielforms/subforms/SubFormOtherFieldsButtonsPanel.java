@@ -7,13 +7,13 @@ import java.io.PrintStream;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class PanelBotonesModificarRestoCampos extends JPanel
+public class SubFormOtherFieldsButtonsPanel extends JPanel
 {
   private SubFormInterface subformInterface;
   private JButton aceptarButton;
   private JButton cancelarButton;
 
-  public PanelBotonesModificarRestoCampos(SubFormInterface subformInterface)
+  public SubFormOtherFieldsButtonsPanel(SubFormInterface subformInterface)
   {
     this.subformInterface = subformInterface;
 
@@ -36,7 +36,7 @@ public class PanelBotonesModificarRestoCampos extends JPanel
     {
       try
       {
-        PanelBotonesModificarRestoCampos.this.subformInterface.cerrarDialogo();
+        SubFormOtherFieldsButtonsPanel.this.subformInterface.cerrarDialogo();
       }
       catch (Exception e) {
         System.out.println("Ocurrio algún error inesperado...");
@@ -52,7 +52,7 @@ public class PanelBotonesModificarRestoCampos extends JPanel
     {
       try
       {
-        PanelBotonesModificarRestoCampos.this.subformInterface.aceptarModificacion();
+        SubFormOtherFieldsButtonsPanel.this.subformInterface.aceptarModificacion();
       }
       catch (Exception e)
       {

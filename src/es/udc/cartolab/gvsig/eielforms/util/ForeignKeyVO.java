@@ -2,11 +2,11 @@ package es.udc.cartolab.gvsig.eielforms.util;
 
 import java.util.Vector;
 
-public class ClaveForaneaVO
+public class ForeignKeyVO
 {
   private Vector campos;
 
-  public ClaveForaneaVO()
+  public ForeignKeyVO()
   {
     this.campos = new Vector();
   }
