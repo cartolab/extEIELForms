@@ -1,11 +1,9 @@
 package es.udc.cartolab.gvsig.eielforms;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -37,16 +35,21 @@ public class EIELNavTable extends AbstractNavTable {
 
 	@Override
 	public boolean init() {
-		add(getNorthPanel());
-		add(getCenterPanel());
-		add(getSouthPanel());
+		JPanel centerPanel = getCenterPanel();
+		if (centerPanel != null) {
+			add(getNorthPanel());
+			add(getCenterPanel());
+			add(getSouthPanel());
 
-		currentPosition = 0;
+			currentPosition = 0;
 
-		refreshGUI();
-		super.repaint();
-		super.setVisible(true);
-		return true;
+			refreshGUI();
+			super.repaint();
+			super.setVisible(true);
+			return true;
+		} else {
+			return false;
+		}
 
 	}
 
@@ -117,14 +120,13 @@ public class EIELNavTable extends AbstractNavTable {
 				if (form == null) {
 					FormGenerator fg = new FormGenerator();
 					form = fg.createFormController(layer.getName());
-				} 
+				}
 				centerPanel = form.getInterface();
 			} catch (FormException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return null;
 			}
 		}
 		return centerPanel;
 	}
-	
+
 }

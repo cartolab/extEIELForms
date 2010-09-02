@@ -1,24 +1,20 @@
 package es.udc.cartolab.gvsig.eielforms;
 
-import java.io.File;
-
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
-import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
-import es.udc.cartolab.gvsig.eielforms.formgenerator.FormGenerator;
-import es.udc.cartolab.gvsig.eielforms.forms.FormController;
+import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
+import es.udc.cartolab.gvsig.navtable.NavTable;
 
 public class FormExtension extends Extension {
 
 	@Override
 	public void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -34,9 +30,14 @@ public class FormExtension extends Extension {
 //		}
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		FLyrVect l = (FLyrVect) v.getMapControl().getMapContext().getLayers().getActives()[0];
-		EIELNavTable nt = new EIELNavTable(l);
+		AbstractNavTable nt = new EIELNavTable(l);
 		if (nt.init()) {
 			PluginServices.getMDIManager().addCentredWindow(nt);
+		} else {
+			nt = new NavTable(l);
+			if (nt.init()) {
+				PluginServices.getMDIManager().addCentredWindow(nt);
+			}
 		}
 	}
 
