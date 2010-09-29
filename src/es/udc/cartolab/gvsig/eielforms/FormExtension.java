@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2010. Cartolab (Universidade da Coruña)
+ * 
+ * This file is part of extEIELForms
+ * 
+ * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
+ * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
+ * 
+ * extEIELForms is free software: you can redistribute it and/or modify it under the terms
+ * of the GNU General Public License as published by the Free Software Foundation, either
+ * version 3 of the License, or any later version.
+ * 
+ * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with extEIELForms.
+ * If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.udc.cartolab.gvsig.eielforms;
 
 import com.iver.andami.PluginServices;
@@ -13,21 +33,19 @@ public class FormExtension extends Extension {
 
 	@Override
 	public void initialize() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void execute(String actionCommand) {
-//		ConstantsManager cm = new ConstantsManager();
-//		FormGenerator fg = new FormGenerator();
-//		try {
-//			FormController fc = fg.createFormController("ferrocarril");
-//			fc.getInterface().setVisible(true);
-//		} catch (FormException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		//		ConstantsManager cm = new ConstantsManager();
+		//		FormGenerator fg = new FormGenerator();
+		//		try {
+		//			FormController fc = fg.createFormController("ferrocarril");
+		//			fc.getInterface().setVisible(true);
+		//		} catch (FormException e) {
+		//			e.printStackTrace();
+		//		}
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		FLyrVect l = (FLyrVect) v.getMapControl().getMapContext().getLayers().getActives()[0];
 		AbstractNavTable nt = new EIELNavTable(l);
@@ -47,14 +65,13 @@ public class FormExtension extends Extension {
 		FLayers layers = v.getMapControl().getMapContext().getLayers();
 		if (layers.getActives().length > 0) {
 			return layers.getActives()[0] instanceof FLyrVect;
-		} else return false;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
 	public boolean isVisible() {
 		return PluginServices.getMDIManager().getActiveWindow() instanceof View;
 	}
-	
-	
-
 }

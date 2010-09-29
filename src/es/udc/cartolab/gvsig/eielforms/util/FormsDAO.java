@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2010. Cartolab (Universidade da Coruña)
+ * 
+ * This file is part of extEIELForms
+ * 
+ * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
+ * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
+ * 
+ * extEIELForms is free software: you can redistribute it and/or modify it under the terms
+ * of the GNU General Public License as published by the Free Software Foundation, either
+ * version 3 of the License, or any later version.
+ * 
+ * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with extEIELForms.
+ * If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.udc.cartolab.gvsig.eielforms.util;
 
 import java.sql.Connection;
@@ -16,49 +36,49 @@ import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class FormsDAO {
-	
+
 	public FormsDAO() {
 	}
-	
+
 	public HashMap<String, String> getValues(HashMap key, String schemaName, String table, List<String> fields) throws FormException {
 		ResultSet resultSet = null;
-	    Connection connection = null;
-	    Statement statement = null;
-	    String condition = getWhereCondition(key);
-	    String queryString = "SELECT ";
-	    HashMap<String, String> result = new HashMap<String, String>();
+		Connection connection = null;
+		Statement statement = null;
+		String condition = getWhereCondition(key);
+		String queryString = "SELECT ";
+		HashMap<String, String> result = new HashMap<String, String>();
 
-	    for (int i = 0; i < fields.size(); ++i) {
-	      queryString = queryString + ((String)fields.get(i)) + ", ";
-	    }
-	    queryString = queryString.substring(0, queryString.length() - 2) + " ";
+		for (int i = 0; i < fields.size(); ++i) {
+			queryString = queryString + (String)fields.get(i) + ", ";
+		}
+		queryString = queryString.substring(0, queryString.length() - 2) + " ";
 
-	    if (!(schemaName.equals("")))
-	      queryString = queryString + "FROM \"" + schemaName + "\"." + table + " " + condition;
-	    else {
-	      queryString = queryString + "FROM " + table + " " + condition;
-	    }
-	    System.out.println("Ejecutando la consulta >>>>>>>>> \n" + queryString);
-	    try
-	    {
-	    	DBSession dbs = DBSession.getCurrentSession();
-	    	if (dbs!=null) {
-	    	connection = dbs.getJavaConnection();
-	    	statement = connection.createStatement();
-	        resultSet = statement.executeQuery(queryString);
+		if (!schemaName.equals("")) {
+			queryString = queryString + "FROM \"" + schemaName + "\"." + table + " " + condition;
+		} else {
+			queryString = queryString + "FROM " + table + " " + condition;
+		}
+		System.out.println("Ejecutando la consulta >>>>>>>>> \n" + queryString);
+		try
+		{
+			DBSession dbs = DBSession.getCurrentSession();
+			if (dbs!=null) {
+				connection = dbs.getJavaConnection();
+				statement = connection.createStatement();
+				resultSet = statement.executeQuery(queryString);
 
-	        if (resultSet.next()) {
-	          for (int i = 0; i<fields.size() ; ++i) { 
-	            result.put((String)fields.get(i), resultSet.getString(fields.get(i)));
-	          }
-	        }
-	    	} else {
-	    		throw new FormException("La sesion no se ha iniciado");
-	    	}
+				if (resultSet.next()) {
+					for (int i = 0; i<fields.size() ; ++i) {
+						result.put((String)fields.get(i), resultSet.getString(fields.get(i)));
+					}
+				}
+			} else {
+				throw new FormException("La sesion no se ha iniciado");
+			}
 
-	        return result;
-	    } catch (SQLException e) {
-	    	try {
+			return result;
+		} catch (SQLException e) {
+			try {
 				DBSession.reconnect();
 			} catch (DBException e1) {
 				// TODO Auto-generated catch block
@@ -66,321 +86,323 @@ public class FormsDAO {
 			} finally {
 				throw new FormException(e);
 			}
-	    } finally {
-	    	closeResultSet(resultSet);
-	    	closeStatement(statement);
-	    }
+		} finally {
+			closeResultSet(resultSet);
+			closeStatement(statement);
+		}
 	}
 
-	 public void updateEntity(HashMap key, String schemaName, String table, HashMap fields)
-	    throws FormException
-	  {
-	    Connection connection = null;
-	    Statement statement = null;
+	public void updateEntity(HashMap key, String schemaName, String table, HashMap fields)
+	throws FormException
+	{
+		Connection connection = null;
+		Statement statement = null;
 
-	    String condition = getWhereCondition(key);
-	    Set fieldsSet = fields.keySet();
-	    Iterator fieldsIterator = fieldsSet.iterator();
+		String condition = getWhereCondition(key);
+		Set fieldsSet = fields.keySet();
+		Iterator fieldsIterator = fieldsSet.iterator();
 
-	    String updateString = "";
-	    if (!(schemaName.equals("")))
-	      updateString = "UPDATE \"" + schemaName + "\"." + table + " SET \n";
-	    else
-	      updateString = "UPDATE " + table + " SET \n";
-	    while (fieldsIterator.hasNext()) {
-	      String oneField = (String)fieldsIterator.next();
-	      String oneFieldValue = (String)fields.get(oneField);
-	      if (oneFieldValue != null && oneFieldValue.compareTo("") != 0) {
-	        updateString = updateString + oneField + " = '" + fields.get(oneField) + "',\n ";
-	      } else {
-	      updateString = updateString + oneField + " = null,\n ";
-	      }
-	    }
+		String updateString = "";
+		if (!schemaName.equals("")) {
+			updateString = "UPDATE \"" + schemaName + "\"." + table + " SET \n";
+		} else {
+			updateString = "UPDATE " + table + " SET \n";
+		}
+		while (fieldsIterator.hasNext()) {
+			String oneField = (String)fieldsIterator.next();
+			String oneFieldValue = (String)fields.get(oneField);
+			if (oneFieldValue != null && oneFieldValue.compareTo("") != 0) {
+				updateString = updateString + oneField + " = '" + fields.get(oneField) + "',\n ";
+			} else {
+				updateString = updateString + oneField + " = null,\n ";
+			}
+		}
 
-	    updateString = updateString.substring(0, updateString.length() - 3);
-	    updateString = updateString + "\n " + condition;
+		updateString = updateString.substring(0, updateString.length() - 3);
+		updateString = updateString + "\n " + condition;
 
-	    System.out.println("SENTENCIA UPDATE EJECUTADA >>>>>>>>> \n" + updateString);
-	    try
-	    {
-	      DBSession dbs = DBSession.getCurrentSession();
-	      if (dbs!= null) {
-	      connection = dbs.getJavaConnection();
-	      statement = connection.createStatement();
+		System.out.println("SENTENCIA UPDATE EJECUTADA >>>>>>>>> \n" + updateString);
+		try
+		{
+			DBSession dbs = DBSession.getCurrentSession();
+			if (dbs!= null) {
+				connection = dbs.getJavaConnection();
+				statement = connection.createStatement();
 
-	      statement.executeUpdate(updateString);
-	      connection.commit();
-	    	} else {
-	    		throw new FormException("La sesion no se ha iniciado");
-	    	}
-	    }
-	    catch (Exception e)
-	    {
-	      throw new FormException(e);
-	    } finally {
-//	      closeResultSet(resultSet);
-	      closeStatement(statement);
-	    }
-	  }
+				statement.executeUpdate(updateString);
+				connection.commit();
+			} else {
+				throw new FormException("La sesion no se ha iniciado");
+			}
+		}
+		catch (Exception e)
+		{
+			throw new FormException(e);
+		} finally {
+			//	      closeResultSet(resultSet);
+			closeStatement(statement);
+		}
+	}
 
-	  public void insertEntity(HashMap fields, String schemaName, String table)
-	    throws FormException
-	  {
-	    Connection connection = null;
-	    Statement statement = null;
+	public void insertEntity(HashMap fields, String schemaName, String table)
+	throws FormException
+	{
+		Connection connection = null;
+		Statement statement = null;
 
-	    Set fieldsSet = fields.keySet();
-	    Iterator fieldsIterator = fieldsSet.iterator();
+		Set fieldsSet = fields.keySet();
+		Iterator fieldsIterator = fieldsSet.iterator();
 
-	    String insertString = "";
+		String insertString = "";
 
-	    if (!(schemaName.equals("")))
-	      insertString = "INSERT INTO \"" + schemaName + "\"." + table + "\n";
-	    else
-	      insertString = "INSERT INTO " + table + "\n";
-	    String fieldsString = "(";
-	    String valuesString = "(";
+		if (!schemaName.equals("")) {
+			insertString = "INSERT INTO \"" + schemaName + "\"." + table + "\n";
+		} else {
+			insertString = "INSERT INTO " + table + "\n";
+		}
+		String fieldsString = "(";
+		String valuesString = "(";
 
-	    while (fieldsIterator.hasNext()) {
-	      String oneField = (String)fieldsIterator.next();
-	      fieldsString = fieldsString + oneField + ", ";
+		while (fieldsIterator.hasNext()) {
+			String oneField = (String)fieldsIterator.next();
+			fieldsString = fieldsString + oneField + ", ";
 
-	      if (((String)fields.get(oneField)).compareTo("") == 0) {
-	        valuesString = valuesString + "null, ";
-	      }
-	      valuesString = valuesString + "'" + ((String)fields.get(oneField)).trim() + "', ";
-	    }
+			if (((String)fields.get(oneField)).compareTo("") == 0) {
+				valuesString = valuesString + "null, ";
+			}
+			valuesString = valuesString + "'" + ((String)fields.get(oneField)).trim() + "', ";
+		}
 
-	    fieldsString = fieldsString.substring(0, fieldsString.length() - 2) + ") ";
-	    valuesString = valuesString.substring(0, valuesString.length() - 2) + ") ";
+		fieldsString = fieldsString.substring(0, fieldsString.length() - 2) + ") ";
+		valuesString = valuesString.substring(0, valuesString.length() - 2) + ") ";
 
-	    insertString = insertString + fieldsString + "VALUES " + valuesString;
+		insertString = insertString + fieldsString + "VALUES " + valuesString;
 
-	    System.out.println("SENTENCIA INSERT EJECUTADA >>>>>>>>> \n" + insertString);
-	    try
-	    {
-	      DBSession dbs = DBSession.getCurrentSession();
-	      if (dbs!=null) {
-	      connection = dbs.getJavaConnection();
+		System.out.println("SENTENCIA INSERT EJECUTADA >>>>>>>>> \n" + insertString);
+		try
+		{
+			DBSession dbs = DBSession.getCurrentSession();
+			if (dbs!=null) {
+				connection = dbs.getJavaConnection();
 
-	      statement = connection.createStatement();
-	      statement.execute(insertString);
-    	} else {
-    		throw new FormException("La sesion no se ha iniciado");
-    	}
-	    }
-	    catch (Exception e)
-	    {
-	    	try {
+				statement = connection.createStatement();
+				statement.execute(insertString);
+			} else {
+				throw new FormException("La sesion no se ha iniciado");
+			}
+		}
+		catch (Exception e)
+		{
+			try {
 				DBSession.reconnect();
 			} catch (DBException e1) {
 				throw new FormException(e1);
-			} 
-	      throw new FormException(e);
-	    } finally {
-	      closeStatement(statement);
-	    }
-	  }
+			}
+			throw new FormException(e);
+		} finally {
+			closeStatement(statement);
+		}
+	}
 
-	  public int deleteEntity(HashMap key, String schemaName, String table)
-	    throws FormException
-	  {
-	    Connection connection = null;
-	    Statement statement = null;
-	    String condition = getWhereCondition(key);
+	public int deleteEntity(HashMap key, String schemaName, String table)
+	throws FormException
+	{
+		Connection connection = null;
+		Statement statement = null;
+		String condition = getWhereCondition(key);
 
-	    String deleteString = "";
+		String deleteString = "";
 
-	    if (!(schemaName.equals("")))
-	      deleteString = "DELETE FROM \"" + schemaName + "\"." + table + "\n";
-	    else {
-	      deleteString = "DELETE FROM " + table + "\n";
-	    }
-	    deleteString = deleteString + condition;
-	    try
-	    {
-	    	DBSession dbs = DBSession.getCurrentSession();
-	    	if (dbs != null) {
-	      connection = dbs.getJavaConnection();
+		if (!schemaName.equals("")) {
+			deleteString = "DELETE FROM \"" + schemaName + "\"." + table + "\n";
+		} else {
+			deleteString = "DELETE FROM " + table + "\n";
+		}
+		deleteString = deleteString + condition;
+		try
+		{
+			DBSession dbs = DBSession.getCurrentSession();
+			if (dbs != null) {
+				connection = dbs.getJavaConnection();
 
-	      statement = connection.createStatement();
-	      int updatedRows = statement.executeUpdate(deleteString);
+				statement = connection.createStatement();
+				int updatedRows = statement.executeUpdate(deleteString);
 
-	      System.out.println("SENTENCIA DELETE EJECUTADA >>>>>>>>> \n" + deleteString);
+				System.out.println("SENTENCIA DELETE EJECUTADA >>>>>>>>> \n" + deleteString);
 
-	      int i = updatedRows;
+				int i = updatedRows;
 
-	      return i;
-	    	} else {
-	    		throw new FormException("La sesion no se ha iniciado");
-	    	}
-	    }
-	      catch (Exception e)
-		    {
-		    	try {
-					DBSession.reconnect();
-				} catch (DBException e1) {
-					throw new FormException(e1);
-				} 
-		      throw new FormException(e);
-		    } finally {
-		      closeStatement(statement);
-		    }
-	  }
-	  
-	  public String getHighestValue(HashMap key, String schemaName, String table, String field) throws FormException {
-		  Connection connection = null;
-		  Statement statement = null;
-		  ResultSet resultSet = null;
+				return i;
+			} else {
+				throw new FormException("La sesion no se ha iniciado");
+			}
+		}
+		catch (Exception e)
+		{
+			try {
+				DBSession.reconnect();
+			} catch (DBException e1) {
+				throw new FormException(e1);
+			}
+			throw new FormException(e);
+		} finally {
+			closeStatement(statement);
+		}
+	}
 
-		  ArrayList fieldsCollection = new ArrayList();
-		  String condition = getWhereCondition(key);
-		  condition = condition + " AND " + field + " IS NOT NULL";
+	public String getHighestValue(HashMap key, String schemaName, String table, String field) throws FormException {
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
 
-		  String queryString = "SELECT " + field + " ";
+		ArrayList fieldsCollection = new ArrayList();
+		String condition = getWhereCondition(key);
+		condition = condition + " AND " + field + " IS NOT NULL";
 
-		  if (!(schemaName.equals("")))
-			  queryString = queryString + "FROM \"" + schemaName + "\"." + table + " " + condition;
-		  else {
-			  queryString = queryString + "FROM " + table + " " + condition;
-		  }
+		String queryString = "SELECT " + field + " ";
 
-		  queryString = queryString + " ORDER BY " + field + " DESC LIMIT 1";
-		  System.out.println("CONSULTA EJECUTADA >>>>>>>>> \n" + queryString);
+		if (!schemaName.equals("")) {
+			queryString = queryString + "FROM \"" + schemaName + "\"." + table + " " + condition;
+		} else {
+			queryString = queryString + "FROM " + table + " " + condition;
+		}
 
-		  String highestValue = null;
-		  try
-		  {
-			  DBSession dbs = DBSession.getCurrentSession();
-			  if (dbs != null) {
-				  connection = dbs.getJavaConnection();
-				  statement = connection.createStatement();
+		queryString = queryString + " ORDER BY " + field + " DESC LIMIT 1";
+		System.out.println("CONSULTA EJECUTADA >>>>>>>>> \n" + queryString);
 
-				  resultSet = statement.executeQuery(queryString);
+		String highestValue = null;
+		try
+		{
+			DBSession dbs = DBSession.getCurrentSession();
+			if (dbs != null) {
+				connection = dbs.getJavaConnection();
+				statement = connection.createStatement();
 
-				  
-				  while (resultSet.next()) {
-					  highestValue = resultSet.getString(1);
-				  }
-			  } else {
-				  throw new FormException("La sesion no se ha iniciado");
-			  }
-		  }
-		  catch (Exception e)
-		  {
-			  try {
-				  DBSession.reconnect();
-			  } catch (DBException e1) {
-				  throw new FormException(e1);
-			  } 
-			  throw new FormException(e);
-		  } finally {
-			  closeResultSet(resultSet);
-			  closeStatement(statement);
-		  }
-		  
-		  if (highestValue == null) {
-			  highestValue = "00";
-		  }
-		  return highestValue;
-	  }
+				resultSet = statement.executeQuery(queryString);
 
-	  public ArrayList getFieldsCollection(HashMap key, String schemaName, String table, ArrayList fields)
-	    throws FormException
-	  {
-	    Connection connection = null;
-	    Statement statement = null;
-	    ResultSet resultSet = null;
 
-	    ArrayList fieldsCollection = new ArrayList();
-	    String condition = getWhereCondition(key);
+				while (resultSet.next()) {
+					highestValue = resultSet.getString(1);
+				}
+			} else {
+				throw new FormException("La sesion no se ha iniciado");
+			}
+		}
+		catch (Exception e)
+		{
+			try {
+				DBSession.reconnect();
+			} catch (DBException e1) {
+				throw new FormException(e1);
+			}
+			throw new FormException(e);
+		} finally {
+			closeResultSet(resultSet);
+			closeStatement(statement);
+		}
 
-	    String queryString = "SELECT ";
+		if (highestValue == null) {
+			highestValue = "00";
+		}
+		return highestValue;
+	}
 
-	    for (int i = 0; i < fields.size(); ++i) {
-	      queryString = queryString + ((String)fields.get(i)) + ", ";
-	    }
-	    queryString = queryString.substring(0, queryString.length() - 2) + " ";
+	public ArrayList getFieldsCollection(HashMap key, String schemaName, String table, ArrayList fields)
+	throws FormException
+	{
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
 
-	    if (!(schemaName.equals("")))
-	      queryString = queryString + "FROM \"" + schemaName + "\"." + table + " " + condition;
-	    else {
-	      queryString = queryString + "FROM " + table + " " + condition;
-	    }
-	    System.out.println("CONSULTA EJECUTADA >>>>>>>>> \n" + queryString);
-	    try
-	    {
-	      DBSession dbs = DBSession.getCurrentSession();
-	      if (dbs != null) {
-	      connection = dbs.getJavaConnection();
-	      statement = connection.createStatement();
+		ArrayList fieldsCollection = new ArrayList();
+		String condition = getWhereCondition(key);
 
-	      resultSet = statement.executeQuery(queryString);
+		String queryString = "SELECT ";
 
-	      while (resultSet.next()) {
-	        HashMap result = new HashMap();
-	        for (int i = 0; i < fields.size(); ++i) {
-	          result.put((String)fields.get(i), resultSet.getString(i + 1));
-	        }
-	        fieldsCollection.add(result);
-	      }
+		for (int i = 0; i < fields.size(); ++i) {
+			queryString = queryString + (String)fields.get(i) + ", ";
+		}
+		queryString = queryString.substring(0, queryString.length() - 2) + " ";
 
-	      ArrayList localArrayList1 = fieldsCollection;
+		if (!schemaName.equals("")) {
+			queryString = queryString + "FROM \"" + schemaName + "\"." + table + " " + condition;
+		} else {
+			queryString = queryString + "FROM " + table + " " + condition;
+		}
+		System.out.println("CONSULTA EJECUTADA >>>>>>>>> \n" + queryString);
+		try
+		{
+			DBSession dbs = DBSession.getCurrentSession();
+			if (dbs != null) {
+				connection = dbs.getJavaConnection();
+				statement = connection.createStatement();
 
-	      return localArrayList1;
-	    	} else {
-	    		throw new FormException("La sesion no se ha iniciado");
-	    	}
-	    }
-	      catch (Exception e)
-		    {
-		    	try {
-					DBSession.reconnect();
-				} catch (DBException e1) {
-					throw new FormException(e1);
-				} 
-		      throw new FormException(e);
-		    } finally {
-		    	closeResultSet(resultSet);
-		      closeStatement(statement);
-		    }
-	  }
+				resultSet = statement.executeQuery(queryString);
 
-	  private String getWhereCondition(HashMap key) {
-	    Set keySet = key.keySet();
-	    Iterator claveIterator = keySet.iterator();
+				while (resultSet.next()) {
+					HashMap result = new HashMap();
+					for (int i = 0; i < fields.size(); ++i) {
+						result.put((String)fields.get(i), resultSet.getString(i + 1));
+					}
+					fieldsCollection.add(result);
+				}
 
-	    String condition = "";
+				ArrayList localArrayList1 = fieldsCollection;
 
-	    if (claveIterator.hasNext()) {
-	      condition = "WHERE ";
-	      while (claveIterator.hasNext()) {
-	        String oneKey = (String)claveIterator.next();
-	        condition = condition + oneKey + " = '" + key.get(oneKey) + "' and ";
-	      }
-	      condition = condition.substring(0, condition.length() - 5);
-	    }
-	    return condition;
-	  }
-	
-	  
-	  private void closeStatement(Statement statement) throws FormException {
-		  if (statement!=null) {
-			  try {
+				return localArrayList1;
+			} else {
+				throw new FormException("La sesion no se ha iniciado");
+			}
+		}
+		catch (Exception e)
+		{
+			try {
+				DBSession.reconnect();
+			} catch (DBException e1) {
+				throw new FormException(e1);
+			}
+			throw new FormException(e);
+		} finally {
+			closeResultSet(resultSet);
+			closeStatement(statement);
+		}
+	}
+
+	private String getWhereCondition(HashMap key) {
+		Set keySet = key.keySet();
+		Iterator claveIterator = keySet.iterator();
+
+		String condition = "";
+
+		if (claveIterator.hasNext()) {
+			condition = "WHERE ";
+			while (claveIterator.hasNext()) {
+				String oneKey = (String)claveIterator.next();
+				condition = condition + oneKey + " = '" + key.get(oneKey) + "' and ";
+			}
+			condition = condition.substring(0, condition.length() - 5);
+		}
+		return condition;
+	}
+
+
+	private void closeStatement(Statement statement) throws FormException {
+		if (statement!=null) {
+			try {
 				statement.close();
 			} catch (SQLException e) {
 				throw new FormException(e);
 			}
-		  }
-	  }
-	  
-	  private void closeResultSet(ResultSet resultSet) throws FormException {
-		  if (resultSet != null) {
-			  try {
+		}
+	}
+
+	private void closeResultSet(ResultSet resultSet) throws FormException {
+		if (resultSet != null) {
+			try {
 				resultSet.close();
 			} catch (SQLException e) {
 				throw new FormException(e);
 			}
-		  }
-	  }
+		}
+	}
 }
