@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
- * 
+ *
  * This file is part of extEIELForms
- * 
+ *
  * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
  * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
- * 
+ *
  * extEIELForms is free software: you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or any later version.
- * 
+ *
  * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with extEIELForms.
  * If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,6 +36,7 @@ import es.udc.cartolab.gvsig.eielforms.groups.FieldGroup;
 import es.udc.cartolab.gvsig.eielforms.groups.GroupGenerator;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubForm;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubFormGenerator;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class FormGenerator
 {
@@ -58,7 +59,7 @@ public class FormGenerator
 
 	public FormGenerator()
 	{
-		this.formDAO = new FormFileReader();
+		this.formDAO = new FormDBReader();
 		this.domParser = new DOMParser();
 		this.dependencyGenerator = new DependencyGenerator();
 		this.groupGenerator = new GroupGenerator();
@@ -179,7 +180,12 @@ public class FormGenerator
 		Node attributes = configurationValuesNode.getFirstChild();
 		while (attributes != null) {
 			if (attributes.getNodeName().compareTo("DataBase") == 0) {
-				this.database = attributes.getFirstChild().getNodeValue();
+				DBSession dbs = DBSession.getCurrentSession();
+				if (dbs != null) {
+					this.database = dbs.getSchema();
+				} else {
+					this.database = attributes.getFirstChild().getNodeValue();
+				}
 			}
 			else if (attributes.getNodeName().compareTo("Table") == 0) {
 				this.table = attributes.getFirstChild().getNodeValue();
