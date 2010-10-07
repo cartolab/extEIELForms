@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
- * 
+ *
  * This file is part of extEIELForms
- * 
+ *
  * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
  * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
- * 
+ *
  * extEIELForms is free software: you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or any later version.
- * 
+ *
  * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with extEIELForms.
  * If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,6 +31,13 @@ import org.xml.sax.InputSource;
 
 import es.udc.cartolab.gvsig.eielforms.domain.BasicDomain;
 import es.udc.cartolab.gvsig.eielforms.domain.Domain;
+import es.udc.cartolab.gvsig.eielforms.domain.restriction.DecimalSizeRestriction;
+import es.udc.cartolab.gvsig.eielforms.domain.restriction.FieldSizeEqualRestriction;
+import es.udc.cartolab.gvsig.eielforms.domain.restriction.FieldSizeGreaterRestriction;
+import es.udc.cartolab.gvsig.eielforms.domain.restriction.FieldSizeLessRestriction;
+import es.udc.cartolab.gvsig.eielforms.domain.restriction.GreaterThanRestriction;
+import es.udc.cartolab.gvsig.eielforms.domain.restriction.LessThanRestriction;
+import es.udc.cartolab.gvsig.eielforms.domain.restriction.NumericFieldRestriction;
 import es.udc.cartolab.gvsig.eielforms.domain.restriction.Restriction;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 
@@ -174,7 +181,7 @@ public class DomainGenerator
 					if (restriccion.getNodeName().compareTo("Name") == 0) {
 						name = restriccion.getFirstChild().getNodeValue();
 					}
-					else if (restriccion.getNodeName().compareTo("RestrictionSubClass") == 0) {
+					else if (restriccion.getNodeName().equalsIgnoreCase("RestrictionSubClass")) {
 						subclass = restriccion.getFirstChild().getNodeValue();
 					}
 					else if (restriccion.getNodeName().compareTo("Value") == 0) {
@@ -183,29 +190,28 @@ public class DomainGenerator
 
 					restriccion = restriccion.getNextSibling();
 				}
-				//TODO recuperar las restricciones de los campos...
 
-				//        if (subclass.compareTo("LongitudCampoIgual") == 0) {
-				//          restricciones.add(new FieldSizeEqualRestriction(name, value));
-				//        }
-				//        else if (subclass.compareTo("LongitudCampoMayor") == 0) {
-				//          restricciones.add(new FieldSizeGreaterRestriction(name, value));
-				//        }
-				//        else if (subclass.compareTo("LongitudCampoMenor") == 0) {
-				//          restricciones.add(new FieldSizeLessRestriction(name, value));
-				//        }
-				//        else if (subclass.compareTo("Numerico") == 0) {
-				//          restricciones.add(new NumericFieldRestriction(name));
-				//        }
-				//        else if (subclass.compareTo("LongitudDecimales") == 0) {
-				//          restricciones.add(new DecimalSizeRestriction(name, value));
-				//        }
-				//        else if (subclass.compareTo("MayorQue") == 0) {
-				//          restricciones.add(new GreaterThanRestriction(name, new Float(value.toString())));
-				//        }
-				//        else if (subclass.compareTo("MenorQue") == 0) {
-				//          restricciones.add(new LessThanRestriction(name, new Float(value.toString())));
-				//        }
+				if (subclass.compareTo("LongitudCampoIgual") == 0) {
+					restricciones.add(new FieldSizeEqualRestriction(name, value));
+				}
+				else if (subclass.compareTo("LongitudCampoMayor") == 0) {
+					restricciones.add(new FieldSizeGreaterRestriction(name, value));
+				}
+				else if (subclass.compareTo("LongitudCampoMenor") == 0) {
+					restricciones.add(new FieldSizeLessRestriction(name, value));
+				}
+				else if (subclass.compareTo("Numerico") == 0) {
+					restricciones.add(new NumericFieldRestriction(name));
+				}
+				else if (subclass.compareTo("LongitudDecimales") == 0) {
+					restricciones.add(new DecimalSizeRestriction(name, value));
+				}
+				else if (subclass.compareTo("MayorQue") == 0) {
+					restricciones.add(new GreaterThanRestriction(name, new Float(value.toString())));
+				}
+				else if (subclass.compareTo("MenorQue") == 0) {
+					restricciones.add(new LessThanRestriction(name, new Float(value.toString())));
+				}
 
 			}
 

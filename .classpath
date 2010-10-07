@@ -13,5 +13,6 @@
 	<classpathentry kind="src" path="/libIverUtiles"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extUtilEIEL"/>
 	<classpathentry kind="src" path="/extCAD"/>
+	<classpathentry kind="lib" path="lib/validation-2.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
