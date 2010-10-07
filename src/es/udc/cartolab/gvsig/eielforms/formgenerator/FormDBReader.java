@@ -47,7 +47,7 @@ public class FormDBReader extends FormReader {
 
 		String queryString = "select definicion from \"" + this.aplicationSchemaName + "\".formularios ";
 		queryString = queryString + "where capa = ?";
-		String formXMLDefinition;
+		String formXMLDefinition = null;
 		DBSession dbs = DBSession.getCurrentSession();
 		if (dbs != null) {
 			try
@@ -63,8 +63,6 @@ public class FormDBReader extends FormReader {
 				resultSet = preparedStatement.executeQuery();
 				if (resultSet.next()) {
 					formXMLDefinition = resultSet.getString(1);
-				} else {
-					formXMLDefinition = null;
 				}
 
 			}
@@ -93,6 +91,12 @@ public class FormDBReader extends FormReader {
 		} else {
 			throw new FormException("Sesión no iniciada");
 		}
+
+		if (formXMLDefinition == null) {
+			throw new FormException("Formulario no encontrado");
+		}
+
+
 		return formXMLDefinition;
 	}
 }

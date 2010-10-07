@@ -138,7 +138,9 @@ public class EIELNavTable extends AbstractNavTable {
 					form = fg.createFormController(layer.getName());
 				}
 				centerPanel = form.getInterface();
-			} catch (FormException e) {
+			} catch (FormException fe) {
+				return null;
+			} catch (Exception e) {
 				return null;
 			}
 		}
