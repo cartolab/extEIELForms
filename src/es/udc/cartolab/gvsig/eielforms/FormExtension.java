@@ -28,6 +28,7 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.navtable.NavTable;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class FormExtension extends Extension {
 
@@ -63,7 +64,10 @@ public class FormExtension extends Extension {
 	public boolean isEnabled() {
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		FLayers layers = v.getMapControl().getMapContext().getLayers();
-		if (layers.getActives().length > 0) {
+		if (DBSession.getCurrentSession() == null){
+			return false;
+		}
+		else if (layers.getActives().length > 0) {
 			return layers.getActives()[0] instanceof FLyrVect && !layers.getActives()[0].isEditing();
 		} else {
 			return false;
