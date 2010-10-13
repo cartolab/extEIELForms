@@ -13,7 +13,12 @@
 		<extension class-name="es.udc.cartolab.gvsig.eielforms.FormExtension" description="Formulario" active="true">
 			<menu text="EIEL/Formulario"
 				action-command="form"
+				icon="images/formularios.png"
 				position="03"/> 
+			<tool-bar name="Formulario">
+				<action-tool icon="images/formularios.png" tooltip="lanzar_formulario"
+					action-command="form" position="03"/>
+			</tool-bar>
 		</extension>
 		<extension class-name="es.udc.cartolab.gvsig.eielforms.ThrowFormExtension" description="throw_form" active="true">
 			<tool-bar name="NavTable">
