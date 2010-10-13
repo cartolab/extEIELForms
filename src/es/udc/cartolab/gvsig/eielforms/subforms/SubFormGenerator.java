@@ -27,6 +27,7 @@ import org.w3c.dom.Node;
 import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterFieldGenerator;
 import es.udc.cartolab.gvsig.eielforms.field.FieldGenerator;
 import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class SubFormGenerator
 {
@@ -55,11 +56,16 @@ public class SubFormGenerator
     String name = "";
 
     Node contenidoSubform = subformNode.getFirstChild();
+    
+    DBSession dbs  = DBSession.getCurrentSession();
+	if (dbs != null) {
+		database = dbs.getSchema();
+	} else {
+		database = contenidoSubform.getAttributes().getNamedItem("DataBase").getNodeValue();
+	}
     while (contenidoSubform != null) {
-      if (contenidoSubform.getNodeName().compareTo("Database") == 0) {
-        database = contenidoSubform.getFirstChild().getNodeValue();
-      }
-      else if (contenidoSubform.getNodeName().compareTo("Name") == 0) {
+     
+      if (contenidoSubform.getNodeName().compareTo("Name") == 0) {
         name = contenidoSubform.getFirstChild().getNodeValue();
       }
       else if (contenidoSubform.getNodeName().compareTo("Table") == 0) {
