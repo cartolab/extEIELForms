@@ -10,8 +10,8 @@
 	<libraries library-dir="lib"/>
 	<resourceBundle name="text"/>
 	<extensions>
-		<extension class-name="es.udc.cartolab.gvsig.eielforms.FormExtension" description="form" active="true">
-			<menu text="data_base_menu/form"
+		<extension class-name="es.udc.cartolab.gvsig.eielforms.FormExtension" description="Formulario" active="true">
+			<menu text="EIEL/Formulario"
 				action-command="form"
 				position="03"/> 
 		</extension>
