@@ -32,6 +32,7 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.listeners.CADListenerManager;
 import com.iver.cit.gvsig.listeners.EndGeometryListener;
 
+import es.udc.cartolab.gvsig.eielforms.gui.EIELNavTable;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.navtable.NavTable;
 import es.udc.cartolab.gvsig.navtable.ToggleEditing;

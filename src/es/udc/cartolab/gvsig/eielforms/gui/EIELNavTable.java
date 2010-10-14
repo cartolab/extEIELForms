@@ -18,7 +18,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.udc.cartolab.gvsig.eielforms;
+package es.udc.cartolab.gvsig.eielforms.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,8 +140,10 @@ public class EIELNavTable extends AbstractNavTable {
 				centerPanel.setFocusCycleRoot(true);
 
 			} catch (FormException fe) {
+				fe.printStackTrace();
 				return null;
 			} catch (Exception e) {
+				e.printStackTrace();
 				return null;
 			}
 		}

@@ -26,6 +26,7 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
+import es.udc.cartolab.gvsig.eielforms.gui.EIELNavTable;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.navtable.NavTable;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
@@ -39,14 +40,7 @@ public class FormExtension extends Extension {
 
 	@Override
 	public void execute(String actionCommand) {
-		//		ConstantsManager cm = new ConstantsManager();
-		//		FormGenerator fg = new FormGenerator();
-		//		try {
-		//			FormController fc = fg.createFormController("ferrocarril");
-		//			fc.getInterface().setVisible(true);
-		//		} catch (FormException e) {
-		//			e.printStackTrace();
-		//		}
+
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		FLyrVect l = (FLyrVect) v.getMapControl().getMapContext().getLayers().getActives()[0];
 		AbstractNavTable nt = new EIELNavTable(l);

@@ -278,7 +278,31 @@ public class FormController extends Subject
 
 	public void insert()
 	{
-		this.formInterface.showInterface(true);
+		ArrayList<String> idFields = new ArrayList<String>();
+		idFields.add("id");
+		idFields.add("gid");
+		ArrayList fields = getFields();
+		ArrayList fieldsInterface = getFieldsInterface();
+		HashMap<String, String> fieldValues = new HashMap<String, String>();
+		for (int i=0; i< fieldsInterface.size(); i++) {
+			FieldInterface fi = (FieldInterface) fieldsInterface.get(i);
+			FieldController fc = fi.getField();
+			String fieldName = fc.getName();
+			if (!(fi instanceof DependencyMasterField) && !idFields.contains(fieldName.toLowerCase())) {
+				fieldValues.put(fieldName, fc.getValue());
+			}
+		}
+		FormsDAO fdao = new FormsDAO();
+		try {
+			fdao.insertEntity(fieldValues, dataBase, table);
+		} catch (FormException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+//		this.formInterface.showInterface(true);
+
 	}
 
 	public boolean validate()

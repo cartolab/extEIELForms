@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
- * 
+ *
  * This file is part of extEIELForms
- * 
+ *
  * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
  * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
- * 
+ *
  * extEIELForms is free software: you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or any later version.
- * 
+ *
  * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with extEIELForms.
  * If not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,6 +21,7 @@
 package es.udc.cartolab.gvsig.eielforms.util;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -49,7 +50,7 @@ public class FormsDAO {
 		HashMap<String, String> result = new HashMap<String, String>();
 
 		for (int i = 0; i < fields.size(); ++i) {
-			queryString = queryString + (String)fields.get(i) + ", ";
+			queryString = queryString + fields.get(i) + ", ";
 		}
 		queryString = queryString.substring(0, queryString.length() - 2) + " ";
 
@@ -69,7 +70,7 @@ public class FormsDAO {
 
 				if (resultSet.next()) {
 					for (int i = 0; i<fields.size() ; ++i) {
-						result.put((String)fields.get(i), resultSet.getString(fields.get(i)));
+						result.put(fields.get(i), resultSet.getString(fields.get(i)));
 					}
 				}
 			} else {
@@ -148,7 +149,7 @@ public class FormsDAO {
 	throws FormException
 	{
 		Connection connection = null;
-		Statement statement = null;
+		PreparedStatement statement = null;
 
 		Set fieldsSet = fields.keySet();
 		Iterator fieldsIterator = fieldsSet.iterator();
@@ -170,7 +171,7 @@ public class FormsDAO {
 			if (((String)fields.get(oneField)).compareTo("") == 0) {
 				valuesString = valuesString + "null, ";
 			}
-			valuesString = valuesString + "'" + ((String)fields.get(oneField)).trim() + "', ";
+			valuesString = valuesString + "?, ";
 		}
 
 		fieldsString = fieldsString.substring(0, fieldsString.length() - 2) + ") ";
@@ -185,8 +186,18 @@ public class FormsDAO {
 			if (dbs!=null) {
 				connection = dbs.getJavaConnection();
 
-				statement = connection.createStatement();
-				statement.execute(insertString);
+				statement = connection.prepareStatement(insertString);
+
+				fieldsIterator = fieldsSet.iterator();
+				int i=1;
+				while (fieldsIterator.hasNext()) {
+					String oneField = (String)fieldsIterator.next();
+					statement.setObject(i, ((String)fields.get(oneField)).trim());
+					i++;
+				}
+
+				statement.executeUpdate();
+				connection.commit();
 			} else {
 				throw new FormException("La sesion no se ha iniciado");
 			}
@@ -342,7 +353,7 @@ public class FormsDAO {
 				while (resultSet.next()) {
 					HashMap result = new HashMap();
 					for (int i = 0; i < fields.size(); ++i) {
-						result.put((String)fields.get(i), resultSet.getString(i + 1));
+						result.put(fields.get(i), resultSet.getString(i + 1));
 					}
 					fieldsCollection.add(result);
 				}

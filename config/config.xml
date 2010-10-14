@@ -26,5 +26,10 @@
 					action-command="throw_form" position="5" name="throw-form"/>
 			</tool-bar>
 		</extension>
+		<extension class-name="es.udc.cartolab.gvsig.eielforms.AlphanumericFormExtension" description="form" active="true">
+			<menu text="EIEL/Formularios/Carreteras"
+				action-command="Carreteras"
+				position="03"/> 
+		</extension>
 	</extensions>
 </plugin-config>
