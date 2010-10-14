@@ -69,7 +69,6 @@ public class EIELNavTable extends AbstractNavTable {
 		} else {
 			return false;
 		}
-
 	}
 
 	@Override
@@ -138,6 +137,8 @@ public class EIELNavTable extends AbstractNavTable {
 					form = fg.createFormController(layer.getName());
 				}
 				centerPanel = form.getInterface();
+				centerPanel.setFocusCycleRoot(true);
+
 			} catch (FormException fe) {
 				return null;
 			} catch (Exception e) {
