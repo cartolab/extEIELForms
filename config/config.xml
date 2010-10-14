@@ -14,10 +14,10 @@
 			<menu text="EIEL/Formularios/Formulario de la capa"
 				action-command="form"
 				icon="images/formularios.png"
-				position="03"/> 
+				position="99"/> 
 			<tool-bar name="Formulario">
 				<action-tool icon="images/formularios.png" tooltip="lanzar_formulario"
-					action-command="form" position="03"/>
+					action-command="form" position="99"/>
 			</tool-bar>
 		</extension>
 		<extension class-name="es.udc.cartolab.gvsig.eielforms.ThrowFormExtension" description="throw_form" active="true">
@@ -30,6 +30,9 @@
 			<menu text="EIEL/Formularios/Carreteras"
 				action-command="Carreteras"
 				position="03"/> 
+			<menu text="EIEL/Formularios/Calles"
+				action-command="Calles"
+				position="04"/>
 		</extension>
 	</extensions>
 </plugin-config>
