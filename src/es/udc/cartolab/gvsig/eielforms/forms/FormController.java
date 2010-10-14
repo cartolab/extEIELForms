@@ -20,6 +20,7 @@
 
 package es.udc.cartolab.gvsig.eielforms.forms;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,6 +48,7 @@ public class FormController extends Subject
 	private FormInterface formInterface;
 	private String name;
 	private DependencyMasterFieldRetriever dependencyMasterFieldRetriever;
+	DecimalFormat df;
 
 	public FormController(String layer, String dataBase, String table, String layout, String name, String title)
 	{
@@ -55,6 +57,8 @@ public class FormController extends Subject
 		this.dataBase = dataBase;
 		this.table = table;
 		this.name = name;
+		
+		this.df = new DecimalFormat("000");
 
 		this.knowKey = false;
 		this.key = new ArrayList();
@@ -198,15 +202,12 @@ public class FormController extends Subject
 					try {
 						String highestVal = fdao.getHighestValue(getEielKey(fields), dataBase, table, oneField.getName());
 						Integer val = Integer.parseInt(highestVal) + 1;
-						if (val < 10) {
-							value = "0" + Integer.toString(val);
-						} else {
-							value = Integer.toString(val);
-						}
+						value = df.format(val);
+						
 					} catch (FormException e) {
 						e.printStackTrace();
 					} catch (Exception e) {
-						value = "00";
+						value = "999";
 					}
 				}
 				if (value == null) {
