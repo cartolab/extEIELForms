@@ -19,9 +19,14 @@
  */
 package es.udc.cartolab.gvsig.eielforms;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
+import com.iver.andami.ui.mdiFrame.JToolBarButton;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.listeners.CADListenerManager;
@@ -34,24 +39,35 @@ import es.udc.cartolab.gvsig.navtable.ToggleEditing;
 public class ThrowFormExtension extends Extension implements EndGeometryListener {
 
 	//este valor se tomara desde las preferencias de NavTable y no en una variable aqui
-	boolean formsEnabled = false;
-
+	private boolean formsEnabled = false;
+	private final Icon offIcon = new ImageIcon(this.getClass().getClassLoader().getResource("images/forms.png"));
+	private final Icon onIcon = new ImageIcon(this.getClass().getClassLoader().getResource("images/forms-active.png"));
+	
 	@Override
 	public void initialize() {
 		//se retira el listener de navtable y se pone el nuestro si procede,
 		//se desactiva la extension de formularios automaticos de navtable.
+		PluginServices.getIconTheme().registerDefault(
+				"throw-form",
+				this.getClass().getClassLoader().getResource("images/forms.png")
+			);
 	}
 
 	@Override
 	public void execute(String actionCommand) {
+		
+		JToolBarButton throwFormButton = (JToolBarButton) PluginServices.getMainFrame().getComponentByName("throw-form");
 		if (!formsEnabled) {
 			CADListenerManager.addEndGeometryListener("es.udc.cartolab.eielforms", this);
 			NotificationManager.addInfo("Formularios activados");
 			formsEnabled = true;
+			throwFormButton.setIcon(onIcon);
+			
 		} else {
 			CADListenerManager.removeEndGeometryListener("es.udc.cartolab.eielforms");
 			NotificationManager.addInfo("Formularios desactivados");
 			formsEnabled = false;
+			throwFormButton.setIcon(offIcon);
 		}
 	}
 
