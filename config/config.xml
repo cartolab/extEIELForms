@@ -11,7 +11,7 @@
 	<resourceBundle name="text"/>
 	<extensions>
 		<extension class-name="es.udc.cartolab.gvsig.eielforms.FormExtension" description="Formulario" active="true">
-			<menu text="EIEL/Formulario"
+			<menu text="EIEL/Formularios/Formulario de la capa"
 				action-command="form"
 				icon="images/formularios.png"
 				position="03"/> 
