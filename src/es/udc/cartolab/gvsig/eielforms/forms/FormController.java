@@ -57,7 +57,7 @@ public class FormController extends Subject
 		this.dataBase = dataBase;
 		this.table = table;
 		this.name = name;
-		
+
 		this.df = new DecimalFormat("000");
 
 		this.knowKey = false;
@@ -203,7 +203,7 @@ public class FormController extends Subject
 						String highestVal = fdao.getHighestValue(getEielKey(fields), dataBase, table, oneField.getName());
 						Integer val = Integer.parseInt(highestVal) + 1;
 						value = df.format(val);
-						
+
 					} catch (FormException e) {
 						e.printStackTrace();
 					} catch (Exception e) {
@@ -233,7 +233,8 @@ public class FormController extends Subject
 					if (oneField.getName().compareTo(oneDependency.getDependencyMasterField().getField().getName()) == 0) {
 						oneField.setValue((String)fields.get(oneDependency.getName() + ".." + oneDependency.getDependencyMasterField().getForeignField()));
 					} else {
-						oneField.setValue((String)fields.get(oneDependency.getName() + ".." + oneField.getName()));
+//						oneField.setValue((String)fields.get(oneDependency.getName() + ".." + oneField.getName()));
+						oneField.setValue(oneField.getDefaultValue());
 					}
 
 				}
@@ -259,7 +260,8 @@ public class FormController extends Subject
 			{
 				for (int j = 0; j < groupOfFields.size(); ++j) {
 					FieldController oneField = (FieldController)groupOfFields.get(j);
-					oneField.setValue((String)fields.get(oneDependency.getName() + ".." + oneField.getName()));
+//					oneField.setValue((String)fields.get(oneDependency.getName() + ".." + oneField.getName()));
+					oneField.setValue(oneField.getDefaultValue());
 				}
 			}
 		}

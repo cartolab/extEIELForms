@@ -25,6 +25,7 @@ import java.util.HashMap;
 import com.iver.andami.plugins.Extension;
 
 import es.udc.cartolab.gvsig.eielforms.gui.AlphanumericForm;
+import es.udc.cartolab.gvsig.eielutils.constants.Constants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class AlphanumericFormExtension extends Extension {
@@ -53,14 +54,14 @@ public class AlphanumericFormExtension extends Extension {
 
 	@Override
 	public boolean isEnabled() {
-		DBSession dbs = DBSession.getCurrentSession();
-		return dbs!=null;
+		return true;
 	}
 
 	@Override
 	public boolean isVisible() {
 		DBSession dbs = DBSession.getCurrentSession();
-		return dbs!=null;
+		Constants cts = Constants.getCurrentConstants();
+		return dbs!=null && cts.getNucCod()!=null;
 	}
 
 }

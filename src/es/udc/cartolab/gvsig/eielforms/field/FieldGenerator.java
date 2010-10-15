@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
- * 
+ *
  * This file is part of extEIELForms
- * 
+ *
  * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
  * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
- * 
+ *
  * extEIELForms is free software: you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or any later version.
- * 
+ *
  * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with extEIELForms.
  * If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,6 +24,7 @@ import org.w3c.dom.Node;
 
 import es.udc.cartolab.gvsig.eielforms.domain.Domain;
 import es.udc.cartolab.gvsig.eielforms.domain.generator.DomainGenerator;
+import es.udc.cartolab.gvsig.eielutils.constants.Constants;
 
 public class FieldGenerator
 {
@@ -42,7 +43,7 @@ public class FieldGenerator
 		String isKey = new String();
 		String editable = new String();
 		String required = new String();
-		String defaultValue = new String();
+		String defaultValue = null;
 		boolean bool_isKey = false;
 		boolean bool_editable = false;
 		boolean bool_required = false;
@@ -54,6 +55,7 @@ public class FieldGenerator
 
 		while (atributos != null)
 		{
+
 			if (atributos.getNodeName().compareTo("Name") == 0) {
 				name = atributos.getFirstChild().getNodeValue();
 			}
@@ -88,11 +90,33 @@ public class FieldGenerator
 				while (defaultValueTypeNode != null) {
 					if (defaultValueTypeNode.getNodeName().compareTo("SingleValue") == 0) {
 						bool_constant_value = false;
-						defaultValue = defaultValueTypeNode.getFirstChild().getNodeValue();
+						Constants cts = Constants.getCurrentConstants();
+						boolean constant = false;
+						if (cts!=null) {
+							String value = cts.getValue(name);
+							if (value!=null) {
+								defaultValue = value;
+								constant = true;
+							}
+						}
+						if (!constant) {
+							defaultValue = defaultValueTypeNode.getFirstChild().getNodeValue();
+						}
 					}
 					else if (defaultValueTypeNode.getNodeName().compareTo("ConstantValue") == 0) {
 						bool_constant_value = true;
-						defaultValue = defaultValueTypeNode.getFirstChild().getNodeValue();
+						Constants cts = Constants.getCurrentConstants();
+						boolean constant = false;
+						if (cts!=null) {
+							String value = cts.getValue(name);
+							if (value!=null) {
+								defaultValue = value;
+								constant = true;
+							}
+						}
+						if (!constant) {
+							defaultValue = defaultValueTypeNode.getFirstChild().getNodeValue();
+						}
 					}
 
 					defaultValueTypeNode = defaultValueTypeNode.getNextSibling();
@@ -106,6 +130,22 @@ public class FieldGenerator
 
 			atributos = atributos.getNextSibling();
 		}
+
+		if (defaultValue == null) {
+			Constants cts = Constants.getCurrentConstants();
+			boolean constant = false;
+			if (cts!=null) {
+				String value = cts.getValue(name);
+				if (value!=null) {
+					defaultValue = value;
+					constant = true;
+				}
+			}
+			if (!constant) {
+				defaultValue = new String();
+			}
+		}
+
 		Domain domain = this.domainGenerator.getDomain(string_dominio);
 
 		FieldController fieldController = new FieldController(label, name, domain, defaultValue, bool_editable, bool_required, bool_isKey, bool_constant_value, bool_isOrden);
