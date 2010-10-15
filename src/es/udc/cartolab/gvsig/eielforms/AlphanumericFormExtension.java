@@ -20,6 +20,8 @@
 
 package es.udc.cartolab.gvsig.eielforms;
 
+import java.util.HashMap;
+
 import com.iver.andami.plugins.Extension;
 
 import es.udc.cartolab.gvsig.eielforms.gui.AlphanumericForm;
@@ -27,8 +29,13 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class AlphanumericFormExtension extends Extension {
 
+	private HashMap<String, Integer> formHeights;
+
 	@Override
 	public void initialize() {
+
+		formHeights = new HashMap<String, Integer>();
+		formHeights.put("Calles", 275);
 
 	}
 
@@ -36,6 +43,11 @@ public class AlphanumericFormExtension extends Extension {
 	public void execute(String actionCommand) {
 		AlphanumericForm af = new AlphanumericForm(actionCommand);
 		af.open();
+
+		Integer height = formHeights.get(actionCommand);
+		if (height!=null) {
+			af.setHeight(height);
+		}
 
 	}
 
