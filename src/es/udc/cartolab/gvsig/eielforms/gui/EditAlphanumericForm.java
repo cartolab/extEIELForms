@@ -113,9 +113,7 @@ public class EditAlphanumericForm extends AlphanumericForm {
 	}
 
 	public void fillValues() {
-		if (pos>-1) {
-			super.fillValues();
-		}
+		super.fillValues();
 	}
 
 	protected void addPKChangeListener() {
