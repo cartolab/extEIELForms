@@ -33,6 +33,9 @@
 			<menu text="EIEL/Formularios/Calles"
 				action-command="Calles"
 				position="04"/>
+			<menu text="EIEL/Formularios/Núcleo Encuestado 1"
+				action-command="Nucleo Encuestado 1"
+				position="05"/>
 		</extension>
 	</extensions>
 </plugin-config>
