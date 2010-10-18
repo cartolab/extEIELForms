@@ -20,6 +20,7 @@
 
 package es.udc.cartolab.gvsig.eielforms.gui;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -64,16 +65,29 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 
 	}
 
-	@Override
-	public WindowInfo getWindowInfo() {
-		if (viewInfo==null) {
-			viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.PALETTE);
-			viewInfo.setTitle("Alphanumeric form");
-			viewInfo.setWidth(500);
-			viewInfo.setHeight(185);
-		}
-		return viewInfo;
-	}
+	
+	 public WindowInfo getWindowInfo() {
+         if (viewInfo == null){
+                 viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.PALETTE);
+                 viewInfo.setTitle("Alphanumeric form");
+                 Dimension dim = getPreferredSize();
+                 int width,heigth = 0;
+                 if (dim.getHeight()>500){
+                         heigth = 500;
+                 }else{
+                         heigth = new Double(dim.getHeight()).intValue();
+                 }
+                 if (dim.getWidth()>500){
+                         width = 500;
+                 }else{
+                         width = new Double(dim.getWidth()).intValue();
+                 }
+                 viewInfo.setWidth(width+20);
+                 viewInfo.setHeight(heigth+20);
+         }
+         return viewInfo;
+ }
+
 
 	/**
 	 * Adds a listener to the Primary Key field
