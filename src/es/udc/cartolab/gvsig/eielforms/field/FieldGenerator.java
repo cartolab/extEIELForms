@@ -43,7 +43,9 @@ public class FieldGenerator
 		String isKey = new String();
 		String editable = new String();
 		String required = new String();
+		String save = new String();
 		String defaultValue = null;
+		boolean bool_save = false;
 		boolean bool_isKey = false;
 		boolean bool_editable = false;
 		boolean bool_required = false;
@@ -82,6 +84,10 @@ public class FieldGenerator
 			else if (atributos.getNodeName().compareTo("Required") == 0) {
 				required = atributos.getFirstChild().getNodeValue();
 				bool_required = getBoolean(required);
+			}
+			else if (atributos.getNodeName().compareTo("Save") == 0) {
+				save = atributos.getFirstChild().getNodeValue();
+				bool_save = getBoolean(save);
 			}
 			else if (atributos.getNodeName().compareTo("DefaultValue") == 0 &&
 					atributos.getFirstChild() != null) {
@@ -149,6 +155,7 @@ public class FieldGenerator
 		Domain domain = this.domainGenerator.getDomain(string_dominio);
 
 		FieldController fieldController = new FieldController(label, name, domain, defaultValue, bool_editable, bool_required, bool_isKey, bool_constant_value, bool_isOrden);
+		fieldController.setMustSave(bool_save);
 		FieldInterface fieldInterface;
 		if (domain.getType().compareTo("usuario") == 0)
 		{

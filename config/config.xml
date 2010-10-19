@@ -14,8 +14,8 @@
 			<menu text="EIEL/Formularios/Formulario de la capa"
 				action-command="form"
 				icon="images/formularios.png"
-				position="99"/> 
-			<tool-bar name="Formulario">
+				position="090"/> 
+			<tool-bar name="NavTable">
 				<action-tool icon="images/formularios.png" tooltip="lanzar_formulario"
 					action-command="form" position="99"/>
 			</tool-bar>
@@ -29,13 +29,16 @@
 		<extension class-name="es.udc.cartolab.gvsig.eielforms.AlphanumericFormExtension" description="form" active="true">
 			<menu text="EIEL/Formularios/Carreteras"
 				action-command="Carreteras"
-				position="03"/> 
+				position="0903"/> 
 			<menu text="EIEL/Formularios/Calles"
 				action-command="Calles"
-				position="04"/>
+				position="0904"/>
 			<menu text="EIEL/Formularios/Núcleo Encuestado 1"
 				action-command="Nucleo Encuestado 1"
-				position="05"/>
+				position="0905"/>
+			<menu text="EIEL/Formularios/Municipio Abastecimiento"
+				action-command="Municipio Abastecimiento"
+				position="0906"/>
 		</extension>
 	</extensions>
 </plugin-config>
