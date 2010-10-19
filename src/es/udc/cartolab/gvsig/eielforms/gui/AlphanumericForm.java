@@ -148,6 +148,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 				addPKChangeListener();
 			}
 			centerPanel = form.getInterface();
+			centerPanel.setFocusCycleRoot(true);
 
 		}
 		return centerPanel;
