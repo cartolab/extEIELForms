@@ -234,7 +234,11 @@ public class FormController extends Subject
 						oneField.setValue((String)fields.get(oneDependency.getName() + ".." + oneDependency.getDependencyMasterField().getForeignField()));
 					} else {
 //						oneField.setValue((String)fields.get(oneDependency.getName() + ".." + oneField.getName()));
-						oneField.setValue(oneField.getDefaultValue());
+						oneField.setValue((String)fields.get(oneField.getName()));
+						if (oneField.getValue()==null) {
+							oneField.setValue(oneField.getDefaultValue());
+						}
+						System.out.println("Value:" + oneField.getValue());
 					}
 
 				}
