@@ -44,7 +44,6 @@ public class SingleFieldGroup extends FieldGroup
     this.panel = new JPanel();
 
     configureLayout();
-    this.panel.add(new JLabel(groupName));
     updateLayout();
   }
 
