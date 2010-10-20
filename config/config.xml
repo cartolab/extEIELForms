@@ -33,9 +33,6 @@
 			<menu text="EIEL/Formularios/Calles"
 				action-command="Calles"
 				position="0904"/>
-			<menu text="EIEL/Formularios/Núcleo Encuestado 1"
-				action-command="Nucleo Encuestado 1"
-				position="0905"/>
 			<menu text="EIEL/Formularios/Municipio Datos Generales"
 				action-command="Municipio Datos Generales"
 				position="0906"/>
@@ -51,6 +48,12 @@
 			<menu text="EIEL/Formularios/Municipio Alumbrado"
 				action-command="Municipio Alumbrado"
 				position="0910"/>
+			<menu text="EIEL/Formularios/Núcleo Encuestado 1"
+				action-command="Nucleo Encuestado 1"
+				position="0911"/>
+			<menu text="EIEL/Formularios/Núcleo Encuestado 3"
+				action-command="Nucleo Encuestado 3"
+				position="0912"/>				
 		</extension>
 	</extensions>
 </plugin-config>
