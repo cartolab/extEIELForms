@@ -31,13 +31,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.iver.andami.PluginServices;
+import com.iver.andami.ui.mdiFrame.MDIFrame;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
@@ -54,7 +58,8 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 
 	protected String formName;
 	private WindowInfo viewInfo;
-	private JPanel centerPanel, southPanel;
+	private JPanel southPanel;
+	private JScrollPane centerPanel;
 	protected FormController form;
 	protected HashMap<String, String> key = new HashMap();
 	private JButton editButton, newButton, closeButton;
@@ -62,28 +67,33 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 
 	public AlphanumericForm(String formName) {
 		this.formName = formName;
-
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.setFocusCycleRoot(true);
 	}
 
-	
+
 	 public WindowInfo getWindowInfo() {
          if (viewInfo == null){
                  viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.PALETTE);
                  viewInfo.setTitle("Alphanumeric form");
                  Dimension dim = getPreferredSize();
+                 MDIFrame a = (MDIFrame) PluginServices.getMainFrame();
+                 int maxHeight =  a.getHeight()-175;
+                 int maxWidth =  a.getWidth()-15;
+
                  int width,heigth = 0;
-                 if (dim.getHeight()>500){
-                         heigth = 500;
+                 if (dim.getHeight()> maxHeight){
+                         heigth = maxHeight;
                  }else{
                          heigth = new Double(dim.getHeight()).intValue();
                  }
-                 if (dim.getWidth()>500){
-                         width = 500;
+                 if (dim.getWidth()> maxWidth){
+                         width = maxWidth;
                  }else{
                          width = new Double(dim.getWidth()).intValue();
                  }
                  viewInfo.setWidth(width+20);
-                 viewInfo.setHeight(heigth+20);
+                 viewInfo.setHeight(heigth+15);
          }
          return viewInfo;
  }
@@ -140,15 +150,16 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		}
 	}
 
-	private JPanel getCenterPanel() throws FormException {
+	private JScrollPane getCenterPanel() throws FormException {
 		if (centerPanel == null) {
+
 			if (form == null) {
 				FormGenerator fg = new FormGenerator();
 				form = fg.createFormController(formName);
 				addPKChangeListener();
 			}
-			centerPanel = form.getInterface();
-			centerPanel.setFocusCycleRoot(true);
+			centerPanel = new JScrollPane(form.getInterface());
+			centerPanel.setBorder(new EmptyBorder(0,0,0,0));
 
 		}
 		return centerPanel;
@@ -312,7 +323,5 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		if (arg0.getSource() == closeButton) {
 			close();
 		}
-
 	}
-
 }
