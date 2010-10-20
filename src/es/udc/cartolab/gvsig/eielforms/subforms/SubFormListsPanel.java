@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
- * 
+ *
  * This file is part of extEIELForms
- * 
+ *
  * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
  * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
- * 
+ *
  * extEIELForms is free software: you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or any later version.
- * 
+ *
  * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with extEIELForms.
  * If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,8 +36,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle;
 
-import com.iver.utiles.swing.threads.SwingWorker;
-
 import es.udc.cartolab.gvsig.eielforms.domain.Domain;
 import es.udc.cartolab.gvsig.eielforms.domain.UserDomain;
 import es.udc.cartolab.gvsig.eielforms.field.ComboFieldInterface;
@@ -59,12 +57,12 @@ public class SubFormListsPanel extends JPanel
 	private String database;
 	private String tabla;
 	private SubFormController subformController;
-	private JButton jButton1;
-	private JButton jButton2;
-	private JButton jButton3;
-	private JButton jButton4;
-	private JList jList1;
-	private JList jList2;
+	private JButton moveRightButton;
+	private JButton moveLeftButton;
+	private JButton moveAllRightButton;
+	private JButton moveAllLeftButton;
+	private JList assignedList;
+	private JList availableList;
 	private JScrollPane jScrollPane1;
 	private JScrollPane jScrollPane2;
 	private JLabel jLabel1;
@@ -99,39 +97,39 @@ public class SubFormListsPanel extends JPanel
 	private void initComponents()
 	{
 		this.jScrollPane1 = new JScrollPane();
-		this.jList1 = new JList();
+		this.assignedList = new JList();
 		this.jScrollPane2 = new JScrollPane();
-		this.jList2 = new JList();
-		this.jButton1 = new JButton();
-		this.jButton2 = new JButton();
-		this.jButton3 = new JButton();
-		this.jButton4 = new JButton();
+		this.availableList = new JList();
+		this.moveRightButton = new JButton();
+		this.moveLeftButton = new JButton();
+		this.moveAllRightButton = new JButton();
+		this.moveAllLeftButton = new JButton();
 		this.jLabel1 = new JLabel();
 		this.jLabel2 = new JLabel();
 
-		this.jList1.setModel(new AbstractListModel() { String[] strings;
+		this.assignedList.setModel(new AbstractListModel() { String[] strings;
 
 		public int getSize() { return this.strings.length; }
 		public Object getElementAt(int i) { return this.strings[i];
 		}
 		});
-		this.jScrollPane1.setViewportView(this.jList1);
+		this.jScrollPane1.setViewportView(this.assignedList);
 
-		this.jList2.setModel(new AbstractListModel() { String[] strings;
+		this.availableList.setModel(new AbstractListModel() { String[] strings;
 
 		public int getSize() { return this.strings.length; }
 		public Object getElementAt(int i) { return this.strings[i];
 		}
 		});
-		this.jScrollPane2.setViewportView(this.jList2);
+		this.jScrollPane2.setViewportView(this.availableList);
 
-		this.jButton1.setText(">");
+		this.moveRightButton.setText(">");
 
-		this.jButton2.setText("<");
+		this.moveLeftButton.setText("<");
 
-		this.jButton3.setText(">>");
+		this.moveAllRightButton.setText(">>");
 
-		this.jButton4.setText("<<");
+		this.moveAllLeftButton.setText("<<");
 
 		this.jLabel1.setText("Asignados");
 
@@ -139,9 +137,9 @@ public class SubFormListsPanel extends JPanel
 
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(25, 25, 25).addComponent(this.jScrollPane1, -2, 128, -2).addGap(18, 18, 18).addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false).addComponent(this.jButton1, -1, -1, 32767).addComponent(this.jButton2, -1, -1, 32767).addComponent(this.jButton3, -1, -1, 32767).addComponent(this.jButton4, -1, -1, 32767)).addGap(22, 22, 22).addComponent(this.jScrollPane2, -2, 121, -2).addContainerGap(32, 32767)).addGroup(layout.createSequentialGroup().addGap(61, 61, 61).addComponent(this.jLabel1).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 140, 32767).addComponent(this.jLabel2).addGap(116, 116, 116)));
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(25, 25, 25).addComponent(this.jScrollPane1, -2, 128, -2).addGap(18, 18, 18).addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false).addComponent(this.moveRightButton, -1, -1, 32767).addComponent(this.moveLeftButton, -1, -1, 32767).addComponent(this.moveAllRightButton, -1, -1, 32767).addComponent(this.moveAllLeftButton, -1, -1, 32767)).addGap(22, 22, 22).addComponent(this.jScrollPane2, -2, 121, -2).addContainerGap(32, 32767)).addGroup(layout.createSequentialGroup().addGap(61, 61, 61).addComponent(this.jLabel1).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 140, 32767).addComponent(this.jLabel2).addGap(116, 116, 116)));
 
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(88, 88, 88).addComponent(this.jButton1).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.jButton2).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.jButton3).addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(this.jButton4)).addGroup(layout.createSequentialGroup().addGap(49, 49, 49).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(this.jLabel1).addComponent(this.jLabel2)).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(this.jScrollPane2, -2, -1, -2).addComponent(this.jScrollPane1, -2, -1, -2)))).addContainerGap(42, 32767)));
+		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(88, 88, 88).addComponent(this.moveRightButton).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.moveLeftButton).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.moveAllRightButton).addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(this.moveAllLeftButton)).addGroup(layout.createSequentialGroup().addGap(49, 49, 49).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(this.jLabel1).addComponent(this.jLabel2)).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(this.jScrollPane2, -2, -1, -2).addComponent(this.jScrollPane1, -2, -1, -2)))).addContainerGap(42, 32767)));
 	}
 
 	public void borrarDatos()
@@ -185,8 +183,8 @@ public class SubFormListsPanel extends JPanel
 		}
 
 		//TODO repasar esto, no puede estar bien ni de lejos (los valores no los coge de BD!)
-		for (int i = 0; i < this.jList1.getModel().getSize(); ++i) {
-			String valorCampoPrimario = (String)this.jList1.getModel().getElementAt(i);
+		for (int i = 0; i < this.assignedList.getModel().getSize(); ++i) {
+			String valorCampoPrimario = (String)this.assignedList.getModel().getElementAt(i);
 			OtrosDatosVO campos = new OtrosDatosVO();
 			if (nombreCampos.size() != 0) {
 				try {
@@ -215,7 +213,7 @@ public class SubFormListsPanel extends JPanel
 				nomDominiosAsignados.add(this.domain.resolve((String)dominiosAsignados.get(i)));
 			}
 
-			this.jList1.setListData(nomDominiosAsignados);
+			this.assignedList.setListData(nomDominiosAsignados);
 		} catch (FormException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -226,13 +224,13 @@ public class SubFormListsPanel extends JPanel
 			domains.add(this.domain.getValues().get(i));
 		}
 
-		for (int i = 0; i < this.jList1.getModel().getSize(); ++i) {
-			String item = (String)this.jList1.getModel().getElementAt(i);
+		for (int i = 0; i < this.assignedList.getModel().getSize(); ++i) {
+			String item = (String)this.assignedList.getModel().getElementAt(i);
 			if (!domains.contains(item)) {
 				continue;
 			} domains.remove(item);
 		}
-		this.jList2.setListData(domains);
+		this.availableList.setListData(domains);
 	}
 
 	private void jButtonDesasignarMouseClicked(MouseEvent evt)
@@ -242,10 +240,10 @@ public class SubFormListsPanel extends JPanel
 		Vector valoresFinalesList2 = new Vector();
 		Vector vacio = new Vector();
 
-		int[] indicesValoresSeleccionados = this.jList1.getSelectedIndices();
+		int[] indicesValoresSeleccionados = this.assignedList.getSelectedIndices();
 		int indexValSele = 0;
 		for (int i = 0; i < indicesValoresSeleccionados.length; ++i) {
-			String nombre = (String)this.jList1.getModel().getElementAt(indicesValoresSeleccionados[i]);
+			String nombre = (String)this.assignedList.getModel().getElementAt(indicesValoresSeleccionados[i]);
 			valoresSeleccionados.add(nombre);
 			this.subformController.getInterface().eliminarDatos(nombre);
 
@@ -254,8 +252,8 @@ public class SubFormListsPanel extends JPanel
 
 		Vector list1Vector = new Vector();
 
-		for (int i = 0; i < this.jList1.getModel().getSize(); ++i) {
-			list1Vector.add(this.jList1.getModel().getElementAt(i));
+		for (int i = 0; i < this.assignedList.getModel().getSize(); ++i) {
+			list1Vector.add(this.assignedList.getModel().getElementAt(i));
 		}
 
 		for (int j = 0; j < valoresSeleccionados.size(); ++j) {
@@ -266,81 +264,69 @@ public class SubFormListsPanel extends JPanel
 
 		}
 
-		this.jList1.setListData(list1Vector);
+		this.assignedList.setListData(list1Vector);
 
-		for (int i = 0; i < this.jList2.getModel().getSize(); ++i) {
-			valoresList2.add(this.jList2.getModel().getElementAt(i));
+		for (int i = 0; i < this.availableList.getModel().getSize(); ++i) {
+			valoresList2.add(this.availableList.getModel().getElementAt(i));
 		}
 
 		for (int i = 0; i < valoresSeleccionados.size(); ++i) {
 			valoresList2.add(valoresSeleccionados.get(i));
 		}
-		this.jList2.setListData(valoresList2);
+		this.availableList.setListData(valoresList2);
 	}
 
 	private void jButtonAsignarMouseClicked(MouseEvent evt)
 	{
-		SwingWorker sw = new SwingWorker()
-		{
-			@Override
-			public Object construct()
-			{
-				Vector valoresList1 = new Vector();
-				Vector valoresSeleccionados = new Vector();
-				Vector valoresFinalesList2 = new Vector();
-				Vector vacio = new Vector();
+		Vector valoresList1 = new Vector();
+		Vector valoresSeleccionados = new Vector();
+		Vector valoresFinalesList2 = new Vector();
+		Vector vacio = new Vector();
 
-				int[] indicesValoresSeleccionados = SubFormListsPanel.this.jList2.getSelectedIndices();
+		int[] indicesValoresSeleccionados = SubFormListsPanel.this.availableList.getSelectedIndices();
 
-				for (int i = 0; i < indicesValoresSeleccionados.length; ++i) {
-					String nombre = (String)SubFormListsPanel.this.jList2.getModel().getElementAt(indicesValoresSeleccionados[i]);
-					SubFormListsPanel.this.subformController.getInterface().setItem(nombre);
-					while (i > 0 && !SubFormListsPanel.this.subformController.getInterface().getProcesado()) {
-						;
-					}
-					SubFormListsPanel.this.subformController.getInterface().insertarDatosParaDisponibles(nombre);
-					//          if (PanelTipos.this.subformController.getInterface().getSubForm().getFields().size() != 0) {
-					//            PanelTipos.this.subformController.getInterface().setProcesado(false);
-					//          }
-					while (!SubFormListsPanel.this.subformController.getInterface().getProcesado()) {
-						;
-					}
-					if (SubFormListsPanel.this.subformController.getInterface().getAsignar()) {
-						valoresSeleccionados.add(SubFormListsPanel.this.subformController.getInterface().getItem());
-					}
+		for (int i = 0; i < indicesValoresSeleccionados.length; ++i) {
 
-				}
+			String nombre = (String)SubFormListsPanel.this.availableList.getModel().getElementAt(indicesValoresSeleccionados[i]);
+			SubFormListsPanel.this.subformController.getInterface().setItem(nombre);
 
-				Vector list2Vector = new Vector();
-
-				for (int i = 0; i < SubFormListsPanel.this.jList2.getModel().getSize(); ++i) {
-					list2Vector.add(SubFormListsPanel.this.jList2.getModel().getElementAt(i));
-				}
-
-				for (int j = 0; j < valoresSeleccionados.size(); ++j) {
-					if (list2Vector.contains(valoresSeleccionados.get(j))) {
-						int posicion = list2Vector.indexOf(valoresSeleccionados.get(j));
-						list2Vector.remove(posicion);
-					}
-				}
-
-				SubFormListsPanel.this.jList2.setListData(list2Vector);
-
-				for (int i = 0; i < SubFormListsPanel.this.jList1.getModel().getSize(); ++i) {
-					valoresList1.add(SubFormListsPanel.this.jList1.getModel().getElementAt(i));
-				}
-
-				for (int j = 0; j < valoresSeleccionados.size(); ++j) {
-					valoresList1.add(valoresSeleccionados.get(j));
-				}
-
-				SubFormListsPanel.this.jList1.setListData(valoresList1);
-
-				return null;
+			SubFormListsPanel.this.subformController.getInterface().insertarDatosParaDisponibles(nombre);
+			if (SubFormListsPanel.this.subformController.getInterface().getSubForm().getFields().size() != 0) {
+				SubFormListsPanel.this.subformController.getInterface().setProcesado(false);
 			}
 
-		};
-		sw.start();
+			if (SubFormListsPanel.this.subformController.getInterface().getAsignar()) {
+				valoresSeleccionados.add(SubFormListsPanel.this.subformController.getInterface().getItem());
+			}
+
+		}
+
+		Vector list2Vector = new Vector();
+
+		for (int i = 0; i < SubFormListsPanel.this.availableList.getModel().getSize(); ++i) {
+			list2Vector.add(SubFormListsPanel.this.availableList.getModel().getElementAt(i));
+		}
+
+		for (int j = 0; j < valoresSeleccionados.size(); ++j) {
+			if (list2Vector.contains(valoresSeleccionados.get(j))) {
+				int posicion = list2Vector.indexOf(valoresSeleccionados.get(j));
+				list2Vector.remove(posicion);
+			}
+		}
+
+		SubFormListsPanel.this.availableList.setListData(list2Vector);
+
+		for (int i = 0; i < SubFormListsPanel.this.assignedList.getModel().getSize(); ++i) {
+			valoresList1.add(SubFormListsPanel.this.assignedList.getModel().getElementAt(i));
+		}
+
+		for (int j = 0; j < valoresSeleccionados.size(); ++j) {
+			valoresList1.add(valoresSeleccionados.get(j));
+		}
+
+		SubFormListsPanel.this.assignedList.setListData(valoresList1);
+
+
 	}
 
 	private void jButtonDesasignarTodosMouseClicked(MouseEvent evt)
@@ -349,92 +335,80 @@ public class SubFormListsPanel extends JPanel
 		Vector valoresList2 = new Vector();
 		Vector vacio = new Vector();
 
-		for (int i = 0; i < this.jList1.getModel().getSize(); ++i) {
-			String nombre = (String)this.jList1.getModel().getElementAt(i);
+		for (int i = 0; i < this.assignedList.getModel().getSize(); ++i) {
+			String nombre = (String)this.assignedList.getModel().getElementAt(i);
 			valoresList1.add(nombre);
 			this.subformController.getInterface().eliminarDatos(nombre);
 		}
-		this.jList1.setListData(vacio);
+		this.assignedList.setListData(vacio);
 
-		for (int i = 0; i < this.jList2.getModel().getSize(); ++i) {
-			valoresList2.add(this.jList2.getModel().getElementAt(i));
+		for (int i = 0; i < this.availableList.getModel().getSize(); ++i) {
+			valoresList2.add(this.availableList.getModel().getElementAt(i));
 		}
 
 		for (int j = 0; j < valoresList1.size(); ++j) {
 			valoresList2.add(valoresList1.get(j));
 		}
 
-		this.jList2.setListData(valoresList2);
+		this.availableList.setListData(valoresList2);
 	}
 
 	private void jButtonAsignarTodosMouseClicked(MouseEvent evt)
 	{
-		SwingWorker sw = new SwingWorker()
-		{
-			@Override
-			public Object construct()
-			{
-				Vector valoresSeleccionados = new Vector();
-				Vector valoresList1 = new Vector();
-				Vector valoresList2 = new Vector();
 
-				for (int i = 0; i < SubFormListsPanel.this.jList1.getModel().getSize(); ++i) {
-					valoresList1.add(SubFormListsPanel.this.jList1.getModel().getElementAt(i));
-				}
+		Vector valoresSeleccionados = new Vector();
+		Vector valoresList1 = new Vector();
+		Vector valoresList2 = new Vector();
 
-				for (int i = 0; i < SubFormListsPanel.this.jList2.getModel().getSize(); ++i) {
-					valoresList2.add(SubFormListsPanel.this.jList2.getModel().getElementAt(i));
-				}
+		for (int i = 0; i < SubFormListsPanel.this.assignedList.getModel().getSize(); ++i) {
+			valoresList1.add(SubFormListsPanel.this.assignedList.getModel().getElementAt(i));
+		}
 
-				for (int i = 0; i < SubFormListsPanel.this.jList2.getModel().getSize(); ++i) {
-					String nombre = (String)SubFormListsPanel.this.jList2.getModel().getElementAt(i);
-					SubFormListsPanel.this.subformController.getInterface().setItem(nombre);
-					while (i > 0 && !SubFormListsPanel.this.subformController.getInterface().getProcesado()) {
-						;
-					}
-					SubFormListsPanel.this.subformController.getInterface().insertarDatosParaDisponibles(nombre);
-					SubFormListsPanel.this.subformController.getInterface().setProcesado(false);
-					while (!SubFormListsPanel.this.subformController.getInterface().getProcesado()) {
-						;
-					}
-					if (SubFormListsPanel.this.subformController.getInterface().getAsignar()) {
-						valoresSeleccionados.add(SubFormListsPanel.this.subformController.getInterface().getItem());
-					}
-				}
-				for (int j = 0; j < valoresSeleccionados.size(); ++j) {
-					if (valoresList2.contains(valoresSeleccionados.get(j))) {
-						int posicion = valoresList2.indexOf(valoresSeleccionados.get(j));
-						valoresList2.remove(posicion);
-					}
-				}
-				SubFormListsPanel.this.jList2.setListData(valoresList2);
+		for (int i = 0; i < SubFormListsPanel.this.availableList.getModel().getSize(); ++i) {
+			valoresList2.add(SubFormListsPanel.this.availableList.getModel().getElementAt(i));
+		}
 
-				for (int i = 0; i < valoresSeleccionados.size(); ++i) {
-					valoresList1.add(valoresSeleccionados.get(i));
-				}
-				SubFormListsPanel.this.jList1.setListData(valoresList1);
+		for (int i = 0; i < SubFormListsPanel.this.availableList.getModel().getSize(); ++i) {
+			String nombre = (String)SubFormListsPanel.this.availableList.getModel().getElementAt(i);
+			SubFormListsPanel.this.subformController.getInterface().setItem(nombre);
 
-				return null;
+			SubFormListsPanel.this.subformController.getInterface().insertarDatosParaDisponibles(nombre);
+			SubFormListsPanel.this.subformController.getInterface().setProcesado(false);
+
+			if (SubFormListsPanel.this.subformController.getInterface().getAsignar()) {
+				valoresSeleccionados.add(SubFormListsPanel.this.subformController.getInterface().getItem());
 			}
-		};
-		sw.start();
+		}
+		for (int j = 0; j < valoresSeleccionados.size(); ++j) {
+			if (valoresList2.contains(valoresSeleccionados.get(j))) {
+				int posicion = valoresList2.indexOf(valoresSeleccionados.get(j));
+				valoresList2.remove(posicion);
+			}
+		}
+		SubFormListsPanel.this.availableList.setListData(valoresList2);
+
+		for (int i = 0; i < valoresSeleccionados.size(); ++i) {
+			valoresList1.add(valoresSeleccionados.get(i));
+		}
+		SubFormListsPanel.this.assignedList.setListData(valoresList1);
+
 	}
 
 	public JList getJListAsignados()
 	{
-		return this.jList1;
+		return this.assignedList;
 	}
 
 	public void deshabilitar()
 	{
-		this.jButton1.setEnabled(false);
-		this.jButton2.setEnabled(false);
-		this.jButton3.setEnabled(false);
-		this.jButton4.setEnabled(false);
-		this.jButton1.removeMouseListener(this.eventButton1);
-		this.jButton2.removeMouseListener(this.eventButton2);
-		this.jButton3.removeMouseListener(this.eventButton3);
-		this.jButton4.removeMouseListener(this.eventButton4);
+		this.moveRightButton.setEnabled(false);
+		this.moveLeftButton.setEnabled(false);
+		this.moveAllRightButton.setEnabled(false);
+		this.moveAllLeftButton.setEnabled(false);
+		this.moveRightButton.removeMouseListener(this.eventButton1);
+		this.moveLeftButton.removeMouseListener(this.eventButton2);
+		this.moveAllRightButton.removeMouseListener(this.eventButton3);
+		this.moveAllLeftButton.removeMouseListener(this.eventButton4);
 		setEnabled(false);
 	}
 
@@ -446,7 +420,7 @@ public class SubFormListsPanel extends JPanel
 				SubFormListsPanel.this.jButtonDesasignarMouseClicked(evt);
 			}
 		};
-		this.jButton1.addMouseListener(this.eventButton1);
+		this.moveRightButton.addMouseListener(this.eventButton1);
 
 		this.eventButton2 = new MouseAdapter() {
 			@Override
@@ -454,7 +428,7 @@ public class SubFormListsPanel extends JPanel
 				SubFormListsPanel.this.jButtonAsignarMouseClicked(evt);
 			}
 		};
-		this.jButton2.addMouseListener(this.eventButton2);
+		this.moveLeftButton.addMouseListener(this.eventButton2);
 
 		this.eventButton3 = new MouseAdapter() {
 			@Override
@@ -462,7 +436,7 @@ public class SubFormListsPanel extends JPanel
 				SubFormListsPanel.this.jButtonDesasignarTodosMouseClicked(evt);
 			}
 		};
-		this.jButton3.addMouseListener(this.eventButton3);
+		this.moveAllRightButton.addMouseListener(this.eventButton3);
 
 		this.eventButton4 = new MouseAdapter() {
 			@Override
@@ -470,11 +444,11 @@ public class SubFormListsPanel extends JPanel
 				SubFormListsPanel.this.jButtonAsignarTodosMouseClicked(evt);
 			}
 		};
-		this.jButton4.addMouseListener(this.eventButton4);
+		this.moveAllLeftButton.addMouseListener(this.eventButton4);
 
-		this.jButton1.setEnabled(true);
-		this.jButton2.setEnabled(true);
-		this.jButton3.setEnabled(true);
-		this.jButton4.setEnabled(true);
+		this.moveRightButton.setEnabled(true);
+		this.moveLeftButton.setEnabled(true);
+		this.moveAllRightButton.setEnabled(true);
+		this.moveAllLeftButton.setEnabled(true);
 	}
 }
