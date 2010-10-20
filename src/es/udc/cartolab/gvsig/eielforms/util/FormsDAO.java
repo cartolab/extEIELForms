@@ -168,10 +168,7 @@ public class FormsDAO {
 			String oneField = (String)fieldsIterator.next();
 			fieldsString = fieldsString + oneField + ", ";
 
-			if (((String)fields.get(oneField)).compareTo("") == 0) {
-				valuesString = valuesString + "null, ";
-			}
-			valuesString = valuesString + "?, ";
+				valuesString = valuesString + "?, ";
 		}
 
 		fieldsString = fieldsString.substring(0, fieldsString.length() - 2) + ") ";
@@ -192,7 +189,12 @@ public class FormsDAO {
 				int i=1;
 				while (fieldsIterator.hasNext()) {
 					String oneField = (String)fieldsIterator.next();
-					statement.setObject(i, ((String)fields.get(oneField)).trim());
+					String value = ((String)fields.get(oneField)).trim();
+					if (!value.equals("")) {
+						statement.setObject(i, value);
+					} else {
+						statement.setObject(i, null);
+					}
 					i++;
 				}
 
