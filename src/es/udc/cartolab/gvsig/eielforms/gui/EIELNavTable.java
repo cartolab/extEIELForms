@@ -150,4 +150,8 @@ public class EIELNavTable extends AbstractNavTable {
 		return centerPanel;
 	}
 
+	public void onlySelected() {
+		onlySelectedCB.setSelected(true);
+	}
+
 }
