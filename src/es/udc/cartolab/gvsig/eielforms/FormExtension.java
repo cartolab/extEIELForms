@@ -35,7 +35,14 @@ public class FormExtension extends Extension {
 
 	@Override
 	public void initialize() {
+		registerIcons();
+	}
 
+	private void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
+				"eielform",
+				this.getClass().getClassLoader().getResource("images/form.png")
+			);
 	}
 
 	@Override
