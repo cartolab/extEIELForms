@@ -35,6 +35,7 @@ public abstract class FieldInterface
 	protected FieldController fieldController;
 	private JLabel fieldLabel;
 	protected ArrayList<FieldChangeListener> listeners = new ArrayList<FieldChangeListener>();
+	private String oldValue = null;
 
 	public FieldInterface(FieldController fieldController)
 	{
@@ -113,13 +114,15 @@ public abstract class FieldInterface
 	/**
 	 * Calls all objects which are listening to changes on the fields.
 	 *
-	 * This method should be called <b>before</b> setting the new value on the field interface. Beware of fillField method.
+	 * This method should be called <b>after</b> setting the new value on the field interface. Beware of fillField method.
 	 * @param newValue
 	 */
-	protected void fireFieldChanged(String newValue) {
-		String previousValue = fieldController.getValue();
-		if (!previousValue.equals(newValue)) {
-			FieldChangeEvent e = new FieldChangeEvent(this, previousValue, newValue);
+	protected void fireFieldChanged() {
+		String oldValue = fieldController.getOldValue();
+		String newValue = fieldController.getValue();
+		if (!oldValue.equals(newValue)) {
+			FieldChangeEvent e = new FieldChangeEvent(this, oldValue, newValue);
+			fieldController.setOldValue(newValue);
 			for (FieldChangeListener list : listeners) {
 				list.fieldChanged(e);
 			}

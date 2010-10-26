@@ -37,6 +37,7 @@ public class FieldController
 	private String value;
 	private String memoryValue;
 	private boolean save;
+	private String oldValue;
 
 	public FieldController(String label, String name, Domain domain, String defaultValue, boolean editable, boolean required, boolean isKey, boolean constantValue, boolean isOrden)
 	{
@@ -50,6 +51,7 @@ public class FieldController
 		this.isKey = isKey;
 		this.constantValue = constantValue;
 		this.memoryValue = "";
+		this.oldValue = "";
 		this.isOrden = isOrden;
 	}
 
@@ -168,4 +170,21 @@ public class FieldController
 		}
 		return fieldController;
 	}
+
+	/**
+	 * Sets the current value of this field on DB (it should be only used when retrieving data from DB or after saving it).
+	 * @param value
+	 */
+	public void setOldValue(String value) {
+		oldValue = value;
+	}
+
+	/**
+	 * Gets the current value of this field on DB.
+	 * @return
+	 */
+	public String getOldValue() {
+		return oldValue;
+	}
+
 }

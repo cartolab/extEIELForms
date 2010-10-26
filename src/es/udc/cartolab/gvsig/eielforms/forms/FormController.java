@@ -225,6 +225,7 @@ public class FormController extends Subject
 					}
 				}
 				oneField.setValue(value);
+				oneField.setOldValue(value);
 			}
 
 		}
@@ -459,10 +460,11 @@ public class FormController extends Subject
 		HashMap<String, String> fieldValues = new HashMap<String, String>();
 		for (int i=0; i< fieldsInterface.size(); i++) {
 			FieldInterface fi = (FieldInterface) fieldsInterface.get(i);
+			FieldController fc = fi.getField();
 			if (!(fi instanceof DependencyMasterField)) {
-				FieldController fc = fi.getField();
 				fieldValues.put(fc.getName(), fc.getValue());
 			}
+			fc.setOldValue(fc.getValue());
 		}
 
 		FormsDAO fdao = new FormsDAO();

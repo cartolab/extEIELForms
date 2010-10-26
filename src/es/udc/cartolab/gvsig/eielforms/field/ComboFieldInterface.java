@@ -59,10 +59,8 @@ public class ComboFieldInterface extends FieldInterface
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (comboField.getSelectedItem()!=null) {
-					fireFieldChanged(comboField.getSelectedItem().toString());
-				}
 				fillField();
+				fireFieldChanged();
 				validate();
 			}
 
