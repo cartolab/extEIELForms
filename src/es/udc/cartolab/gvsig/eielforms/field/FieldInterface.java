@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
- * 
+ *
  * This file is part of extEIELForms
- * 
+ *
  * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
  * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
- * 
+ *
  * extEIELForms is free software: you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or any later version.
- * 
+ *
  * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with extEIELForms.
  * If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,14 +22,19 @@ package es.udc.cartolab.gvsig.eielforms.field;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+
+import es.udc.cartolab.gvsig.eielforms.field.listener.FieldChangeEvent;
+import es.udc.cartolab.gvsig.eielforms.field.listener.FieldChangeListener;
 
 public abstract class FieldInterface
 {
 	protected FieldController fieldController;
 	private JLabel fieldLabel;
+	protected ArrayList<FieldChangeListener> listeners = new ArrayList<FieldChangeListener>();
 
 	public FieldInterface(FieldController fieldController)
 	{
@@ -103,5 +108,33 @@ public abstract class FieldInterface
 		this.fieldController.setValue(value);
 
 		loadValue();
+	}
+
+	/**
+	 * Calls all objects which are listening to changes on the fields.
+	 *
+	 * This method should be called <b>before</b> setting the new value on the field interface. Beware of fillField method.
+	 * @param newValue
+	 */
+	protected void fireFieldChanged(String newValue) {
+		String previousValue = fieldController.getValue();
+		if (!previousValue.equals(newValue)) {
+			FieldChangeEvent e = new FieldChangeEvent(this, previousValue, newValue);
+			for (FieldChangeListener list : listeners) {
+				list.fieldChanged(e);
+			}
+		}
+	}
+
+	public void addFieldChangeListener(FieldChangeListener listener) {
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+
+	public void removeFieldChangeListener(FieldChangeListener listener) {
+		if (listeners.contains(listener)) {
+			listeners.remove(listener);
+		}
 	}
 }

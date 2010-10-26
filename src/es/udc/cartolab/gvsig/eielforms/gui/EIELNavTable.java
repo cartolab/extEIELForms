@@ -22,19 +22,21 @@ package es.udc.cartolab.gvsig.eielforms.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
 
 import javax.swing.JPanel;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueWriter;
+import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormGenerator;
 import es.udc.cartolab.gvsig.eielforms.forms.FormController;
+import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeEvent;
+import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeListener;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
 public class EIELNavTable extends AbstractNavTable {
@@ -91,6 +93,7 @@ public class EIELNavTable extends AbstractNavTable {
 					break;
 				}
 			}
+			setChangedValues(false);
 		} catch (ReadDriverException e) {
 			foundAll = false;
 			e.printStackTrace();
@@ -106,16 +109,6 @@ public class EIELNavTable extends AbstractNavTable {
 	@Override
 	public void selectRow(int row) {
 
-	}
-
-	@Override
-	protected Vector checkChangedValues() {
-		return new Vector();
-	}
-
-	@Override
-	protected void saveRegister() {
-		saveRecord();
 	}
 
 	@Override
@@ -135,6 +128,15 @@ public class EIELNavTable extends AbstractNavTable {
 				if (form == null) {
 					FormGenerator fg = new FormGenerator();
 					form = fg.createFormController(layer.getName());
+					form.addFormChangeListener(new FormChangeListener() {
+
+						@Override
+						public void formChanged(FormChangeEvent e) {
+							setChangedValues(true);
+							enableSaveButton(true);
+						}
+
+					});
 				}
 				centerPanel = form.getInterface();
 				centerPanel.setFocusCycleRoot(true);

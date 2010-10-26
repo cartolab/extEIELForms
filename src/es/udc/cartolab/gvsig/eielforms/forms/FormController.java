@@ -31,8 +31,12 @@ import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterField;
 import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterFieldRetriever;
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
+import es.udc.cartolab.gvsig.eielforms.field.listener.FieldChangeEvent;
+import es.udc.cartolab.gvsig.eielforms.field.listener.FieldChangeListener;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.Subject;
+import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeEvent;
+import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeListener;
 import es.udc.cartolab.gvsig.eielforms.groups.FieldGroup;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubForm;
 import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
@@ -48,6 +52,8 @@ public class FormController extends Subject
 	private FormInterface formInterface;
 	private String name;
 	private DependencyMasterFieldRetriever dependencyMasterFieldRetriever;
+	private ArrayList<FormChangeListener> listeners = new ArrayList<FormChangeListener>();
+	private FormFieldListener fieldsListener;
 	DecimalFormat df;
 
 	public FormController(String layer, String dataBase, String table, String layout, String name, String title)
@@ -63,6 +69,9 @@ public class FormController extends Subject
 		this.knowKey = false;
 		this.key = new ArrayList();
 		this.formInterface = new FormInterface(this, layout, title);
+
+		this.fieldsListener = new FormFieldListener(this);
+
 	}
 
 	public String getDataBase() {
@@ -463,6 +472,56 @@ public class FormController extends Subject
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void addFormChangeListener(FormChangeListener listener) {
+
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
+			ArrayList fields = getFieldsInterface();
+			for (int i=0; i<fields.size(); i++) {
+				if (fields.get(i) instanceof FieldInterface) {
+					FieldInterface field = (FieldInterface) fields.get(i);
+					field.addFieldChangeListener(fieldsListener);
+				}
+			}
+		}
+
+	}
+
+	public void removeFormChangeListener(FormChangeListener listener) {
+
+		if (listeners.contains(listener)) {
+			listeners.remove(listener);
+			if (listeners.size()==0) {
+				ArrayList fields = getFieldsInterface();
+				for (int i=0; i<fields.size(); i++) {
+					if (fields.get(i) instanceof FieldInterface) {
+						FieldInterface field = (FieldInterface) fields.get(i);
+						field.removeFieldChangeListener(fieldsListener);
+					}
+				}
+			}
+		}
+
+	}
+
+	private class FormFieldListener implements FieldChangeListener {
+
+		private FormController form;
+
+		public FormFieldListener(FormController form) {
+			this.form = form;
+		}
+
+		@Override
+		public void fieldChanged(FieldChangeEvent e) {
+			FormChangeEvent event = new FormChangeEvent(form, e);
+			for (FormChangeListener listener : listeners) {
+				listener.formChanged(event);
+			}
+		}
+
 	}
 
 
