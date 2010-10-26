@@ -115,6 +115,11 @@ public class EIELNavTable extends AbstractNavTable {
 	protected boolean saveRecord() {
 		if (form.validate()) {
 			form.update(key);
+			try {
+				layer.reload();
+			} catch (ReloadLayerException e) {
+				return false;
+			}
 			return true;
 		} else {
 			return false;
