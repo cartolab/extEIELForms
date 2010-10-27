@@ -242,11 +242,14 @@ public class FormController extends Subject
 
 					if (oneField.getName().compareTo(oneDependency.getDependencyMasterField().getField().getName()) == 0) {
 						oneField.setValue((String)fields.get(oneDependency.getName() + ".." + oneDependency.getDependencyMasterField().getForeignField()));
+						oneField.setOldValue((String)fields.get(oneDependency.getName() + ".." + oneDependency.getDependencyMasterField().getForeignField()));
 					} else {
 //						oneField.setValue((String)fields.get(oneDependency.getName() + ".." + oneField.getName()));
 						oneField.setValue((String)fields.get(oneField.getName()));
+						oneField.setOldValue((String)fields.get(oneField.getName()));
 						if (oneField.getValue()==null) {
 							oneField.setValue(oneField.getDefaultValue());
+							oneField.setOldValue(oneField.getDefaultValue());
 						}
 						System.out.println("Value:" + oneField.getValue());
 					}
@@ -267,6 +270,7 @@ public class FormController extends Subject
 
 					FieldController oneField = oneDependencyMasterField.getField();
 					oneField.setValue(masterFieldKey);
+					oneField.setOldValue(masterFieldKey);
 				}
 
 			}
@@ -276,6 +280,7 @@ public class FormController extends Subject
 					FieldController oneField = (FieldController)groupOfFields.get(j);
 //					oneField.setValue((String)fields.get(oneDependency.getName() + ".." + oneField.getName()));
 					oneField.setValue(oneField.getDefaultValue());
+					oneField.setOldValue(oneField.getDefaultValue());
 				}
 			}
 		}
