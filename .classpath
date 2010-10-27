@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="lib/validation-2.1.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extEIELUtils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extDBConnection"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/extNTOpenCADPlugin"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -33,7 +33,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.listeners.CADListenerManager;
 import com.iver.cit.gvsig.listeners.EndGeometryListener;
-import com.iver.utiles.XMLEntity;
 
 import es.udc.cartolab.gvsig.eielforms.gui.EIELNavTable;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
@@ -47,18 +46,12 @@ public class ThrowFormExtension extends Extension implements EndGeometryListener
 	private boolean formsEnabled = false;
 	private final URL offIcon = this.getClass().getClassLoader().getResource("images/forms.png");
 	private final URL onIcon = this.getClass().getClassLoader().getResource("images/forms-active.png");
-	private final String navTablePlugin = AutoNavTableExtension.PLUGIN_AND_LISTENER_NAME;
-	private final String xmlKey = AutoNavTableExtension.LAUNCH_NAVTABLE_ON_CREATE_GEOMETRY_KEY_NAME;
+	private final String navTablePlugin = AutoNavTableExtension.KEY_NAME;
 
 	@Override
 	public void initialize() {
-		//se retira el listener de navtable y se pone el nuestro si procede,
-		//se desactiva la extension de formularios automaticos de navtable.
-		PluginServices ps = PluginServices.getPluginServices(navTablePlugin);
-		XMLEntity xml = ps.getPersistentXML();
-		if (xml.contains(xmlKey)) {
-			formsEnabled = xml.getBooleanProperty(xmlKey);
-		}
+
+		formsEnabled = AutoNavTableExtension.getPreferences();
 
 		registerIcons();
 
@@ -88,12 +81,8 @@ public class ThrowFormExtension extends Extension implements EndGeometryListener
 			formsEnabled = false;
 			setIcon(offIcon, "Activar formularios automáticos");
 		}
-	}
 
-	private void savePreferences(boolean value) {
-		PluginServices ps = PluginServices.getPluginServices(navTablePlugin);
-		XMLEntity xml = ps.getPersistentXML();
-		xml.putProperty(xmlKey, value);
+		AutoNavTableExtension.savePreferences(formsEnabled);
 	}
 
 	private void setIcon(URL iconURL, String tooltip) {
@@ -139,6 +128,7 @@ public class ThrowFormExtension extends Extension implements EndGeometryListener
 	}
 
 	public void postInitialize() {
+		//desactiva el plugin de opencadtools de navtable y quita el listener
 		CADListenerManager.removeEndGeometryListener(navTablePlugin);
 		PluginServices.getDecoratedExtension(es.udc.cartolab.gvsig.navtable.AutoNavTableExtension.class)
 		.setVisibility(ExtensionDecorator.ALWAYS_INVISIBLE);
