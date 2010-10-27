@@ -123,6 +123,9 @@ public abstract class FieldInterface
 		if (newValue == null) {
 			newValue = "";
 		}
+		if (oldValue == null) {
+			oldValue = "";
+		}
 		if (!oldValue.equals(newValue)) {
 			FieldChangeEvent e = new FieldChangeEvent(this, oldValue, newValue);
 			fieldController.setOldValue(newValue);

@@ -113,6 +113,9 @@ public class EIELNavTable extends AbstractNavTable {
 		FieldInterface field = getFocusField();
 		field.getComponent().requestFocusInWindow();
 
+		setChangedValues(false);
+		enableSaveButton(false);
+
 	}
 
 	@Override
