@@ -120,7 +120,7 @@ public abstract class FieldInterface
 	protected void fireFieldChanged() {
 		String oldValue = fieldController.getOldValue();
 		String newValue = fieldController.getValue();
-		if (!oldValue.equals(newValue)) {
+		if (oldValue == null || !oldValue.equals(newValue)) {
 			FieldChangeEvent e = new FieldChangeEvent(this, oldValue, newValue);
 			fieldController.setOldValue(newValue);
 			for (FieldChangeListener list : listeners) {
