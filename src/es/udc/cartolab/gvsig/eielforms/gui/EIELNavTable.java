@@ -65,6 +65,9 @@ public class EIELNavTable extends AbstractNavTable {
 			add(getCenterPanel());
 			add(getSouthPanel());
 
+			getButton(BUTTON_COPY_PREVIOUS).setVisible(false);
+			getButton(BUTTON_COPY_SELECTED).setVisible(false);
+
 			currentPosition = 0;
 
 			refreshGUI();
