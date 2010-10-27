@@ -21,38 +21,28 @@
 package es.udc.cartolab.gvsig.eielforms;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.plugins.Extension;
+import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
-import com.iver.utiles.extensionPoints.ExtensionPoints;
-import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
+import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
+import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
 import es.udc.cartolab.gvsig.eielforms.gui.EIELNavTable;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.navtable.NavTable;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
-public class FormExtension extends Extension {
+public class FormTOCMenuEntry extends AbstractTocContextMenuAction{
 
 	@Override
-	public void initialize() {
-		registerIcons();
-
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-		extensionPoints.add("View_TocActions", "EIELForm", new FormTOCMenuEntry());
-
-	}
-
-	private void registerIcons() {
-		PluginServices.getIconTheme().registerDefault(
-				"eielform",
-				this.getClass().getClassLoader().getResource("images/form.png")
-			);
+	public String getText() {
+		// TODO Auto-generated method stub
+		return "Formulario EIEL";
 	}
 
 	@Override
-	public void execute(String actionCommand) {
+	public void execute(ITocItem item, FLayer[] selectedItems) {
 
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		FLyrVect l = (FLyrVect) v.getMapControl().getMapContext().getLayers().getActives()[0];
@@ -65,9 +55,9 @@ public class FormExtension extends Extension {
 				PluginServices.getMDIManager().addCentredWindow(nt);
 			}
 		}
+
 	}
 
-	@Override
 	public boolean isEnabled() {
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		FLayers layers = v.getMapControl().getMapContext().getLayers();
@@ -81,8 +71,16 @@ public class FormExtension extends Extension {
 		}
 	}
 
-	@Override
-	public boolean isVisible() {
-		return PluginServices.getMDIManager().getActiveWindow() instanceof View;
+	public String getGroup() {
+		return "navtable";
 	}
+
+	public int getOrder() {
+		return 2;
+	}
+
+	public int getGroupOrder() {
+		return 100;
+	}
+
 }
