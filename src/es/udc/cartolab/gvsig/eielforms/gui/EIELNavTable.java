@@ -28,10 +28,13 @@ import javax.swing.JPanel;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueWriter;
+import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
+import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterField;
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
+import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormGenerator;
 import es.udc.cartolab.gvsig.eielforms.forms.FormController;
@@ -104,6 +107,9 @@ public class EIELNavTable extends AbstractNavTable {
 			//lanzar excepcion?
 		}
 
+		FieldInterface field = getFocusField();
+		field.getComponent().requestFocusInWindow();
+
 	}
 
 	@Override
@@ -159,6 +165,28 @@ public class EIELNavTable extends AbstractNavTable {
 
 	public void onlySelected() {
 		onlySelectedCB.setSelected(true);
+	}
+
+	private FieldInterface getFocusField() {
+		ArrayList fields = form.getFieldsInterface();
+		boolean found = false;
+		FieldInterface focusField = null;
+		for (int i=0; i<fields.size(); i++) {
+			FieldInterface field = (FieldInterface) fields.get(i);
+			if (field.getField().getEditable()) {
+				if (!found || field instanceof DependencyMasterField) {
+					focusField = field;
+					found = true;
+				}
+			}
+		}
+		return focusField;
+	}
+
+	public void open() {
+		PluginServices.getMDIManager().addCentredWindow(this);
+		FieldInterface field = getFocusField();
+		field.getComponent().requestFocusInWindow();
 	}
 
 }

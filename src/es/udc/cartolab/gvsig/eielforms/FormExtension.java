@@ -52,7 +52,7 @@ public class FormExtension extends Extension {
 		FLyrVect l = (FLyrVect) v.getMapControl().getMapContext().getLayers().getActives()[0];
 		AbstractNavTable nt = new EIELNavTable(l);
 		if (nt.init()) {
-			PluginServices.getMDIManager().addCentredWindow(nt);
+			((EIELNavTable)nt).open();
 		} else {
 			nt = new NavTable(l);
 			if (nt.init()) {

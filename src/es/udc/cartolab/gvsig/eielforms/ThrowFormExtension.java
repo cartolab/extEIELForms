@@ -116,7 +116,7 @@ public class ThrowFormExtension extends Extension implements EndGeometryListener
 			FLyrVect l = (FLyrVect) layer;
 			AbstractNavTable nt = new EIELNavTable(l);
 			if (nt.init()) {
-				PluginServices.getMDIManager().addCentredWindow(nt);
+				((EIELNavTable)nt).open();
 			} else {
 				nt = new NavTable(l);
 				if (nt.init()) {
