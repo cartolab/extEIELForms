@@ -47,6 +47,7 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
 
 import es.udc.cartolab.gvsig.eielforms.dependency.Dependency;
+import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterField;
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
@@ -218,9 +219,28 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 
 			viewInfo.setTitle(form.getName());
 
+			FieldInterface field = getFocusField();
+			field.getComponent().requestFocusInWindow();
+
 		} catch (FormException e) {
 			System.out.println("Error en el formulario: " + e.getMessage());
 		}
+	}
+
+	private FieldInterface getFocusField() {
+		ArrayList fields = form.getFieldsInterface();
+		boolean found = false;
+		FieldInterface focusField = null;
+		for (int i=0; i<fields.size(); i++) {
+			FieldInterface field = (FieldInterface) fields.get(i);
+			if (field.getField().getEditable()) {
+				if (!found || field instanceof DependencyMasterField) {
+					focusField = field;
+					found = true;
+				}
+			}
+		}
+		return focusField;
 	}
 
 	/**
