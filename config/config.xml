@@ -67,6 +67,9 @@
 			<menu text="EIEL/Formularios/Captaciones"
 				action-command="Captaciones de agua"
 				position="0914"/>
+			<menu text="EIEL/Formularios/Depósitos"
+				action-command="Depositos_alfanumericos"
+				position="0915"/>
 		</extension>
 	</extensions>
 </plugin-config>
