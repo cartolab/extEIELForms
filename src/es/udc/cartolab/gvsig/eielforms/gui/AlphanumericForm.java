@@ -28,8 +28,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -53,6 +55,7 @@ import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormGenerator;
 import es.udc.cartolab.gvsig.eielforms.forms.FormController;
+import es.udc.cartolab.gvsig.eielutils.constants.Constants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class AlphanumericForm extends JPanel implements IWindow, ActionListener {
@@ -267,16 +270,57 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 
 	}
 
+	private String getWhereClause() throws SQLException {
+		DBSession dbs = DBSession.getCurrentSession();
+		String where =" WHERE ";
+		Constants c = Constants.getCurrentConstants();
+		if (dbs!=null && c.constantsSelected()) {
+			List<String> cols = Arrays.asList(dbs.getColumns(form.getDataBase(), form.getTable()));
+
+			ArrayList<String> upperCols = new ArrayList<String>();
+			for (String column : cols) {
+				upperCols.add(column.toUpperCase());
+			}
+
+			ArrayList<String> constants = new ArrayList<String>();
+			constants.add("FASE");
+			constants.add("PROVINCIA");
+			constants.add("MUNICIPIO");
+			constants.add("ENTIDAD");
+			constants.add("NUCLEO");
+
+			int constn = 0;
+			for (String constant : constants) {
+				int pos = upperCols.indexOf(constant);
+				if (pos>-1 && c.getValue(constant) != null) {
+					constn++;
+					where = where + cols.get(pos) + "='" + c.getValue(constant) + "' AND ";
+				}
+			}
+
+			if (constn>0) {
+				where = where.substring(0, where.length()-5);
+			} else {
+				where = "";
+			}
+		}
+		return where;
+	}
+
+
 	private String getFirstKey(String keyName) throws FormException {
 		DBSession dbs = DBSession.getCurrentSession();
 		String firstKey = "nah";
 		if (dbs!=null) {
-			Connection c = dbs.getJavaConnection();
-			String query = "SELECT \"" + keyName + "\" FROM \"" + form.getDataBase() +
-			"\".\"" + form.getTable() + "\" ORDER BY \"" + keyName + "\"";
+
 			Statement st = null;
 			ResultSet rs = null;
 			try {
+
+				Connection c = dbs.getJavaConnection();
+				String query = "SELECT \"" + keyName + "\" FROM \"" + form.getDataBase() +
+				"\".\"" + form.getTable() + "\"" + getWhereClause() + " ORDER BY \"" + keyName + "\"";
+				System.out.println(query);
 				st = c.createStatement();
 				rs = st.executeQuery(query);
 				if (rs.next()) {
