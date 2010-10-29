@@ -60,7 +60,13 @@
 				position="0911"/>
 			<menu text="EIEL/Formularios/Núcleo Abastecimiento"
 				action-command="Nucleo Abastecimiento"
-				position="0912"/>				
+				position="0912"/>
+			<menu text="EIEL/Formularios/Alumbrado"
+				action-command="Alumbrado"
+				position="0913"/>
+			<menu text="EIEL/Formularios/Captaciones"
+				action-command="Captaciones de agua"
+				position="0914"/>
 		</extension>
 	</extensions>
 </plugin-config>
