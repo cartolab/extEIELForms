@@ -70,6 +70,9 @@
 			<menu text="EIEL/Formularios/Depósitos"
 				action-command="Depositos_alfanumericos"
 				position="0915"/>
+			<menu text="EIEL/Formularios/Depuradoras"
+				action-command="Depuradoras_alfanumericos"
+				position="0915"/>
 		</extension>
 	</extensions>
 </plugin-config>
