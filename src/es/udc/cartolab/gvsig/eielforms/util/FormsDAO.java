@@ -270,7 +270,12 @@ public class FormsDAO {
 
 		ArrayList fieldsCollection = new ArrayList();
 		String condition = getWhereCondition(key);
-		condition = condition + " AND " + field + " IS NOT NULL";
+		if (condition.equals("")) {
+			condition = "WHERE ";
+		} else {
+			condition = condition + " AND ";
+		}
+		condition = condition + field + " IS NOT NULL";
 
 		String queryString = "SELECT " + field + " ";
 
