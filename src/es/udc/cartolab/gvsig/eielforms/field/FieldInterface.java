@@ -42,10 +42,11 @@ public abstract class FieldInterface
 		this.fieldController = fieldController;
 		this.fieldLabel = new JLabel(fieldController.getLabel());
 		this.fieldLabel.setPreferredSize(new Dimension(150, 20));
-		String toolTip = new String("  " + fieldController.getDomain().toString());
+		String toolTip = new String(fieldController.getLabel() + " ["+ fieldController.getDomain().toString());
 		if (fieldController.getRequired() == true) {
-			toolTip = toolTip + "  FieldController Obligatorio ";
+			toolTip = toolTip + ", obligatorio";
 		}
+		toolTip = toolTip + "]";
 		this.fieldLabel.setToolTipText(toolTip);
 	}
 

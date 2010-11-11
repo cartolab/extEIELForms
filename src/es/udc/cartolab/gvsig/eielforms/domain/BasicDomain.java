@@ -46,7 +46,7 @@ public class BasicDomain extends Domain
     		restrictiones.add(new DecimalSizeRestriction("tipoBase", 0));
     	}
     }
-    this.descripcion = new String("Domain basico " + name + " con tipo base " + tipoBase + "\n    Restrictiones:\n");
+    this.descripcion = new String(tipoBase);
   }
 
   public boolean validate(String valor) {
@@ -62,7 +62,8 @@ public class BasicDomain extends Domain
   public void addRestriction(Restriction restriction)
   {
     this.restrictiones.add(restriction);
-    BasicDomain tmp17_16 = this; tmp17_16.descripcion = tmp17_16.descripcion + restriction.toString() + "  \n";
+
+    descripcion = descripcion + ", " + restriction.toString();
   }
 
   public ArrayList getRestrictions() {
