@@ -56,29 +56,32 @@
 				action-command="Municipio Alumbrado"
 				position="0910"/>
 			<menu text="EIEL/Formularios/Núcleo Datos Generales"
-				action-command="Nucleo Datos Generales"
+				action-command="Nucleo encuestado 1"
 				position="0911"/>
 			<menu text="EIEL/Formularios/Núcleo Abastecimiento"
-				action-command="Nucleo Abastecimiento"
+				action-command="Nucleo encuestado 2"
 				position="0912"/>
+			<menu text="EIEL/Formularios/Núcleo Abastecimiento 2"
+				action-command="Nucleo encuestado 3"
+				position="0913"/>
 			<menu text="EIEL/Formularios/Núcleos Abandonados"
 				action-command="Núcleos abandonados"
-				position="0913"/>
+				position="0918"/>
 			<menu text="EIEL/Formularios/Alumbrado"
 				action-command="Alumbrado"
-				position="0914"/>
+				position="0919"/>
 			<menu text="EIEL/Formularios/Captaciones"
 				action-command="Captaciones de agua"
-				position="0915"/>
+				position="0920"/>
 			<menu text="EIEL/Formularios/Depósitos"
 				action-command="Depositos_alfanumericos"
-				position="0916"/>
+				position="0921"/>
 			<menu text="EIEL/Formularios/Depuradoras"
 				action-command="Depuradoras_alfanumericos"
-				position="0917"/>
+				position="0922"/>
 			<menu text="EIEL/Formularios/Entidades"
 				action-command="Entidad singular"
-				position="0918"/>
+				position="0923"/>
 		</extension>
 	</extensions>
 </plugin-config>
