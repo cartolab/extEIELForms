@@ -54,6 +54,8 @@ public class FormController extends Subject
 	private DependencyMasterFieldRetriever dependencyMasterFieldRetriever;
 	private ArrayList<FormChangeListener> listeners = new ArrayList<FormChangeListener>();
 	private FormFieldListener fieldsListener;
+	private String pollTable = "";
+	private boolean pollButton = false;
 	DecimalFormat df;
 
 	public FormController(String layer, String dataBase, String table, String layout, String name, String title)
@@ -529,6 +531,31 @@ public class FormController extends Subject
 			}
 		}
 
+	}
+
+	public void addPollButton(String pollTable) {
+		this.pollButton = true;
+		this.pollTable = pollTable;
+		this.formInterface.addPollButton();
+	}
+
+	public void removePollButton() {
+		this.pollButton = false;
+		this.formInterface.removePollButton();
+	}
+
+	public boolean hasPollButton() {
+		return this.pollButton;
+	}
+
+	public String getPollTable() {
+		return this.pollTable;
+	}
+
+	public void poll() {
+		if (this.pollButton) {
+			System.out.println("Encuestar lo que sea en: " + pollTable);
+		}
 	}
 
 

@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
- * 
+ *
  * This file is part of extEIELForms
- * 
+ *
  * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
  * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
- * 
+ *
  * extEIELForms is free software: you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or any later version.
- * 
+ *
  * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with extEIELForms.
  * If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,8 +24,11 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -59,6 +62,8 @@ public class FormInterface extends JPanel
 	private InsertPanel insertPanel;
 	private boolean hasSubform = false;
 	private ArrayList subformsControllers;
+	private JButton pollButton;
+	private boolean hasPollButton = false;
 	//  private SelectEntityPanel selectEntityPanel;
 
 	protected FormInterface(FormController formController, String layout, String title)
@@ -71,6 +76,7 @@ public class FormInterface extends JPanel
 		this.dependencies = new ArrayList();
 		this.layout = layout.toUpperCase();
 		this.visible = false;
+		this.pollButton = new JButton("Encuestar");
 		setTitle(title);
 		initFormInterface();
 		configureLayout();
@@ -198,6 +204,7 @@ public class FormInterface extends JPanel
 			this.subFormPanel.setVisible(false);
 		}
 		this.panel.setVisible(true);
+
 		//    this.mainPane.add(this.queryPanel, "South");
 		//    pack();
 	}
@@ -383,5 +390,28 @@ public class FormInterface extends JPanel
 
 	public String getTitle() {
 		return title;
+	}
+
+	public void addPollButton() {
+		if (formController.hasPollButton()) {
+			if (!hasPollButton) {
+				panel.add(pollButton, this.gridbagconst);
+				updateLayout();
+				pollButton.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent paramActionEvent) {
+						formController.poll();
+					}
+
+				});
+				hasPollButton = true;
+			} else {
+				pollButton.setVisible(true);
+			}
+		}
+	}
+
+	public void removePollButton() {
+		pollButton.setVisible(false);
 	}
 }

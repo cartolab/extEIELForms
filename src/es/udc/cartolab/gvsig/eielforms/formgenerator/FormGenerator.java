@@ -56,6 +56,8 @@ public class FormGenerator
 	private SubFormGenerator subformGenerator;
 	private String aplicationDbName;
 	private String xml;
+	private boolean pollButton;
+	private String pollTable;
 
 	public FormGenerator()
 	{
@@ -64,6 +66,8 @@ public class FormGenerator
 		this.dependencyGenerator = new DependencyGenerator();
 		this.groupGenerator = new GroupGenerator();
 		this.subformGenerator = new SubFormGenerator();
+		this.pollButton = false;
+		this.pollTable = "";
 	}
 
 	public FormController createFormController(String formControllerName) throws FormException
@@ -107,6 +111,10 @@ public class FormGenerator
 					SubForm subformulario = (SubForm)this.subform.get(i);
 
 					this.formController.addSubForm(subformulario);
+				}
+
+				if (this.pollButton) {
+					this.formController.addPollButton(this.pollTable);
 				}
 			}
 			else {
@@ -163,6 +171,10 @@ public class FormGenerator
 				}
 				else if (attributes.getNodeName().compareTo("Subform") == 0) {
 					this.subform.add(this.subformGenerator.processSubForm(attributes));
+				}
+				else if (attributes.getNodeName().compareTo("PollButton") == 0) {
+					this.pollButton = true;
+					this.pollTable = attributes.getAttributes().getNamedItem("Table").getNodeValue();
 				}
 
 			}
