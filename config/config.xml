@@ -70,6 +70,12 @@
 			<menu text="EIEL/Formularios/Núcleo Saneamiento y depuración"
 				action-command="Nucleo encuestado 5"
 				position="0915"/>
+			<menu text="EIEL/Formularios/Núcleo Recogida de basura"
+				action-command="Nucleo encuestado 6"
+				position="0916"/>
+			<menu text="EIEL/Formularios/Núcleo Otros datos"
+				action-command="Nucleo encuestado 7"
+				position="0917"/>
 			<menu text="EIEL/Formularios/Núcleos Abandonados"
 				action-command="Núcleos abandonados"
 				position="0918"/>
