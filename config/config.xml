@@ -64,6 +64,12 @@
 			<menu text="EIEL/Formularios/Núcleo Abastecimiento 2"
 				action-command="Nucleo encuestado 3"
 				position="0913"/>
+			<menu text="EIEL/Formularios/Núcleo Abastecimiento Autónomo"
+				action-command="Nucleo encuestado 4"
+				position="0914"/>
+			<menu text="EIEL/Formularios/Núcleo Saneamiento y depuración"
+				action-command="Nucleo encuestado 5"
+				position="0915"/>
 			<menu text="EIEL/Formularios/Núcleos Abandonados"
 				action-command="Núcleos abandonados"
 				position="0918"/>
