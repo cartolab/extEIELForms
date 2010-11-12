@@ -106,6 +106,12 @@
 			<menu text="EIEL/Formularios/Conducción"
 				action-command="Conduccion_alfanumericos"
 				position="0927" />
+			<menu text="EIEL/Formularios/Emisarios"
+				action-command="Emisarios"
+				position="0928" />
+			<menu text="EIEL/Formularios/Emisarios encuestados"
+				action-command="Emisarios_encuestados"
+				position="0929" />
 		</extension>			
 	</extensions>
 </plugin-config>
