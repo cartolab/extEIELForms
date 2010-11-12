@@ -99,14 +99,13 @@
 				position="0924"/>
 			<menu text="EIEL/Formularios/Entidades"
 				action-command="Entidad singular"
-				position="0925">
+				position="0925" />
 			<menu text="EIEL/Formularios/Colector"
 				action-command="Colector_alfanumericos"
-				position="0926">
+				position="0926" />
 			<menu text="EIEL/Formularios/Conducción"
 				action-command="Conduccion_alfanumericos"
-				position="0927">
-		</extension>
-			
+				position="0927" />
+		</extension>			
 	</extensions>
 </plugin-config>
