@@ -41,6 +41,7 @@ import es.udc.cartolab.gvsig.eielforms.groups.FieldGroup;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubForm;
 import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
 import es.udc.cartolab.gvsig.eielutils.constants.Constants;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class FormController extends Subject
 {
@@ -156,6 +157,27 @@ public class FormController extends Subject
 		}
 
 		return temporal;
+	}
+	/**
+	 * to be used only in getAllFieldValues
+	 * @return
+	 */
+	private ArrayList getAllFieldsInterface() {
+
+		ArrayList grupos = getGroups();
+		ArrayList dependencias = getDependencies();
+		ArrayList temporal = new ArrayList();
+
+		for (int i = 0; i < grupos.size(); ++i) {
+			temporal.addAll(((FieldGroup)grupos.get(i)).getFieldsInterface());
+		}
+
+		for (int i = 0; i < dependencias.size(); ++i) {
+			temporal.addAll(((Dependency)dependencias.get(i)).getFieldsInterface());
+		}
+
+		return temporal;
+
 	}
 
 	public ArrayList getKey()
@@ -299,12 +321,10 @@ public class FormController extends Subject
 		this.formInterface.startInsertion();
 	}
 
-	public void insert()
-	{
+	private HashMap<String, String> getFieldValues() {
 		ArrayList<String> idFields = new ArrayList<String>();
 		idFields.add("id");
 		idFields.add("gid");
-		ArrayList fields = getFields();
 		ArrayList fieldsInterface = getFieldsInterface();
 		HashMap<String, String> fieldValues = new HashMap<String, String>();
 		for (int i=0; i< fieldsInterface.size(); i++) {
@@ -315,6 +335,34 @@ public class FormController extends Subject
 				fieldValues.put(fieldName, fc.getValue());
 			}
 		}
+		return fieldValues;
+	}
+
+	/**
+	 * To get all field values(including dependencies), only to be used in poll method
+	 * @return
+	 */
+	private HashMap<String, String> getAllFieldValues() {
+
+
+		ArrayList fieldsInterface = getAllFieldsInterface();
+		HashMap<String, String> fieldValues = new HashMap<String, String>();
+		for (int i=0; i< fieldsInterface.size(); i++) {
+			FieldInterface fi = (FieldInterface) fieldsInterface.get(i);
+			FieldController fc = fi.getField();
+			String fieldName = fc.getName();
+			if (!(fi instanceof DependencyMasterField)) {
+				fieldValues.put(fieldName, fc.getValue());
+			}
+		}
+		return fieldValues;
+
+	}
+
+	public void insert()
+	{
+		HashMap<String, String> fieldValues = getFieldValues();
+
 		FormsDAO fdao = new FormsDAO();
 		try {
 			fdao.insertEntity(fieldValues, dataBase, table);
@@ -555,6 +603,17 @@ public class FormController extends Subject
 	public void poll() {
 		if (this.pollButton) {
 			System.out.println("Encuestar lo que sea en: " + pollTable);
+			DBSession dbs = DBSession.getCurrentSession();
+			if (dbs!=null) {
+				HashMap<String, String> fieldValues = getAllFieldValues();
+				FormsDAO fdao = new FormsDAO();
+				try {
+					fdao.insertEntity(fieldValues, dataBase, pollTable);
+				} catch (FormException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
