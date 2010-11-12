@@ -112,6 +112,7 @@
 			<menu text="EIEL/Formularios/Emisarios encuestados"
 				action-command="Emisarios_encuestados"
 				position="0929" />
-		</extension>			
+		</extension>
+
 	</extensions>
 </plugin-config>
