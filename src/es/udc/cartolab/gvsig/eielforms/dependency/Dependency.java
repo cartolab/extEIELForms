@@ -44,6 +44,7 @@ public class Dependency extends SingleFieldGroup
 	private boolean knowOwnFieldsInterface;
 	private String groupName;
 	private String layout;
+	private ArrayList<DependencyListener> listeners;
 
 	public Dependency(String groupName, String layout, String table, String dataBase, ArrayList foreignKey)
 	{
@@ -58,6 +59,7 @@ public class Dependency extends SingleFieldGroup
 		this.ownFields = new ArrayList();
 		this.ownFieldsInterface = new ArrayList();
 		this.dependencyMasterField = null;
+		this.listeners = new ArrayList<DependencyListener>();
 
 		getInterface().setBorder(new TitledBorder(groupName));
 	}
@@ -145,6 +147,7 @@ public class Dependency extends SingleFieldGroup
 		}
 
 		loadData();
+		fireDependencyChanged();
 	}
 
 	public Dependency clonar() {
@@ -171,4 +174,23 @@ public class Dependency extends SingleFieldGroup
 
 		return dependency;
 	}
+
+	public void addDependencyListener(DependencyListener listener) {
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+
+	public void removeDependencyListener(DependencyListener listener) {
+		if (listeners.contains(listener)) {
+			listeners.remove(listener);
+		}
+	}
+
+	private void fireDependencyChanged() {
+		for (DependencyListener listener : listeners) {
+			listener.dependencyChanged(this);
+		}
+	}
+
 }

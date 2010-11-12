@@ -414,4 +414,8 @@ public class FormInterface extends JPanel
 	public void removePollButton() {
 		pollButton.setVisible(false);
 	}
+
+	public void enablePollButton(boolean enabled) {
+		pollButton.setEnabled(enabled);
+	}
 }

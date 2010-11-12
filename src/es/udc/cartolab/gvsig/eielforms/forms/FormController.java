@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import es.udc.cartolab.gvsig.eielforms.dependency.Dependency;
+import es.udc.cartolab.gvsig.eielforms.dependency.DependencyListener;
 import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterField;
 import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterFieldRetriever;
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
@@ -57,6 +58,7 @@ public class FormController extends Subject
 	private FormFieldListener fieldsListener;
 	private String pollTable = "";
 	private boolean pollButton = false;
+	private PollDependencyListener pollListener;
 	DecimalFormat df;
 
 	public FormController(String layer, String dataBase, String table, String layout, String name, String title)
@@ -74,6 +76,8 @@ public class FormController extends Subject
 		this.formInterface = new FormInterface(this, layout, title);
 
 		this.fieldsListener = new FormFieldListener(this);
+
+		this.pollListener = new PollDependencyListener();
 
 	}
 
@@ -428,6 +432,23 @@ public class FormController extends Subject
 		}
 	}
 
+	public HashMap<String, String> getFieldValues(ArrayList<String> fieldNames) {
+
+		HashMap<String, String> fieldValues = new HashMap<String, String>();
+
+		ArrayList fields = getAllFieldsInterface();
+		for (int i=0; i<fields.size(); i++) {
+			FieldInterface fi = (FieldInterface) fields.get(i);
+			String name = fi.getField().getName();
+			if (fieldNames.contains(name)) {
+				fieldValues.put(name, fi.getField().getValue());
+			}
+		}
+
+		return fieldValues;
+
+	}
+
 	public void updateDependencyFields(HashMap fields) {
 		ArrayList dependencies = getDependencies();
 
@@ -585,11 +606,21 @@ public class FormController extends Subject
 		this.pollButton = true;
 		this.pollTable = pollTable;
 		this.formInterface.addPollButton();
+		ArrayList dependencies = formInterface.getDependencies();
+		for (int i=0; i<dependencies.size(); i++) {
+			Dependency d = (Dependency) dependencies.get(i);
+			d.addDependencyListener(pollListener);
+		}
 	}
 
 	public void removePollButton() {
 		this.pollButton = false;
 		this.formInterface.removePollButton();
+		ArrayList dependencies = formInterface.getDependencies();
+		for (int i=0; i<dependencies.size(); i++) {
+			Dependency d = (Dependency) dependencies.get(i);
+			d.removeDependencyListener(pollListener);
+		}
 	}
 
 	public boolean hasPollButton() {
@@ -602,7 +633,6 @@ public class FormController extends Subject
 
 	public void poll() {
 		if (this.pollButton) {
-			System.out.println("Encuestar lo que sea en: " + pollTable);
 			DBSession dbs = DBSession.getCurrentSession();
 			if (dbs!=null) {
 				HashMap<String, String> fieldValues = getAllFieldValues();
@@ -615,6 +645,48 @@ public class FormController extends Subject
 				}
 			}
 		}
+		formInterface.enablePollButton(false);
+	}
+
+	public boolean isPolled() {
+
+		boolean polled = false;
+
+		if (this.pollButton) {
+
+			DBSession dbs = DBSession.getCurrentSession();
+			if (dbs != null) {
+
+				ArrayList<String> keyNames = new ArrayList<String>();
+				for (int i=0; i<key.size();i++) {
+					FieldController fc = (FieldController) key.get(i);
+					keyNames.add(fc.getName());
+				}
+
+				HashMap<String, String> keyValues = getFieldValues(keyNames);
+
+				FormsDAO fdao = new FormsDAO();
+				try {
+					HashMap<String, String> val = fdao.getValues(keyValues, dbs.getSchema(), pollTable, keyNames);
+					if (!val.isEmpty()) {
+						polled = true;
+					}
+				} catch (FormException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return polled;
+	}
+
+	private class PollDependencyListener implements DependencyListener {
+
+		public void dependencyChanged(Dependency dep) {
+			formInterface.enablePollButton(!isPolled());
+		}
+
 	}
 
 
