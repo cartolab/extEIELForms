@@ -99,8 +99,8 @@ public class TextFieldInterface extends FieldInterface
 		}
 
 		public void focusLost(FocusEvent evt) {
-			fireFieldChanged();
 			this.textFieldInterface.fillField();
+			fireFieldChanged();
 			this.textFieldInterface.validate();
 		}
 
