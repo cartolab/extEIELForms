@@ -39,6 +39,8 @@ import es.udc.cartolab.gvsig.eielforms.forms.panel.InsertPanel;
 import es.udc.cartolab.gvsig.eielforms.forms.panel.QueryPanel;
 import es.udc.cartolab.gvsig.eielforms.forms.panel.SubFormButtonPanel;
 import es.udc.cartolab.gvsig.eielforms.groups.FieldGroup;
+import es.udc.cartolab.gvsig.eielforms.nucsubform.NucSubForm;
+import es.udc.cartolab.gvsig.eielforms.nucsubform.NucSubFormButtonPanel;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubForm;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubFormController;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubFormInterface;
@@ -64,6 +66,7 @@ public class FormInterface extends JPanel
 	private ArrayList subformsControllers;
 	private JButton pollButton;
 	private boolean hasPollButton = false;
+	private NucSubForm nucSubForm = null;
 	//  private SelectEntityPanel selectEntityPanel;
 
 	protected FormInterface(FormController formController, String layout, String title)
@@ -127,6 +130,10 @@ public class FormInterface extends JPanel
 		this.dependencies.add(dependency);
 		this.panel.add(dependency.getInterface(), this.gridbagconst);
 		updateLayout();
+	}
+
+	public void setNucSubForm(NucSubForm nsf) {
+		this.nucSubForm = nsf;
 	}
 
 	public ArrayList getGroups()
@@ -411,11 +418,21 @@ public class FormInterface extends JPanel
 		}
 	}
 
+	public void addNucSubformButton(NucSubForm nucSubForm) {
+		this.nucSubForm = nucSubForm;
+		NucSubFormButtonPanel panel = new NucSubFormButtonPanel(this);
+		this.panel.add(panel);
+	}
+
 	public void removePollButton() {
 		pollButton.setVisible(false);
 	}
 
 	public void enablePollButton(boolean enabled) {
 		pollButton.setEnabled(enabled);
+	}
+
+	public NucSubForm getNucSubForm() {
+		return nucSubForm;
 	}
 }

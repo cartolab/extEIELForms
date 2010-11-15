@@ -24,6 +24,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import es.udc.cartolab.gvsig.eielforms.dependency.Dependency;
@@ -39,6 +40,7 @@ import es.udc.cartolab.gvsig.eielforms.formgenerator.Subject;
 import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeEvent;
 import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeListener;
 import es.udc.cartolab.gvsig.eielforms.groups.FieldGroup;
+import es.udc.cartolab.gvsig.eielforms.nucsubform.NucSubForm;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubForm;
 import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
 import es.udc.cartolab.gvsig.eielutils.constants.Constants;
@@ -125,6 +127,10 @@ public class FormController extends Subject
 	public void addSubformsButton(ArrayList subforms)
 	{
 		this.formInterface.addSubForm(subforms);
+	}
+
+	public void addNucSubformButton(NucSubForm subform) {
+		this.formInterface.addNucSubformButton(subform);
 	}
 
 	//  public void setModal(boolean modal)
@@ -448,7 +454,7 @@ public class FormController extends Subject
 		FormsDAO fdao = new FormsDAO();
 		HashMap map;
 		try {
-			map = fdao.getValues(keys, getDataBase(), getTable(), fieldNames);
+			map = fdao.getKeyValues(keys, getDataBase(), getTable(), fieldNames);
 
 			map.putAll(getDependenciesFields(map));
 
@@ -460,7 +466,7 @@ public class FormController extends Subject
 		}
 	}
 
-	public HashMap<String, String> getFieldValues(ArrayList<String> fieldNames) {
+	public HashMap<String, String> getFieldValues(List<String> fieldNames) {
 
 		HashMap<String, String> fieldValues = new HashMap<String, String>();
 
@@ -535,7 +541,7 @@ public class FormController extends Subject
 				}
 
 				FormsDAO fdao = new FormsDAO();
-				HashMap dependencyResult = fdao.getValues(dependencyFK, oneDependency.getDataBase(), oneDependency.getTable(), dependencyFieldNames);
+				HashMap dependencyResult = fdao.getKeyValues(dependencyFK, oneDependency.getDataBase(), oneDependency.getTable(), dependencyFieldNames);
 				Set fieldSet = dependencyResult.keySet();
 				Iterator fieldsIterator = fieldSet.iterator();
 
@@ -695,7 +701,7 @@ public class FormController extends Subject
 
 				FormsDAO fdao = new FormsDAO();
 				try {
-					HashMap<String, String> val = fdao.getValues(keyValues, dbs.getSchema(), pollTable, keyNames);
+					HashMap<String, String> val = fdao.getKeyValues(keyValues, dbs.getSchema(), pollTable, keyNames);
 					if (!val.isEmpty()) {
 						polled = true;
 					}
@@ -741,7 +747,6 @@ public class FormController extends Subject
 		}
 
 	}
-
 
 
 	//  public void addEntitiesPanel(SelectEntityPanel selectEntityPanel) {

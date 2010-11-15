@@ -41,13 +41,13 @@ public class FormsDAO {
 	public FormsDAO() {
 	}
 
-	public HashMap<String, String> getValues(HashMap key, String schemaName, String table, List<String> fields) throws FormException {
+	public List<HashMap<String, String>> getValues(HashMap whereFields, String schemaName, String table, List<String> fields) throws FormException {
 		ResultSet resultSet = null;
 		Connection connection = null;
 		Statement statement = null;
-		String condition = getWhereCondition(key);
+		String condition = getWhereCondition(whereFields);
 		String queryString = "SELECT ";
-		HashMap<String, String> result = new HashMap<String, String>();
+		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
 
 		for (int i = 0; i < fields.size(); ++i) {
 			queryString = queryString + fields.get(i) + ", ";
@@ -68,10 +68,12 @@ public class FormsDAO {
 				statement = connection.createStatement();
 				resultSet = statement.executeQuery(queryString);
 
-				if (resultSet.next()) {
+				while (resultSet.next()) {
+					HashMap<String, String> row = new HashMap<String, String>();
 					for (int i = 0; i<fields.size() ; ++i) {
-						result.put(fields.get(i), resultSet.getString(fields.get(i)));
+						row.put(fields.get(i), resultSet.getString(fields.get(i)));
 					}
+					result.add(row);
 				}
 			} else {
 				throw new FormException("La sesion no se ha iniciado");
@@ -91,6 +93,18 @@ public class FormsDAO {
 			closeResultSet(resultSet);
 			closeStatement(statement);
 		}
+	}
+
+
+	public HashMap<String, String> getKeyValues(HashMap key, String schemaName, String table, List<String> fields) throws FormException {
+
+		List<HashMap<String, String>> values = getValues(key, schemaName, table, fields);
+		if (values.size()==0) {
+			return new HashMap<String, String>();
+		} else {
+			return values.get(0);
+		}
+
 	}
 
 	public void updateEntity(HashMap key, String schemaName, String table, HashMap fields)

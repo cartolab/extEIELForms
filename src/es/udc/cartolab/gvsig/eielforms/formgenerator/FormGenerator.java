@@ -34,6 +34,8 @@ import es.udc.cartolab.gvsig.eielforms.dependency.DependencyGenerator;
 import es.udc.cartolab.gvsig.eielforms.forms.FormController;
 import es.udc.cartolab.gvsig.eielforms.groups.FieldGroup;
 import es.udc.cartolab.gvsig.eielforms.groups.GroupGenerator;
+import es.udc.cartolab.gvsig.eielforms.nucsubform.NucSubForm;
+import es.udc.cartolab.gvsig.eielforms.nucsubform.NucSubFormGenerator;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubForm;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubFormGenerator;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
@@ -50,14 +52,17 @@ public class FormGenerator
 	private String table;
 	private String layer;
 	private String title;
+	private NucSubForm nucSubform;
 	private FormController formController;
 	private DependencyGenerator dependencyGenerator;
 	private GroupGenerator groupGenerator;
 	private SubFormGenerator subformGenerator;
+	private NucSubFormGenerator nucSubformGenerator;
 	private String aplicationDbName;
 	private String xml;
 	private boolean pollButton;
 	private String pollTable;
+
 
 	public FormGenerator()
 	{
@@ -66,6 +71,7 @@ public class FormGenerator
 		this.dependencyGenerator = new DependencyGenerator();
 		this.groupGenerator = new GroupGenerator();
 		this.subformGenerator = new SubFormGenerator();
+		this.nucSubformGenerator = new NucSubFormGenerator();
 		this.pollButton = false;
 		this.pollTable = "";
 	}
@@ -111,6 +117,9 @@ public class FormGenerator
 					SubForm subformulario = (SubForm)this.subform.get(i);
 
 					this.formController.addSubForm(subformulario);
+				}
+				if (this.nucSubform != null) {
+					this.formController.addNucSubformButton(this.nucSubform);
 				}
 
 				if (this.pollButton) {
@@ -175,6 +184,9 @@ public class FormGenerator
 				else if (attributes.getNodeName().compareTo("PollButton") == 0) {
 					this.pollButton = true;
 					this.pollTable = attributes.getAttributes().getNamedItem("Table").getNodeValue();
+				}
+				else if (attributes.getNodeName().compareTo("NucWindow") == 0) {
+					this.nucSubform = this.nucSubformGenerator.processNucSubForm(attributes);
 				}
 
 			}
