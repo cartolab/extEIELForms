@@ -59,6 +59,7 @@ public class FormController extends Subject
 	private String pollTable = "";
 	private boolean pollButton = false;
 	private PollDependencyListener pollListener;
+	private HashMap<FieldController, OrderDependencyListener> orderListeners;
 	DecimalFormat df;
 
 	public FormController(String layer, String dataBase, String table, String layout, String name, String title)
@@ -78,7 +79,7 @@ public class FormController extends Subject
 		this.fieldsListener = new FormFieldListener(this);
 
 		this.pollListener = new PollDependencyListener();
-
+		this.orderListeners = new HashMap<FieldController, OrderDependencyListener>();
 	}
 
 	public String getDataBase() {
@@ -225,6 +226,23 @@ public class FormController extends Subject
 		return aux;
 	}
 
+	private String getOrderValue(HashMap fields, FieldController oneField) {
+		FormsDAO fdao = new FormsDAO();
+		String value = "999";
+		try {
+			HashMap map = getEielKey(fields);
+			String highestVal = fdao.getHighestValue(getEielKey(fields), dataBase, table, oneField.getName());
+			Integer val = Integer.parseInt(highestVal) + 1;
+			value = df.format(val);
+
+		} catch (FormException e) {
+			e.printStackTrace();
+		}
+
+		return value;
+	}
+
+
 	public void executeQuery(HashMap fields)
 	{
 		ArrayList groups = getGroups();
@@ -234,18 +252,19 @@ public class FormController extends Subject
 			for (int j = 0; j < groupOfFields.size(); ++j) {
 				FieldController oneField = (FieldController)groupOfFields.get(j);
 				String value = (String)fields.get(oneField.getName());
-				if (value == null && oneField.isOrden()) {
-					FormsDAO fdao = new FormsDAO();
-					try {
-						String highestVal = fdao.getHighestValue(getEielKey(fields), dataBase, table, oneField.getName());
-						Integer val = Integer.parseInt(highestVal) + 1;
-						value = df.format(val);
-
-					} catch (FormException e) {
-						e.printStackTrace();
-					} catch (Exception e) {
-						value = "999";
+				if (oneField.isOrden()) {
+					OrderDependencyListener orderListener = orderListeners.get(oneField);
+					if (orderListener != null) {
+						orderListener.setInitialValue(value);
+					} else {
+						FieldInterface oneFieldInterface = ((FieldGroup)groups.get(i)).getFieldInterface(oneField.getName());
+						if (oneFieldInterface != null) {
+							orderListeners.put(oneField, new OrderDependencyListener(value, oneFieldInterface));
+						}
 					}
+				}
+				if (value == null && oneField.isOrden()) {
+					value = getOrderValue(fields, oneField);
 				}
 				if (value == null) {
 					if (!oneField.getDefaultValue().equals("")) {
@@ -258,9 +277,18 @@ public class FormController extends Subject
 
 		}
 
+
 		ArrayList dependencies = getDependencies();
 		for (int i = 0; i < dependencies.size(); ++i) {
 			Dependency oneDependency = (Dependency)dependencies.get(i);
+
+			//add listeners for order fields
+			Set<FieldController> keySet = orderListeners.keySet();
+			Iterator<FieldController> it = keySet.iterator();
+			while (it.hasNext()) {
+				OrderDependencyListener listener = orderListeners.get(it.next());
+				oneDependency.addDependencyListener(listener);
+			}
 			ArrayList groupOfFields = oneDependency.getFields();
 
 			if (oneDependency.getDependencyMasterField() != null)
@@ -685,6 +713,31 @@ public class FormController extends Subject
 
 		public void dependencyChanged(Dependency dep) {
 			formInterface.enablePollButton(!isPolled());
+		}
+
+	}
+
+	private class OrderDependencyListener implements DependencyListener {
+
+		private String initialValue;
+		private FieldInterface orderField;
+
+		public OrderDependencyListener(String initialValue, FieldInterface orderField) {
+			this.initialValue = initialValue;
+			this.orderField = orderField;
+		}
+
+		public void setInitialValue(String value) {
+			initialValue = value;
+		}
+
+		public void dependencyChanged(Dependency dep) {
+			HashMap<String, String> fields = getFieldValues();
+			if (initialValue == null) {
+				String value = getOrderValue(fields, orderField.getField());
+				orderField.setValue(value);
+				orderField.getField().setOldValue(value);
+			}
 		}
 
 	}
