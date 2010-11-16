@@ -20,6 +20,7 @@
 
 package es.udc.cartolab.gvsig.eielforms.gui;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -127,6 +128,7 @@ public class NucSubFormWindow extends AlphanumericForm {
 	private JPanel getSouthButtonsPanel() {
 
 		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
 
 		JButton okButton = new JButton("Aceptar");
 		okButton.addActionListener(new ActionListener() {
@@ -146,8 +148,31 @@ public class NucSubFormWindow extends AlphanumericForm {
 
 		});
 
-		panel.add(okButton);
-		panel.add(cancelButton);
+		JPanel auxPanel = new JPanel();
+		auxPanel.add(okButton);
+		auxPanel.add(cancelButton);
+
+		JPanel auxPanel2 = new JPanel();
+		JButton removeRowsButton = new JButton("Quitar elementos seleccionados");
+		removeRowsButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent paramActionEvent) {
+
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				for (int i=table.getSelectedRowCount()-1; i>=0; i--) {
+					model.removeRow(table.getSelectedRows()[i]);
+				}
+
+
+			}
+
+		});
+		auxPanel2.add(removeRowsButton);
+
+
+		panel.add(auxPanel2, BorderLayout.WEST);
+		panel.add(auxPanel, BorderLayout.EAST);
+//		panel.add(cancelButton, BorderLayout.EAST);C
 
 		return panel;
 
