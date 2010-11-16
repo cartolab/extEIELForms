@@ -96,7 +96,7 @@ public void updateMasterFields(Dependency dependency, HashMap valoresCampos)
         ArrayList allDependencyPosibleValues = this.formsDAO.getFieldsCollection(applicationDAOCondition, dependency.getDataBase(), dependency.getTable(), dependencyFieldsNames);
 
         HashMap dependencyRowValues = new HashMap();
-        HashMap dependencyDomainValues = new HashMap();
+        LinkedHashMap dependencyDomainValues = new LinkedHashMap();
         LinkedHashMap dependencyValuesHashMap = new LinkedHashMap();
 
         for (int i = 0; i < allDependencyPosibleValues.size(); ++i) {
