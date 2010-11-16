@@ -592,7 +592,7 @@ public class FormController extends Subject
 
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
-			ArrayList fields = getFieldsInterface();
+			ArrayList fields = getAllFieldsInterface();
 			for (int i=0; i<fields.size(); i++) {
 				if (fields.get(i) instanceof FieldInterface) {
 					FieldInterface field = (FieldInterface) fields.get(i);
@@ -608,7 +608,7 @@ public class FormController extends Subject
 		if (listeners.contains(listener)) {
 			listeners.remove(listener);
 			if (listeners.size()==0) {
-				ArrayList fields = getFieldsInterface();
+				ArrayList fields = getAllFieldsInterface();
 				for (int i=0; i<fields.size(); i++) {
 					if (fields.get(i) instanceof FieldInterface) {
 						FieldInterface field = (FieldInterface) fields.get(i);

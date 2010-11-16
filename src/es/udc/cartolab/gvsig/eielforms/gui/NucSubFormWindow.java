@@ -36,6 +36,8 @@ import javax.swing.table.DefaultTableModel;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
+import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeEvent;
+import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeListener;
 import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
 import es.udc.cartolab.gvsig.eielutils.misc.EIELValues;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
@@ -46,7 +48,7 @@ public class NucSubFormWindow extends AlphanumericForm {
 	private WindowInfo windowInfo;
 	private HashMap<String, String> fields;
 	private JTable table;
-	private ArrayList<TableElement> tableElements;
+	private ArrayList<TableElement> initialTableElements, currentTableElements;
 	private JButton addButton;
 	private ArrayList<String> nucFields;
 
@@ -67,8 +69,6 @@ public class NucSubFormWindow extends AlphanumericForm {
 		getTableElementsFromDB();
 		prepareTable();
 
-
-
 	}
 
 	public WindowInfo getWindowInfo() {
@@ -84,10 +84,66 @@ public class NucSubFormWindow extends AlphanumericForm {
 	public void open() {
 		super.open();
 
+		form.addFormChangeListener(new FormChangeListener() {
+
+			public void formChanged(FormChangeEvent e) {
+
+				try {
+					enableAddButton();
+				} catch (FormException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+
+		});
+
 		JScrollPane pane = new JScrollPane(this.table);
 		add(pane);
 
 		add(getSouthButtonsPanel());
+
+		try {
+			enableAddButton();
+		} catch (FormException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
+	private void enableAddButton() throws FormException {
+
+		TableElement te = getElementFromForm();
+		if (addButton != null) {
+			addButton.setEnabled(!currentTableElements.contains(te));
+		}
+
+	}
+
+	private TableElement getElementFromForm() throws FormException {
+
+		HashMap<String, String> nucValues = form.getFieldValues(nucFields);
+		TableElement te = new TableElement(
+				nucValues.get(EIELValues.FIELD_FASE),
+				nucValues.get(EIELValues.FIELD_COD_PRO),
+				nucValues.get(EIELValues.FIELD_COD_MUN),
+				nucValues.get(EIELValues.FIELD_COD_ENT),
+				nucValues.get(EIELValues.FIELD_COD_POB));
+
+		return te;
+	}
+
+	private TableElement getElementFromTable(int row) throws FormException {
+
+		return new TableElement(
+				table.getValueAt(row, 0).toString(),
+				table.getValueAt(row, 1).toString(),
+				table.getValueAt(row, 2).toString(),
+				table.getValueAt(row, 3).toString(),
+				table.getValueAt(row, 4).toString());
+
+
 	}
 
 	protected JPanel getButtonsPanel() {
@@ -99,16 +155,11 @@ public class NucSubFormWindow extends AlphanumericForm {
 
 			public void actionPerformed(ActionEvent paramActionEvent) {
 
-				HashMap<String, String> nucValues = form.getFieldValues(nucFields);
 
 				try {
-					TableElement te = new TableElement(
-							nucValues.get(EIELValues.FIELD_FASE),
-							nucValues.get(EIELValues.FIELD_COD_PRO),
-							nucValues.get(EIELValues.FIELD_COD_MUN),
-							nucValues.get(EIELValues.FIELD_COD_ENT),
-							nucValues.get(EIELValues.FIELD_COD_POB));
 
+					TableElement te = getElementFromForm();
+					currentTableElements.add(te);
 					addTableElement(te);
 
 				} catch (FormException e) {
@@ -160,6 +211,15 @@ public class NucSubFormWindow extends AlphanumericForm {
 
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				for (int i=table.getSelectedRowCount()-1; i>=0; i--) {
+					try {
+						TableElement te = getElementFromTable(i);
+						if (currentTableElements.contains(te)) {
+							currentTableElements.remove(te);
+						}
+					} catch (FormException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					model.removeRow(table.getSelectedRows()[i]);
 				}
 
@@ -179,27 +239,18 @@ public class NucSubFormWindow extends AlphanumericForm {
 
 	public void save() {
 
-		ArrayList<TableElement> elementsOnTable = new ArrayList<TableElement>();
-		for (int row=0; row<table.getRowCount(); row++) {
-			try {
-				TableElement te = new TableElement(
-						table.getValueAt(row, 0).toString(),
-						table.getValueAt(row, 1).toString(),
-						table.getValueAt(row, 2).toString(),
-						table.getValueAt(row, 3).toString(),
-						table.getValueAt(row, 4).toString()
-						);
-				elementsOnTable.add(te);
-				if (!tableElements.contains(te)) {
+		for (TableElement te : currentTableElements) {
+			if (!initialTableElements.contains(te)) {
+				try {
 					te.saveInDB();
+				} catch (FormException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (FormException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
-		for (TableElement te : tableElements) {
-			if (!elementsOnTable.contains(te)) {
+		for (TableElement te : initialTableElements) {
+			if (!currentTableElements.contains(te)) {
 				try {
 					te.removeFromDB();
 				} catch (FormException e) {
@@ -213,7 +264,8 @@ public class NucSubFormWindow extends AlphanumericForm {
 
 	private void getTableElementsFromDB() {
 
-		tableElements = new ArrayList<TableElement>();
+		initialTableElements = new ArrayList<TableElement>();
+		currentTableElements = new ArrayList<TableElement>();
 
 		FormsDAO fdao = new FormsDAO();
 		DBSession dbs = DBSession.getCurrentSession();
@@ -228,7 +280,8 @@ public class NucSubFormWindow extends AlphanumericForm {
 					String entidad = map.get(EIELValues.FIELD_COD_ENT);
 					String nucleo = map.get(EIELValues.FIELD_COD_POB);
 					TableElement te = new TableElement(fase, provincia, municipio, entidad, nucleo);
-					tableElements.add(te);
+					initialTableElements.add(te);
+					currentTableElements.add(te);
 				}
 			} catch (FormException e) {
 				// TODO Auto-generated catch block
@@ -239,11 +292,11 @@ public class NucSubFormWindow extends AlphanumericForm {
 
 	private void prepareTable() {
 
-		String[][] elements = new String[tableElements.size()][6];
+		String[][] elements = new String[initialTableElements.size()][6];
 		String[] header = {"Fase", "Provincia", "Municipio", "Entidad", "Núcleo", "Denominación"};
 
-		for (int i=0; i<tableElements.size(); i++) {
-			TableElement te = tableElements.get(i);
+		for (int i=0; i<initialTableElements.size(); i++) {
+			TableElement te = initialTableElements.get(i);
 			elements[i][0] = te.getFase();
 			elements[i][1] = te.getProvincia();
 			elements[i][2] = te.getMunicipio();
