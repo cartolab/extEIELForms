@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
- * 
+ *
  * This file is part of extEIELForms
- * 
+ *
  * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
  * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
- * 
+ *
  * extEIELForms is free software: you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or any later version.
- * 
+ *
  * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with extEIELForms.
  * If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,6 +22,7 @@ package es.udc.cartolab.gvsig.eielforms.dependency;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
@@ -68,7 +69,7 @@ public void updateMasterFields(Dependency dependency, HashMap valoresCampos)
             dependencyFieldsNames.add(oneDependencyField.getName());
           }
 
-          if ((!(dependencyForeignKey.contains(oneDependencyField.getName()))) || ((masterFieldNames.contains(oneDependencyField.getName())) && (oneDependencyField.getIsConstant() != true)) || 
+          if ((!(dependencyForeignKey.contains(oneDependencyField.getName()))) || ((masterFieldNames.contains(oneDependencyField.getName())) && (oneDependencyField.getIsConstant() != true)) ||
             (oneDependencyField.getName().compareTo(masterFieldMainFieldName) == 0))
             continue;
 //          if ((valoresCampos.get(oneDependencyField.getName()) == null) && (oneDependencyField.getIsConstant() == true))
@@ -96,7 +97,7 @@ public void updateMasterFields(Dependency dependency, HashMap valoresCampos)
 
         HashMap dependencyRowValues = new HashMap();
         HashMap dependencyDomainValues = new HashMap();
-        HashMap dependencyValuesHashMap = new HashMap();
+        LinkedHashMap dependencyValuesHashMap = new LinkedHashMap();
 
         for (int i = 0; i < allDependencyPosibleValues.size(); ++i) {
           dependencyRowValues = (HashMap)allDependencyPosibleValues.get(i);

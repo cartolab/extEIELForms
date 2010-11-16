@@ -338,15 +338,22 @@ public class FormsDAO {
 		String queryString = "SELECT ";
 
 		for (int i = 0; i < fields.size(); ++i) {
-			queryString = queryString + (String)fields.get(i) + ", ";
+			queryString = queryString + (String)fields.get(i);
+			if (i == fields.size()-1) {
+				queryString = queryString + " AS visiblefield ";
+			} else {
+				queryString = queryString + ", ";
+			}
 		}
-		queryString = queryString.substring(0, queryString.length() - 2) + " ";
+//		queryString = queryString.substring(0, queryString.length() - 2) + " ";
 
 		if (!schemaName.equals("")) {
 			queryString = queryString + "FROM \"" + schemaName + "\"." + table + " " + condition;
 		} else {
 			queryString = queryString + "FROM " + table + " " + condition;
 		}
+
+		queryString = queryString + " ORDER BY visiblefield";
 		System.out.println("CONSULTA EJECUTADA >>>>>>>>> \n" + queryString);
 		try
 		{

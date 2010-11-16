@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
- * 
+ *
  * This file is part of extEIELForms
- * 
+ *
  * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
  * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
- * 
+ *
  * extEIELForms is free software: you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or any later version.
- * 
+ *
  * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with extEIELForms.
  * If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import es.udc.cartolab.gvsig.eielforms.domain.UserDomain;
 import es.udc.cartolab.gvsig.eielforms.field.ComboFieldInterface;
@@ -33,13 +34,13 @@ import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 
 public class DependencyMasterField extends ComboFieldInterface
 {
-	private HashMap dependencyValues;
+	private LinkedHashMap dependencyValues;
 	private Dependency dependency;
 	private String visibleFieldName;
 	private String foreignField;
 	private Collection secondaryFields;
 
-	public DependencyMasterField(FieldController fieldController, Dependency dependency, HashMap dependencyValues, String visibleFieldName, Collection secondaryFields, String foreignField)
+	public DependencyMasterField(FieldController fieldController, Dependency dependency, LinkedHashMap dependencyValues, String visibleFieldName, Collection secondaryFields, String foreignField)
 	{
 		super(fieldController);
 		this.dependencyValues = dependencyValues;
@@ -95,7 +96,7 @@ public class DependencyMasterField extends ComboFieldInterface
 		return this.secondaryFields;
 	}
 
-	public void setDependencyValues(HashMap dependencyValues, HashMap dependencyDomain) {
+	public void setDependencyValues(LinkedHashMap dependencyValues, HashMap dependencyDomain) {
 		UserDomain newDomain = new UserDomain("dependencyMasterDomain", dependencyDomain);
 		this.fieldController.setDomain(newDomain);
 
