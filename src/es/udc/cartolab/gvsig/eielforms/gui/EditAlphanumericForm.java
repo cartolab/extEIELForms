@@ -56,7 +56,7 @@ public class EditAlphanumericForm extends AlphanumericForm {
 		this.source = source;
 	}
 
-	protected JPanel getSouthPanel() {
+	protected JPanel getButtonsPanel() {
 		if (southPanel == null) {
 			southPanel = new JPanel();
 			saveButton = new JButton("Guardar");

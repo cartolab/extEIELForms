@@ -20,29 +20,29 @@
 
 package es.udc.cartolab.gvsig.eielforms.nucsubform;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NucSubForm {
 
-	private ArrayList<String> fields;
+	private HashMap<String, String> fields;
 	private String tableName;
 
 	public NucSubForm(String tableName) {
 		this.tableName = tableName;
-		this.fields = new ArrayList<String>();
+		this.fields = new HashMap<String, String>();
 	}
 
 	public String getTableName() {
 		return tableName;
 	}
 
-	public void addField(String fieldName) {
-		fields.add(fieldName);
+	public void addField(String fieldName1, String fieldName2) {
+		fields.put(fieldName1, fieldName2);
 	}
 
 
-	public List<String> getFields() {
+	public Map<String, String> getFields() {
 		return fields;
 	}
 

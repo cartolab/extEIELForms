@@ -169,7 +169,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		return centerPanel;
 	}
 
-	protected JPanel getSouthPanel() {
+	protected JPanel getButtonsPanel() {
 		if (southPanel == null) {
 			southPanel = new JPanel();
 			editButton = new JButton("Editar");
@@ -213,7 +213,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 
 		try {
 			add(getCenterPanel());
-			add(getSouthPanel());
+			add(getButtonsPanel());
 			if (setKey()) {
 				fillValues();
 			}

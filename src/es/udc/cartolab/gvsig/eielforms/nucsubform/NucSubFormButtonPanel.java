@@ -23,11 +23,16 @@ package es.udc.cartolab.gvsig.eielforms.nucsubform;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 import es.udc.cartolab.gvsig.eielforms.forms.FormInterface;
 import es.udc.cartolab.gvsig.eielforms.gui.NucSubFormWindow;
 
@@ -46,12 +51,40 @@ public class NucSubFormButtonPanel extends JPanel {
 		button.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				HashMap<String, String> values = formInterface.getFormController().getFieldValues(formInterface.getNucSubForm().getFields());
-				NucSubFormWindow w = new NucSubFormWindow(
-						formInterface.getNucSubForm().getTableName(),
-						formInterface.getFormController().getName(),
-						values);
-				w.open();
+
+				Map<String, String> fields = formInterface.getNucSubForm().getFields();
+				ArrayList<String> fieldNames = getFields(fields);
+
+				HashMap<String, String> values = formInterface.getFormController().getFieldValues(fieldNames);
+				HashMap<String, String> values2 = new HashMap<String,String>();
+
+				for (String fieldName : fieldNames) {
+					values2.put(fields.get(fieldName), values.get(fieldName));
+				}
+
+				NucSubFormWindow w;
+				try {
+					w = new NucSubFormWindow(
+							formInterface.getNucSubForm().getTableName(),
+							formInterface.getFormController().getName(),
+							values);
+					w.open();
+				} catch (FormException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+
+			private ArrayList<String> getFields(Map<String, String> fieldsMap) {
+
+				Set<String> keySet = fieldsMap.keySet();
+				Iterator<String> iterator = keySet.iterator();
+				ArrayList<String> fieldNames = new ArrayList<String>();
+				while (iterator.hasNext()) {
+					fieldNames.add(iterator.next());
+				}
+
+				return fieldNames;
 			}
 
 		});

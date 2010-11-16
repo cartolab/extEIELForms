@@ -475,7 +475,9 @@ public class FormController extends Subject
 			FieldInterface fi = (FieldInterface) fields.get(i);
 			String name = fi.getField().getName();
 			if (fieldNames.contains(name)) {
-				fieldValues.put(name, fi.getField().getValue());
+				if (!fieldValues.containsKey(name) || !(fi instanceof DependencyMasterField)) {
+					fieldValues.put(name, fi.getField().getValue());
+				}
 			}
 		}
 

@@ -64,9 +64,9 @@ public class FormGenerator
 	private String pollTable;
 
 
-	public FormGenerator()
+	public FormGenerator(FormReader reader)
 	{
-		this.formDAO = new FormDBReader();
+		this.formDAO = reader;
 		this.domParser = new DOMParser();
 		this.dependencyGenerator = new DependencyGenerator();
 		this.groupGenerator = new GroupGenerator();
@@ -74,6 +74,12 @@ public class FormGenerator
 		this.nucSubformGenerator = new NucSubFormGenerator();
 		this.pollButton = false;
 		this.pollTable = "";
+	}
+
+	public FormGenerator() {
+
+		this(new FormDBReader());
+
 	}
 
 	public FormController createFormController(String formControllerName) throws FormException

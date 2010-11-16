@@ -20,7 +20,6 @@
 
 package es.udc.cartolab.gvsig.eielforms.gui;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -32,8 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import com.iver.andami.PluginServices;
-import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
@@ -41,17 +38,16 @@ import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
 import es.udc.cartolab.gvsig.eielutils.misc.EIELValues;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
-public class NucSubFormWindow extends JPanel implements IWindow {
+public class NucSubFormWindow extends AlphanumericForm {
 
-
-	private WindowInfo windowInfo;
-	private JButton okButton, cancelButton, addNucButton;
 	private String title, dbtable;
-	private ArrayList<TableElement> tableElements;
+	private WindowInfo windowInfo;
 	private HashMap<String, String> fields;
 	private JTable table;
+	private ArrayList<TableElement> tableElements;
 
-	public NucSubFormWindow(String table, String name, HashMap<String, String> values) {
+	public NucSubFormWindow(String table, String name, HashMap<String, String> values) throws FormException {
+		super("Nucleo_relacion");
 		title = "Núcleos para " + name;
 		this.dbtable = table;
 		this.fields = values;
@@ -59,40 +55,55 @@ public class NucSubFormWindow extends JPanel implements IWindow {
 		getTableElementsFromDB();
 		prepareTable();
 
-		setLayout();
-
 	}
 
 	public WindowInfo getWindowInfo() {
-
-		if (windowInfo==null) {
-			windowInfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE | WindowInfo.PALETTE);
-			windowInfo.setWidth(100);
-			windowInfo.setHeight(100);
+		if (windowInfo == null) {
+			windowInfo = super.getWindowInfo();
+			windowInfo.setWidth(500);
+			windowInfo.setHeight(650);
 			windowInfo.setTitle(title);
 		}
-
 		return windowInfo;
 	}
 
-	public Object getWindowProfile() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public void open() {
-		PluginServices.getMDIManager().addWindow(this);
-		getRootPane().setDefaultButton(okButton);
-		getRootPane().setFocusTraversalPolicyProvider(true);
-//		getDefaultFocusComponent().requestFocusInWindow();
+		super.open();
+
+		JScrollPane pane = new JScrollPane(this.table);
+		add(pane);
+
+		add(getButtonsPanel());
 	}
 
-	public void close() {
-		PluginServices.getMDIManager().closeWindow(this);
+	private JPanel getSouthButtonsPanel() {
+
+		JPanel panel = new JPanel();
+
+		JButton okButton = new JButton("Aceptar");
+		okButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent paramActionEvent) {
+				save();
+			}
+
+		});
+
+		JButton cancelButton = new JButton("Cancelar");
+		cancelButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent paramActionEvent) {
+				close();
+			}
+
+		});
+
+		return panel;
+
 	}
 
-	private Component getDefaultFocusComponent() {
-		return null;
+	public void save() {
+
 	}
 
 	private void getTableElementsFromDB() {
@@ -148,49 +159,6 @@ public class NucSubFormWindow extends JPanel implements IWindow {
 
 	}
 
-	private void setLayout() {
-
-		//table
-		JScrollPane pane = new JScrollPane(table);
-
-		//buttons
-		JPanel panel = new JPanel();
-		okButton = new JButton("Aceptar");
-		okButton.addActionListener(new ActionListener(){
-
-			public void actionPerformed(ActionEvent e) {
-
-				//save current table status
-				close();
-			}
-
-		});
-		cancelButton = new JButton("Cancelar");
-		cancelButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				close();
-			}
-
-		});
-		addNucButton = new JButton("Añadir");
-		addNucButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				//get data from form and
-				//add new row to the table
-			}
-
-		});
-
-		panel.add(addNucButton);
-		panel.add(okButton);
-		panel.add(cancelButton);
-
-		add(pane);
-		add(panel);
-	}
-
 
 	private class TableElement {
 
@@ -219,7 +187,7 @@ public class NucSubFormWindow extends JPanel implements IWindow {
 				ArrayList<String> fields = new ArrayList<String>();
 				fields.add(EIELValues.FIELD_DENOM);
 
-				HashMap map = fdao.getKeyValues(key, dbs.getSchema(), dbtable, fields);
+				HashMap map = fdao.getKeyValues(key, dbs.getSchema(), EIELValues.TABLE_NUCLEO, fields);
 				if (!map.isEmpty()) {
 					denominaci = (String) map.get(EIELValues.FIELD_DENOM);
 				}
@@ -273,14 +241,4 @@ public class NucSubFormWindow extends JPanel implements IWindow {
 		}
 
 	}
-
-	private void save() {
-
-	}
-
-	private void addElement() {
-
-	}
-
-
 }
