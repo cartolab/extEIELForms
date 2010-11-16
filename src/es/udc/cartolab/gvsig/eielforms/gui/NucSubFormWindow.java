@@ -30,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
@@ -45,15 +46,27 @@ public class NucSubFormWindow extends AlphanumericForm {
 	private HashMap<String, String> fields;
 	private JTable table;
 	private ArrayList<TableElement> tableElements;
+	private JButton addButton;
+	private ArrayList<String> nucFields;
 
 	public NucSubFormWindow(String table, String name, HashMap<String, String> values) throws FormException {
 		super("Nucleo_relacion");
+
+		nucFields = new ArrayList<String>();
+		nucFields.add(EIELValues.FIELD_FASE);
+		nucFields.add(EIELValues.FIELD_COD_PRO);
+		nucFields.add(EIELValues.FIELD_COD_MUN);
+		nucFields.add(EIELValues.FIELD_COD_ENT);
+		nucFields.add(EIELValues.FIELD_COD_POB);
+
 		title = "Núcleos para " + name;
 		this.dbtable = table;
 		this.fields = values;
 
 		getTableElementsFromDB();
 		prepareTable();
+
+
 
 	}
 
@@ -76,8 +89,39 @@ public class NucSubFormWindow extends AlphanumericForm {
 		add(getSouthButtonsPanel());
 	}
 
-	public JPanel getButtonsPanel() {
-		return new JPanel();
+	protected JPanel getButtonsPanel() {
+
+		JPanel panel = new JPanel();
+
+		addButton = new JButton("Añadir núcleo");
+		addButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent paramActionEvent) {
+
+				HashMap<String, String> nucValues = form.getFieldValues(nucFields);
+
+				try {
+					TableElement te = new TableElement(
+							nucValues.get(EIELValues.FIELD_FASE),
+							nucValues.get(EIELValues.FIELD_COD_PRO),
+							nucValues.get(EIELValues.FIELD_COD_MUN),
+							nucValues.get(EIELValues.FIELD_COD_ENT),
+							nucValues.get(EIELValues.FIELD_COD_POB));
+
+					addTableElement(te);
+
+				} catch (FormException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		});
+
+		panel.add(addButton);
+
+		return panel;
 	}
 
 	private JPanel getSouthButtonsPanel() {
@@ -120,12 +164,7 @@ public class NucSubFormWindow extends AlphanumericForm {
 		FormsDAO fdao = new FormsDAO();
 		DBSession dbs = DBSession.getCurrentSession();
 		if (dbs != null) {
-			ArrayList<String> nucFields = new ArrayList<String>();
-			nucFields.add(EIELValues.FIELD_FASE);
-			nucFields.add(EIELValues.FIELD_COD_PRO);
-			nucFields.add(EIELValues.FIELD_COD_MUN);
-			nucFields.add(EIELValues.FIELD_COD_ENT);
-			nucFields.add(EIELValues.FIELD_COD_POB);
+
 			try {
 				List<HashMap<String, String>> elements = fdao.getValues(fields, dbs.getSchema(), dbtable, nucFields);
 				for (HashMap<String, String> map : elements) {
@@ -162,7 +201,29 @@ public class NucSubFormWindow extends AlphanumericForm {
 			}
 		}
 
-		table = new JTable(elements, header);
+//		table = new JTable(elements, header);
+		table = new JTable();
+		DefaultTableModel dataModel = new DefaultTableModel(elements, header);
+		table.setModel(dataModel);
+
+	}
+
+	private void addTableElement(TableElement te) {
+
+		String[] row = new String[5];
+		row[0] = te.getProvincia();
+		row[1] = te.getMunicipio();
+		row[2] = te.getEntidad();
+		row[3] = te.getNucleo();
+		try {
+			row[4] = te.getDenominacion();
+		} catch (FormException e) {
+			row[4] = "";
+		}
+
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.addRow(row);
+		model.fireTableRowsInserted(model.getRowCount()-1, model.getRowCount()-1);
 
 	}
 
