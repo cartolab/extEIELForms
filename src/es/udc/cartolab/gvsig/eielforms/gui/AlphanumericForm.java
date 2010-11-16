@@ -23,10 +23,7 @@ package es.udc.cartolab.gvsig.eielforms.gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,7 +43,6 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiFrame.MDIFrame;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.fmap.drivers.DBException;
 
 import es.udc.cartolab.gvsig.eielforms.dependency.Dependency;
 import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterField;
@@ -55,6 +51,7 @@ import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormGenerator;
 import es.udc.cartolab.gvsig.eielforms.forms.FormController;
+import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
 import es.udc.cartolab.gvsig.eielutils.constants.Constants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
@@ -309,48 +306,13 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 
 
 	private String getFirstKey(String keyName) throws FormException {
-		DBSession dbs = DBSession.getCurrentSession();
-		String firstKey = "nah";
-		if (dbs!=null) {
 
-			Statement st = null;
-			ResultSet rs = null;
-			try {
+		FormsDAO fdao = new FormsDAO();
+		ArrayList<String> fields = new ArrayList<String>();
+		fields.add(keyName);
+		HashMap<String, String> values = fdao.getKeyValues(key, form.getDataBase(), form.getTable(), fields);
+		return values.get(keyName);
 
-				Connection c = dbs.getJavaConnection();
-				String query = "SELECT \"" + keyName + "\" FROM \"" + form.getDataBase() +
-				"\".\"" + form.getTable() + "\"" + getWhereClause() + " ORDER BY \"" + keyName + "\"";
-				System.out.println(query);
-				st = c.createStatement();
-				rs = st.executeQuery(query);
-				if (rs.next()) {
-					firstKey = rs.getString(keyName);
-				}
-			} catch (SQLException e) {
-				try {
-					dbs = DBSession.reconnect();
-				} catch (DBException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} finally {
-					throw new FormException(e);
-				}
-			} finally {
-				try {
-					if (rs!=null) {
-						rs.close();
-					}
-					if (st!=null) {
-						st.close();
-					}
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-		}
-		return firstKey ;
 	}
 
 	private void enableEdit(boolean enable) {

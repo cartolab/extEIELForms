@@ -73,7 +73,11 @@ public class NucSubFormWindow extends AlphanumericForm {
 		JScrollPane pane = new JScrollPane(this.table);
 		add(pane);
 
-		add(getButtonsPanel());
+		add(getSouthButtonsPanel());
+	}
+
+	public JPanel getButtonsPanel() {
+		return new JPanel();
 	}
 
 	private JPanel getSouthButtonsPanel() {
@@ -97,6 +101,9 @@ public class NucSubFormWindow extends AlphanumericForm {
 			}
 
 		});
+
+		panel.add(okButton);
+		panel.add(cancelButton);
 
 		return panel;
 
