@@ -37,12 +37,7 @@ public class NucSubFormGenerator {
 		Node subformContent = nucSubformNode.getFirstChild();
 		while (subformContent != null) {
 			if (subformContent.getNodeName().equals("Field")) {
-				String value = subformContent.getFirstChild().getNodeValue();
-				if (value!=null) {
-					nsf.addField(value, value);
-				} else {
-					processField(subformContent, nsf);
-				}
+				processField(subformContent, nsf);
 			}
 
 			subformContent = subformContent.getNextSibling();
@@ -52,9 +47,10 @@ public class NucSubFormGenerator {
 
 	}
 
-	private void processField(Node subformContent, NucSubForm nsf) {
+	private void processField(Node fieldNode, NucSubForm nsf) {
 
-		Node nextNode = subformContent.getFirstChild();
+
+		Node nextNode = fieldNode.getFirstChild();
 		String name1 = null, name2 = null;
 		while (nextNode!=null) {
 			if (nextNode.getNodeName().equals("Name1")) {
@@ -62,6 +58,10 @@ public class NucSubFormGenerator {
 			}
 			if (nextNode.getNodeName().equals("Name2")) {
 				name2 = nextNode.getFirstChild().getNodeValue();
+			}
+			if (nextNode.getNodeName().equals("Name")) {
+				name1 = nextNode.getFirstChild().getNodeValue();
+				name2 = name1;
 			}
 			nextNode = nextNode.getNextSibling();
 		}

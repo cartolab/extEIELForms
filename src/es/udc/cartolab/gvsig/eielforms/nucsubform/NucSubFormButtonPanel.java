@@ -67,7 +67,7 @@ public class NucSubFormButtonPanel extends JPanel {
 					w = new NucSubFormWindow(
 							formInterface.getNucSubForm().getTableName(),
 							formInterface.getFormController().getName(),
-							values);
+							values2);
 					w.open();
 				} catch (FormException e1) {
 					// TODO Auto-generated catch block

@@ -172,7 +172,6 @@ public class NucSubFormWindow extends AlphanumericForm {
 
 		panel.add(auxPanel2, BorderLayout.WEST);
 		panel.add(auxPanel, BorderLayout.EAST);
-//		panel.add(cancelButton, BorderLayout.EAST);C
 
 		return panel;
 
@@ -180,6 +179,36 @@ public class NucSubFormWindow extends AlphanumericForm {
 
 	public void save() {
 
+		ArrayList<TableElement> elementsOnTable = new ArrayList<TableElement>();
+		for (int row=0; row<table.getRowCount(); row++) {
+			try {
+				TableElement te = new TableElement(
+						table.getValueAt(row, 0).toString(),
+						table.getValueAt(row, 1).toString(),
+						table.getValueAt(row, 2).toString(),
+						table.getValueAt(row, 3).toString(),
+						table.getValueAt(row, 4).toString()
+						);
+				elementsOnTable.add(te);
+				if (!tableElements.contains(te)) {
+					te.saveInDB();
+				}
+			} catch (FormException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		for (TableElement te : tableElements) {
+			if (!elementsOnTable.contains(te)) {
+				try {
+					te.removeFromDB();
+				} catch (FormException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		close();
 	}
 
 	private void getTableElementsFromDB() {
@@ -210,23 +239,23 @@ public class NucSubFormWindow extends AlphanumericForm {
 
 	private void prepareTable() {
 
-		String[][] elements = new String[tableElements.size()][5];
-		String[] header = {"Provincia", "Municipio", "Entidad", "Núcleo", "Denominación"};
+		String[][] elements = new String[tableElements.size()][6];
+		String[] header = {"Fase", "Provincia", "Municipio", "Entidad", "Núcleo", "Denominación"};
 
 		for (int i=0; i<tableElements.size(); i++) {
 			TableElement te = tableElements.get(i);
-			elements[i][0] = te.getProvincia();
-			elements[i][1] = te.getMunicipio();
-			elements[i][2] = te.getEntidad();
-			elements[i][3] = te.getNucleo();
+			elements[i][0] = te.getFase();
+			elements[i][1] = te.getProvincia();
+			elements[i][2] = te.getMunicipio();
+			elements[i][3] = te.getEntidad();
+			elements[i][4] = te.getNucleo();
 			try {
-				elements[i][4] = te.getDenominacion();
+				elements[i][5] = te.getDenominacion();
 			} catch (FormException e) {
-				elements[i][4] = "";
+				elements[i][5] = "";
 			}
 		}
 
-//		table = new JTable(elements, header);
 		table = new JTable();
 		DefaultTableModel dataModel = new DefaultTableModel(elements, header);
 		table.setModel(dataModel);
@@ -235,15 +264,16 @@ public class NucSubFormWindow extends AlphanumericForm {
 
 	private void addTableElement(TableElement te) {
 
-		String[] row = new String[5];
-		row[0] = te.getProvincia();
-		row[1] = te.getMunicipio();
-		row[2] = te.getEntidad();
-		row[3] = te.getNucleo();
+		String[] row = new String[6];
+		row[0] = te.getFase();
+		row[1] = te.getProvincia();
+		row[2] = te.getMunicipio();
+		row[3] = te.getEntidad();
+		row[4] = te.getNucleo();
 		try {
-			row[4] = te.getDenominacion();
+			row[5] = te.getDenominacion();
 		} catch (FormException e) {
-			row[4] = "";
+			row[5] = "";
 		}
 
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -314,13 +344,16 @@ public class NucSubFormWindow extends AlphanumericForm {
 			return denominaci;
 		}
 
-		public boolean equals(TableElement te) {
-			if (fase.equals(te.getFase())) {
-				if (provincia.equals(te.getProvincia())) {
-					if (municipio.equals(te.getMunicipio())) {
-						if (entidad.equals(te.getEntidad())) {
-							if (nucleo.equals(te.getNucleo())) {
-								return true;
+		public boolean equals(Object obj) {
+			if (obj instanceof TableElement) {
+				TableElement te = (TableElement) obj;
+				if (fase.equals(te.getFase())) {
+					if (provincia.equals(te.getProvincia())) {
+						if (municipio.equals(te.getMunicipio())) {
+							if (entidad.equals(te.getEntidad())) {
+								if (nucleo.equals(te.getNucleo())) {
+									return true;
+								}
 							}
 						}
 					}
@@ -329,8 +362,40 @@ public class NucSubFormWindow extends AlphanumericForm {
 			return false;
 		}
 
-		public void saveInDB() {
+		public String toString() {
+			return "<Element " + fase + "|" + provincia + "|" + municipio + "|" + entidad + "|" + nucleo + ">";
+		}
 
+		public void saveInDB() throws FormException {
+			System.out.println("Saving " + this);
+			DBSession dbs = DBSession.getCurrentSession();
+			if (dbs != null) {
+				FormsDAO fdao = new FormsDAO();
+				fdao.insertEntity(getFields(), dbs.getSchema(), dbtable);
+			}
+		}
+
+		public void removeFromDB() throws FormException {
+			System.out.println("Removing " + this);
+
+			DBSession dbs = DBSession.getCurrentSession();
+			if (dbs != null) {
+				FormsDAO fdao = new FormsDAO();
+				fdao.deleteEntity(getFields(), dbs.getSchema(), dbtable);
+			}
+		}
+
+		private HashMap<String, String> getFields() {
+
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.putAll(fields);
+			map.put(EIELValues.FIELD_FASE, fase);
+			map.put(EIELValues.FIELD_COD_PRO, provincia);
+			map.put(EIELValues.FIELD_COD_MUN, municipio);
+			map.put(EIELValues.FIELD_COD_ENT, entidad);
+			map.put(EIELValues.FIELD_COD_POB, nucleo);
+
+			return map;
 		}
 
 	}
