@@ -84,6 +84,8 @@ public class NucleosRelationWindow extends AlphanumericForm {
 	public void open() {
 		super.open();
 
+		windowInfo.setTitle(title);
+
 		form.addFormChangeListener(new FormChangeListener() {
 
 			public void formChanged(FormChangeEvent e) {
