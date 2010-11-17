@@ -421,7 +421,8 @@ public class FormInterface extends JPanel
 	public void addNucSubformButton(NucSubForm nucSubForm) {
 		this.nucSubForm = nucSubForm;
 		NucSubFormButtonPanel panel = new NucSubFormButtonPanel(this);
-		this.panel.add(panel);
+		this.panel.add(panel, this.gridbagconst);
+		updateLayout();
 	}
 
 	public void removePollButton() {
