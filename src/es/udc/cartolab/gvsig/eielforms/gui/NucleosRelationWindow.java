@@ -42,7 +42,7 @@ import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
 import es.udc.cartolab.gvsig.eielutils.misc.EIELValues;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
-public class NucSubFormWindow extends AlphanumericForm {
+public class NucleosRelationWindow extends AlphanumericForm {
 
 	private String title, dbtable;
 	private WindowInfo windowInfo;
@@ -52,7 +52,7 @@ public class NucSubFormWindow extends AlphanumericForm {
 	private JButton addButton;
 	private ArrayList<String> nucFields;
 
-	public NucSubFormWindow(String table, String name, HashMap<String, String> values) throws FormException {
+	public NucleosRelationWindow(String table, String name, HashMap<String, String> values) throws FormException {
 		super("Nucleo_relacion");
 
 		nucFields = new ArrayList<String>();

@@ -39,8 +39,8 @@ import es.udc.cartolab.gvsig.eielforms.forms.panel.InsertPanel;
 import es.udc.cartolab.gvsig.eielforms.forms.panel.QueryPanel;
 import es.udc.cartolab.gvsig.eielforms.forms.panel.SubFormButtonPanel;
 import es.udc.cartolab.gvsig.eielforms.groups.FieldGroup;
-import es.udc.cartolab.gvsig.eielforms.nucsubform.NucSubForm;
-import es.udc.cartolab.gvsig.eielforms.nucsubform.NucSubFormButtonPanel;
+import es.udc.cartolab.gvsig.eielforms.nucleosrelation.NucleosRelation;
+import es.udc.cartolab.gvsig.eielforms.nucleosrelation.NucleosRelationButtonPanel;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubForm;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubFormController;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubFormInterface;
@@ -66,7 +66,7 @@ public class FormInterface extends JPanel
 	private ArrayList subformsControllers;
 	private JButton pollButton;
 	private boolean hasPollButton = false;
-	private NucSubForm nucSubForm = null;
+	private NucleosRelation nucleosRelation = null;
 	//  private SelectEntityPanel selectEntityPanel;
 
 	protected FormInterface(FormController formController, String layout, String title)
@@ -132,8 +132,8 @@ public class FormInterface extends JPanel
 		updateLayout();
 	}
 
-	public void setNucSubForm(NucSubForm nsf) {
-		this.nucSubForm = nsf;
+	public void setNucleosRelation(NucleosRelation relation) {
+		this.nucleosRelation = relation;
 	}
 
 	public ArrayList getGroups()
@@ -418,9 +418,9 @@ public class FormInterface extends JPanel
 		}
 	}
 
-	public void addNucSubformButton(NucSubForm nucSubForm) {
-		this.nucSubForm = nucSubForm;
-		NucSubFormButtonPanel panel = new NucSubFormButtonPanel(this);
+	public void addNucleosRelationButton(NucleosRelation relation) {
+		this.nucleosRelation = relation;
+		NucleosRelationButtonPanel panel = new NucleosRelationButtonPanel(this);
 		this.panel.add(panel, this.gridbagconst);
 		updateLayout();
 	}
@@ -433,7 +433,7 @@ public class FormInterface extends JPanel
 		pollButton.setEnabled(enabled);
 	}
 
-	public NucSubForm getNucSubForm() {
-		return nucSubForm;
+	public NucleosRelation getNucleosRelation() {
+		return nucleosRelation;
 	}
 }

@@ -40,7 +40,7 @@ import es.udc.cartolab.gvsig.eielforms.formgenerator.Subject;
 import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeEvent;
 import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeListener;
 import es.udc.cartolab.gvsig.eielforms.groups.FieldGroup;
-import es.udc.cartolab.gvsig.eielforms.nucsubform.NucSubForm;
+import es.udc.cartolab.gvsig.eielforms.nucleosrelation.NucleosRelation;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubForm;
 import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
 import es.udc.cartolab.gvsig.eielutils.constants.Constants;
@@ -129,8 +129,8 @@ public class FormController extends Subject
 		this.formInterface.addSubForm(subforms);
 	}
 
-	public void addNucSubformButton(NucSubForm subform) {
-		this.formInterface.addNucSubformButton(subform);
+	public void addNucleosRelationButton(NucleosRelation relation) {
+		this.formInterface.addNucleosRelationButton(relation);
 	}
 
 	//  public void setModal(boolean modal)

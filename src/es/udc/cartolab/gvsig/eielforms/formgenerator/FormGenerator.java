@@ -34,8 +34,8 @@ import es.udc.cartolab.gvsig.eielforms.dependency.DependencyGenerator;
 import es.udc.cartolab.gvsig.eielforms.forms.FormController;
 import es.udc.cartolab.gvsig.eielforms.groups.FieldGroup;
 import es.udc.cartolab.gvsig.eielforms.groups.GroupGenerator;
-import es.udc.cartolab.gvsig.eielforms.nucsubform.NucSubForm;
-import es.udc.cartolab.gvsig.eielforms.nucsubform.NucSubFormGenerator;
+import es.udc.cartolab.gvsig.eielforms.nucleosrelation.NucleosRelation;
+import es.udc.cartolab.gvsig.eielforms.nucleosrelation.NucleosRelationGenerator;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubForm;
 import es.udc.cartolab.gvsig.eielforms.subforms.SubFormGenerator;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
@@ -52,12 +52,12 @@ public class FormGenerator
 	private String table;
 	private String layer;
 	private String title;
-	private NucSubForm nucSubform;
+	private NucleosRelation nucleosRelation;
 	private FormController formController;
 	private DependencyGenerator dependencyGenerator;
 	private GroupGenerator groupGenerator;
 	private SubFormGenerator subformGenerator;
-	private NucSubFormGenerator nucSubformGenerator;
+	private NucleosRelationGenerator nucleosRelationGenerator;
 	private String aplicationDbName;
 	private String xml;
 	private boolean pollButton;
@@ -71,7 +71,7 @@ public class FormGenerator
 		this.dependencyGenerator = new DependencyGenerator();
 		this.groupGenerator = new GroupGenerator();
 		this.subformGenerator = new SubFormGenerator();
-		this.nucSubformGenerator = new NucSubFormGenerator();
+		this.nucleosRelationGenerator = new NucleosRelationGenerator();
 		this.pollButton = false;
 		this.pollTable = "";
 	}
@@ -124,8 +124,8 @@ public class FormGenerator
 
 					this.formController.addSubForm(subformulario);
 				}
-				if (this.nucSubform != null) {
-					this.formController.addNucSubformButton(this.nucSubform);
+				if (this.nucleosRelation != null) {
+					this.formController.addNucleosRelationButton(this.nucleosRelation);
 				}
 
 				if (this.pollButton) {
@@ -191,8 +191,8 @@ public class FormGenerator
 					this.pollButton = true;
 					this.pollTable = attributes.getAttributes().getNamedItem("Table").getNodeValue();
 				}
-				else if (attributes.getNodeName().compareTo("NucWindow") == 0) {
-					this.nucSubform = this.nucSubformGenerator.processNucSubForm(attributes);
+				else if (attributes.getNodeName().compareTo("NucleosRelation") == 0) {
+					this.nucleosRelation = this.nucleosRelationGenerator.processNucleosRelation(attributes);
 				}
 
 			}

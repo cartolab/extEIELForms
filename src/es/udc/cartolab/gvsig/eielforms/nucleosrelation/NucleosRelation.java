@@ -18,17 +18,17 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.udc.cartolab.gvsig.eielforms.nucsubform;
+package es.udc.cartolab.gvsig.eielforms.nucleosrelation;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class NucSubForm {
+public class NucleosRelation {
 
 	private HashMap<String, String> fields;
 	private String tableName;
 
-	public NucSubForm(String tableName) {
+	public NucleosRelation(String tableName) {
 		this.tableName = tableName;
 		this.fields = new HashMap<String, String>();
 	}
@@ -37,8 +37,8 @@ public class NucSubForm {
 		return tableName;
 	}
 
-	public void addField(String fieldName1, String fieldName2) {
-		fields.put(fieldName1, fieldName2);
+	public void addField(String tableName, String relationName) {
+		fields.put(tableName, relationName);
 	}
 
 

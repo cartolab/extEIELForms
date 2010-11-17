@@ -18,45 +18,45 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.udc.cartolab.gvsig.eielforms.nucsubform;
+package es.udc.cartolab.gvsig.eielforms.nucleosrelation;
 
 import org.w3c.dom.Node;
 
-public class NucSubFormGenerator {
+public class NucleosRelationGenerator {
 
-	public NucSubFormGenerator() {
+	public NucleosRelationGenerator() {
 
 	}
 
-	public NucSubForm processNucSubForm(Node nucSubformNode) {
+	public NucleosRelation processNucleosRelation(Node relationNode) {
 
-		String table = nucSubformNode.getAttributes().getNamedItem("Table").getNodeValue();
+		String table = relationNode.getAttributes().getNamedItem("Table").getNodeValue();
 
-		NucSubForm nsf = new NucSubForm(table);
+		NucleosRelation relation = new NucleosRelation(table);
 
-		Node subformContent = nucSubformNode.getFirstChild();
-		while (subformContent != null) {
-			if (subformContent.getNodeName().equals("Field")) {
-				processField(subformContent, nsf);
+		Node relationContent = relationNode.getFirstChild();
+		while (relationContent != null) {
+			if (relationContent.getNodeName().equals("Field")) {
+				processField(relationContent, relation);
 			}
 
-			subformContent = subformContent.getNextSibling();
+			relationContent = relationContent.getNextSibling();
 		}
 
-		return nsf;
+		return relation;
 
 	}
 
-	private void processField(Node fieldNode, NucSubForm nsf) {
+	private void processField(Node fieldNode, NucleosRelation relation) {
 
 
 		Node nextNode = fieldNode.getFirstChild();
 		String name1 = null, name2 = null;
 		while (nextNode!=null) {
-			if (nextNode.getNodeName().equals("Name1")) {
+			if (nextNode.getNodeName().equals("TableName")) {
 				name1 = nextNode.getFirstChild().getNodeValue();
 			}
-			if (nextNode.getNodeName().equals("Name2")) {
+			if (nextNode.getNodeName().equals("RelationName")) {
 				name2 = nextNode.getFirstChild().getNodeValue();
 			}
 			if (nextNode.getNodeName().equals("Name")) {
@@ -66,7 +66,7 @@ public class NucSubFormGenerator {
 			nextNode = nextNode.getNextSibling();
 		}
 
-		nsf.addField(name1, name2);
+		relation.addField(name1, name2);
 	}
 
 }

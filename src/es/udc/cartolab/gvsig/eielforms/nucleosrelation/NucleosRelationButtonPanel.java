@@ -18,7 +18,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.udc.cartolab.gvsig.eielforms.nucsubform;
+package es.udc.cartolab.gvsig.eielforms.nucleosrelation;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -34,14 +34,14 @@ import javax.swing.JPanel;
 
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 import es.udc.cartolab.gvsig.eielforms.forms.FormInterface;
-import es.udc.cartolab.gvsig.eielforms.gui.NucSubFormWindow;
+import es.udc.cartolab.gvsig.eielforms.gui.NucleosRelationWindow;
 
-public class NucSubFormButtonPanel extends JPanel {
+public class NucleosRelationButtonPanel extends JPanel {
 
 	FormInterface formInterface;
 
 
-	public NucSubFormButtonPanel(FormInterface formInterface) {
+	public NucleosRelationButtonPanel(FormInterface formInterface) {
 		this.formInterface = formInterface;
 		addButton();
 	}
@@ -52,22 +52,22 @@ public class NucSubFormButtonPanel extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 
-				Map<String, String> fields = formInterface.getNucSubForm().getFields();
-				ArrayList<String> fieldNames = getFields(fields);
+				Map<String, String> fields = formInterface.getNucleosRelation().getFields();
+				ArrayList<String> tableFieldNames = getTableFields(fields);
 
-				HashMap<String, String> values = formInterface.getFormController().getFieldValues(fieldNames);
-				HashMap<String, String> values2 = new HashMap<String,String>();
+				HashMap<String, String> tableValues = formInterface.getFormController().getFieldValues(tableFieldNames);
+				HashMap<String, String> relationValues = new HashMap<String,String>();
 
-				for (String fieldName : fieldNames) {
-					values2.put(fields.get(fieldName), values.get(fieldName));
+				for (String fieldName : tableFieldNames) {
+					relationValues.put(fields.get(fieldName), tableValues.get(fieldName));
 				}
 
-				NucSubFormWindow w;
+				NucleosRelationWindow w;
 				try {
-					w = new NucSubFormWindow(
-							formInterface.getNucSubForm().getTableName(),
+					w = new NucleosRelationWindow(
+							formInterface.getNucleosRelation().getTableName(),
 							formInterface.getFormController().getName(),
-							values2);
+							relationValues);
 					w.open();
 				} catch (FormException e1) {
 					// TODO Auto-generated catch block
@@ -75,16 +75,16 @@ public class NucSubFormButtonPanel extends JPanel {
 				}
 			}
 
-			private ArrayList<String> getFields(Map<String, String> fieldsMap) {
+			private ArrayList<String> getTableFields(Map<String, String> relationFieldsMap) {
 
-				Set<String> keySet = fieldsMap.keySet();
+				Set<String> keySet = relationFieldsMap.keySet();
 				Iterator<String> iterator = keySet.iterator();
-				ArrayList<String> fieldNames = new ArrayList<String>();
+				ArrayList<String> tableFieldsNames = new ArrayList<String>();
 				while (iterator.hasNext()) {
-					fieldNames.add(iterator.next());
+					tableFieldsNames.add(iterator.next());
 				}
 
-				return fieldNames;
+				return tableFieldsNames;
 			}
 
 		});
