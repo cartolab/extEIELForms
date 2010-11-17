@@ -67,6 +67,7 @@ public class FormInterface extends JPanel
 	private JButton pollButton;
 	private boolean hasPollButton = false;
 	private NucleosRelation nucleosRelation = null;
+	private NucleosRelationButtonPanel nucleosRelationPanel;
 	//  private SelectEntityPanel selectEntityPanel;
 
 	protected FormInterface(FormController formController, String layout, String title)
@@ -402,8 +403,12 @@ public class FormInterface extends JPanel
 	public void addPollButton() {
 		if (formController.hasPollButton()) {
 			if (!hasPollButton) {
+				if (this.nucleosRelation!=null) {
+					this.nucleosRelationPanel.add(pollButton);
+				} else {
 				panel.add(pollButton, this.gridbagconst);
 				updateLayout();
+				}
 				pollButton.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent paramActionEvent) {
@@ -420,8 +425,8 @@ public class FormInterface extends JPanel
 
 	public void addNucleosRelationButton(NucleosRelation relation) {
 		this.nucleosRelation = relation;
-		NucleosRelationButtonPanel panel = new NucleosRelationButtonPanel(this);
-		this.panel.add(panel, this.gridbagconst);
+		this.nucleosRelationPanel = new NucleosRelationButtonPanel(this);
+		this.panel.add(nucleosRelationPanel, this.gridbagconst);
 		updateLayout();
 	}
 
