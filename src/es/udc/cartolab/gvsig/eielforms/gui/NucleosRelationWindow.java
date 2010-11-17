@@ -161,6 +161,7 @@ public class NucleosRelationWindow extends AlphanumericForm {
 					TableElement te = getElementFromForm();
 					currentTableElements.add(te);
 					addTableElement(te);
+					addButton.setEnabled(false);
 
 				} catch (FormException e) {
 					// TODO Auto-generated catch block
@@ -209,18 +210,20 @@ public class NucleosRelationWindow extends AlphanumericForm {
 
 			public void actionPerformed(ActionEvent paramActionEvent) {
 
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				for (int i=table.getSelectedRowCount()-1; i>=0; i--) {
-					try {
+				try {
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					for (int i=table.getSelectedRowCount()-1; i>=0; i--) {
 						TableElement te = getElementFromTable(i);
 						if (currentTableElements.contains(te)) {
 							currentTableElements.remove(te);
 						}
-					} catch (FormException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						model.removeRow(table.getSelectedRows()[i]);
 					}
-					model.removeRow(table.getSelectedRows()[i]);
+
+					enableAddButton();
+				} catch (FormException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 
