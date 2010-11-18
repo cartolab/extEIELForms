@@ -130,6 +130,9 @@ public class DependencyMasterField extends ComboFieldInterface
 				System.out.println("Ocurrio algún error inesperado en el combo selector de la dependencia...");
 				e.printStackTrace();
 			}
+
+			setValue(selectedValue);
+			fillField();
 		}
 	}
 }
