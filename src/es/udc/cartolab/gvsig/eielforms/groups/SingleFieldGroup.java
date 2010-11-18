@@ -1,35 +1,35 @@
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
- * 
+ *
  * This file is part of extEIELForms
- * 
+ *
  * extEIELForms is based on the forms application of GisEIEL <http://giseiel.forge.osor.eu/>
  * devoloped by Laboratorio de Bases de Datos (Universidade da Coruña)
- * 
+ *
  * extEIELForms is free software: you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or any later version.
- * 
+ *
  * extEIELForms is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with extEIELForms.
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.udc.cartolab.gvsig.eielforms.groups;
 
-import es.udc.cartolab.gvsig.eielforms.field.FieldController;
-import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
-
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
+
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import es.udc.cartolab.gvsig.eielforms.field.FieldController;
+import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 
 public class SingleFieldGroup extends FieldGroup
 {
@@ -61,7 +61,7 @@ public class SingleFieldGroup extends FieldGroup
   {
     ArrayList temporalCampos = new ArrayList();
 
-    fillFields();
+//    fillFields();
     for (int i = 0; i < this.fields.size(); ++i) {
       temporalCampos.add(((FieldInterface)this.fields.get(i)).getField());
     }
@@ -73,9 +73,9 @@ public class SingleFieldGroup extends FieldGroup
   {
     ArrayList temporalCampos = new ArrayList();
 
-    fillFields();
+//    fillFields();
     for (int i = 0; i < this.fields.size(); ++i) {
-      temporalCampos.add((FieldInterface)this.fields.get(i));
+      temporalCampos.add(this.fields.get(i));
     }
 
     return temporalCampos;
@@ -85,7 +85,7 @@ public class SingleFieldGroup extends FieldGroup
   {
     ArrayList temporalCampos = new ArrayList();
 
-    fillFields();
+//    fillFields();
 
     for (int i = 0; i < this.fields.size(); ++i)
     {
