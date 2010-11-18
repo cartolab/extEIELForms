@@ -39,19 +39,19 @@ public class SubFormButtonsPanel extends JPanel
 	{
 		this.subformInterface = subformInterface;
 
-		this.saveButton = new JButton("Guardar");
+		this.saveButton = new JButton("Aceptar");
 		this.saveButton.addActionListener(new InitEditionAction());
 
-		this.exitButton = new JButton("Cerrar");
+		this.exitButton = new JButton("Cancelar");
 		this.exitButton.addActionListener(new ExitAction());
 
 		this.datosButton = new JButton("Datos");
 		this.datosButton.addActionListener(new DatosAction());
 
 		setLayout(new FlowLayout());
+		add(this.datosButton);
 		add(this.saveButton);
 		add(this.exitButton);
-		add(this.datosButton);
 		setVisible(true);
 	}
 
@@ -96,6 +96,7 @@ public class SubFormButtonsPanel extends JPanel
 			{
 				//        PanelBotones.this.subformInterface.startEdition();
 				subformInterface.confirmEdition();
+				SubFormButtonsPanel.this.subformInterface.showInterface(false);
 			}
 			catch (Exception e) {
 				System.out.println("Ocurrio algún error inesperado...");
