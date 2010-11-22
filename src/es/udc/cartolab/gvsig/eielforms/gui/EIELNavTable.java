@@ -30,7 +30,14 @@ import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueWriter;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
+import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.MultiLineString;
+import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.Polygon;
 
 import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterField;
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
@@ -99,6 +106,21 @@ public class EIELNavTable extends AbstractNavTable {
 					break;
 				}
 			}
+
+			// Length and area
+			IGeometry g;
+			ReadableVectorial source = (layer).getSource();
+			source.start();
+			g = source.getShape(new Long(currentPosition).intValue());
+			source.stop();
+			Geometry geom = g.toJTSGeometry();
+			if (geom instanceof LineString || geom instanceof MultiLineString) {
+				form.setLengthValue(geom.getLength());
+			}
+			if (geom instanceof Polygon || geom instanceof MultiPolygon) {
+				form.setAreaValue(geom.getArea());
+			}
+
 			setChangedValues(false);
 		} catch (ReadDriverException e) {
 			foundAll = false;

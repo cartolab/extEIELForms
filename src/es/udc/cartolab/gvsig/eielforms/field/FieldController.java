@@ -38,6 +38,10 @@ public class FieldController
 	private String memoryValue;
 	private boolean save;
 	private String oldValue;
+	private boolean isLength;
+	private boolean isArea;
+	private String unitArea;
+	private String unitLength;
 
 	public FieldController(String label, String name, Domain domain, String defaultValue, boolean editable, boolean required, boolean isKey, boolean constantValue, boolean isOrden)
 	{
@@ -186,5 +190,32 @@ public class FieldController
 	public String getOldValue() {
 		return oldValue;
 	}
+
+	public void setIsLength(boolean bool_isLength, String unit) {
+		isLength = bool_isLength;
+		unitLength = unit;
+	}
+
+	public boolean isLength() {
+		return isLength;
+	}
+
+	public void setIsArea(boolean bool_isArea, String unit) {
+		isArea = bool_isArea;
+		unitArea = unit;
+	}
+
+	public boolean isArea() {
+		return isArea;
+	}
+
+	public String getUnitLength() {
+		return unitLength;
+	}
+
+	public String getUnitArea() {
+		return unitArea;
+	}
+
 
 }

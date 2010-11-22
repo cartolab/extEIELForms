@@ -15,5 +15,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/extEIELUtils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extDBConnection"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extNTOpenCADPlugin"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

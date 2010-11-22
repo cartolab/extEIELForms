@@ -20,6 +20,7 @@
 
 package es.udc.cartolab.gvsig.eielforms.forms;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,10 @@ import es.udc.cartolab.gvsig.eielforms.dependency.Dependency;
 import es.udc.cartolab.gvsig.eielforms.dependency.DependencyListener;
 import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterField;
 import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterFieldRetriever;
+import es.udc.cartolab.gvsig.eielforms.domain.BasicDomain;
+import es.udc.cartolab.gvsig.eielforms.domain.Domain;
+import es.udc.cartolab.gvsig.eielforms.domain.restriction.DecimalSizeRestriction;
+import es.udc.cartolab.gvsig.eielforms.domain.restriction.Restriction;
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 import es.udc.cartolab.gvsig.eielforms.field.listener.FieldChangeEvent;
@@ -48,6 +53,25 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class FormController extends Subject
 {
+
+	public enum Unit {
+
+		M, KM, M2, KM2, NOVALUE;
+
+		public static Unit toUnit(String unit) {
+
+
+			try {
+				return valueOf(unit.toUpperCase());
+			}
+			catch (Exception e) {
+				return NOVALUE;
+			}
+		}
+
+	}
+
+
 	private boolean knowKey;
 	private String dataBase;
 	private String table;
@@ -63,6 +87,8 @@ public class FormController extends Subject
 	private PollDependencyListener pollListener;
 	private HashMap<FieldController, OrderDependencyListener> orderListeners;
 	DecimalFormat df;
+	private double length;
+	double area;
 
 	public FormController(String layer, String dataBase, String table, String layout, String name, String title)
 	{
@@ -272,6 +298,12 @@ public class FormController extends Subject
 				if (value == null && oneField.isOrden()) {
 					value = getOrderValue(fields, oneField);
 				}
+				if (value == null && oneField.isLength()) {
+					value = getLengthValue(oneField.getUnitLength(), getDecimalSizeRestriction(oneField.getDomain()));
+				}
+				if (value == null && oneField.isArea()) {
+					value = getAreaValue(oneField.getUnitArea(), getDecimalSizeRestriction(oneField.getDomain()));
+				}
 				if (value == null) {
 					if (!oneField.getDefaultValue().equals("")) {
 						value = oneField.getDefaultValue();
@@ -349,6 +381,68 @@ public class FormController extends Subject
 
 		this.formInterface.loadData();
 		this.formInterface.performQuery();
+	}
+
+	private int getDecimalSizeRestriction(Domain domain) {
+
+		int numDec = 0;
+		if (domain instanceof BasicDomain) {
+			for (Restriction restriction : ((BasicDomain) domain).getRestrictions()) {
+				if (restriction instanceof DecimalSizeRestriction) {
+					numDec = ((DecimalSizeRestriction) restriction).getDecimalRestriction();
+				}
+			}
+		}
+
+		return numDec;
+
+	}
+
+	private String getLengthValue(String unit, int numDecimal) {
+
+		double value;
+
+		switch (Unit.toUnit(unit)) {
+		case KM: value = length/1000.0;
+		case M:
+		default:
+			value = length;
+		}
+
+		return round(value, numDecimal);
+
+	}
+
+	private String round(double value, int numDecimal) {
+		if (numDecimal>0) {
+			BigDecimal dec = new BigDecimal(value);
+			dec = dec.setScale(numDecimal, BigDecimal.ROUND_HALF_UP);
+			return Double.toString(dec.doubleValue());
+		} else {
+			return Long.toString(Math.round(value));
+		}
+	}
+
+	private String getAreaValue(String unit, int numDecimal) {
+
+		double value;
+
+		switch (Unit.toUnit(unit)) {
+		case KM2: value = area/1000000.0;
+		case M2:
+		default:
+			value = area;
+		}
+
+		return round(value, numDecimal);
+	}
+
+	public void setLengthValue(double length) {
+		this.length = length;
+	}
+
+	public void setAreaValue(double area) {
+		this.area = area;
 	}
 
 	public void initFields() {
@@ -749,7 +843,6 @@ public class FormController extends Subject
 		}
 
 	}
-
 
 	//  public void addEntitiesPanel(SelectEntityPanel selectEntityPanel) {
 	//    this.formInterface.addEntitiesPanel(selectEntityPanel);

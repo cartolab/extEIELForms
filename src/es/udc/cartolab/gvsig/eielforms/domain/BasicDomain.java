@@ -30,7 +30,7 @@ import es.udc.cartolab.gvsig.eielforms.domain.restriction.Restriction;
 public class BasicDomain extends Domain
 {
   private String tipoBase;
-  private ArrayList restrictiones;
+  private ArrayList<Restriction> restrictiones;
   private String descripcion;
 
   public BasicDomain(String name, String tipoBase)
@@ -54,7 +54,7 @@ public class BasicDomain extends Domain
     boolean valid = true;
 
     for (i = 0; i < this.restrictiones.size(); ++i) {
-      valid = (valid) && (((Restriction)this.restrictiones.get(i)).validate(valor));
+      valid = (valid) && ((this.restrictiones.get(i)).validate(valor));
     }
     return valid;
   }
@@ -66,7 +66,7 @@ public class BasicDomain extends Domain
     descripcion = descripcion + ", " + restriction.toString();
   }
 
-  public ArrayList getRestrictions() {
+  public ArrayList<Restriction> getRestrictions() {
     return this.restrictiones;
   }
 

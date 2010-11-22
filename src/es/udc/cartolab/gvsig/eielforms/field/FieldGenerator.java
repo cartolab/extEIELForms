@@ -52,6 +52,10 @@ public class FieldGenerator
 		boolean bool_constant_value = false;
 		String isOrden = "";
 		boolean bool_isOrden = false;
+		boolean bool_isLength = false;
+		boolean bool_isArea = false;
+		String unitLength = "m";
+		String unitArea = "m2";
 
 		Node atributos = fieldNode.getFirstChild();
 
@@ -133,6 +137,16 @@ public class FieldGenerator
 				isOrden = atributos.getFirstChild().getNodeValue();
 				bool_isOrden = getBoolean(isOrden);
 			}
+			else if (atributos.getNodeName().compareTo("IsLength") == 0) {
+				unitLength = atributos.getAttributes().getNamedItem("unit").getNodeValue();
+				String isLength = atributos.getFirstChild().getNodeValue();
+				bool_isLength = getBoolean(isLength);
+			}
+			else if (atributos.getNodeName().compareTo("IsArea") == 0) {
+				unitArea = atributos.getAttributes().getNamedItem("unit").getNodeValue();
+				String isArea = atributos.getFirstChild().getNodeValue();
+				bool_isArea = getBoolean(isArea);
+			}
 
 			atributos = atributos.getNextSibling();
 		}
@@ -156,6 +170,8 @@ public class FieldGenerator
 
 		FieldController fieldController = new FieldController(label, name, domain, defaultValue, bool_editable, bool_required, bool_isKey, bool_constant_value, bool_isOrden);
 		fieldController.setMustSave(bool_save);
+		fieldController.setIsLength(bool_isLength, unitLength);
+		fieldController.setIsArea(bool_isArea, unitArea);
 		FieldInterface fieldInterface;
 		if (domain.getType().compareTo("usuario") == 0)
 		{

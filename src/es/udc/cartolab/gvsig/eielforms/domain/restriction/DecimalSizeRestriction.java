@@ -79,4 +79,8 @@ public class DecimalSizeRestriction extends NumericFieldRestriction
   public String toString() {
     return new String("Numero maximo de decimalSize: " + this.decimalSize.toString());
   }
+
+  public int getDecimalRestriction() {
+	  return this.decimalSize;
+  }
 }
