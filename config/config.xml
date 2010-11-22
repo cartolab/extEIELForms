@@ -118,6 +118,9 @@
 			<menu text="EIEL/Formularios/Vertederos"
 				action-command="Vertederos_alfanumericos"
 				position="0931" />
+			<menu text="EIEL/Formularios/Potabilizadoras"
+				action-command="Potabilizadoras_alfanumerico"
+				position="0932" />
 
 		</extension>
 
