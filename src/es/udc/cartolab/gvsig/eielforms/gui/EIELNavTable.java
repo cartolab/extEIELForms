@@ -33,6 +33,7 @@ import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
@@ -119,6 +120,12 @@ public class EIELNavTable extends AbstractNavTable {
 			}
 			if (geom instanceof Polygon || geom instanceof MultiPolygon) {
 				form.setAreaValue(geom.getArea());
+				Envelope envelope = geom.getEnvelopeInternal();
+				double maxLength = envelope.getMaxX() - envelope.getMinX();
+				if (envelope.getMaxY() - envelope.getMinY() > maxLength) {
+					maxLength = envelope.getMaxY() - envelope.getMinY();
+				}
+				form.setLengthValue(maxLength);
 			}
 
 			setChangedValues(false);
