@@ -256,7 +256,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		FieldController fc = (FieldController) keyFields.get(0);
 		String fieldName = fc.getName();
 		String fieldValue = getFirstKey(fieldName);
-		boolean edit = !fieldValue.equals("nah");
+		boolean edit = fieldValue != null;
 		enableEdit(edit);
 		if (edit) {
 			key.put(fieldName, fieldValue);
