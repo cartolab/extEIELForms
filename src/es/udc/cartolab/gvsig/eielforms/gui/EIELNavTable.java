@@ -81,6 +81,7 @@ public class EIELNavTable extends AbstractNavTable {
 			refreshGUI();
 			super.repaint();
 			super.setVisible(true);
+			setOpenNavTableForm(true);
 			return true;
 		} else {
 			return false;
