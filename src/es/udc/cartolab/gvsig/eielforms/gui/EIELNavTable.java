@@ -60,12 +60,12 @@ public class EIELNavTable extends AbstractNavTable {
 		key = new HashMap();
 	}
 
-	@Override
+
 	public Object getWindowProfile() {
 		return null;
 	}
 
-	@Override
+
 	public boolean init() {
 		JPanel centerPanel = getCenterPanel();
 		if (centerPanel != null) {
@@ -176,7 +176,7 @@ public class EIELNavTable extends AbstractNavTable {
 					form = fg.createFormController(layer.getName());
 					form.addFormChangeListener(new FormChangeListener() {
 
-						@Override
+
 						public void formChanged(FormChangeEvent e) {
 							setChangedValues(true);
 							enableSaveButton(true);

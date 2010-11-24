@@ -48,7 +48,7 @@ public class ThrowFormExtension extends Extension implements EndGeometryListener
 	private final URL onIcon = this.getClass().getClassLoader().getResource("images/forms-active.png");
 	private final String navTablePlugin = AutoNavTableExtension.KEY_NAME;
 
-	@Override
+	
 	public void initialize() {
 
 		formsEnabled = AutoNavTableExtension.getPreferences();
@@ -66,7 +66,7 @@ public class ThrowFormExtension extends Extension implements EndGeometryListener
 
 	}
 
-	@Override
+	
 	public void execute(String actionCommand) {
 
 		if (!formsEnabled) {
@@ -94,17 +94,17 @@ public class ThrowFormExtension extends Extension implements EndGeometryListener
 		}
 	}
 
-	@Override
+	
 	public boolean isEnabled() {
 		return true;
 	}
 
-	@Override
+	
 	public boolean isVisible() {
 		return true;
 	}
 
-	@Override
+	
 	public void endGeometry(FLayer layer) {
 
 		if (layer.isEditing()) {

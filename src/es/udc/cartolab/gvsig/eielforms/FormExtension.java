@@ -35,7 +35,6 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class FormExtension extends Extension {
 
-	@Override
 	public void initialize() {
 		registerIcons();
 
@@ -51,7 +50,6 @@ public class FormExtension extends Extension {
 			);
 	}
 
-	@Override
 	public void execute(String actionCommand) {
 
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
@@ -67,7 +65,6 @@ public class FormExtension extends Extension {
 		}
 	}
 
-	@Override
 	public boolean isEnabled() {
 		View v = (View) PluginServices.getMDIManager().getActiveWindow();
 		FLayers layers = v.getMapControl().getMapContext().getLayers();
@@ -81,7 +78,6 @@ public class FormExtension extends Extension {
 		}
 	}
 
-	@Override
 	public boolean isVisible() {
 		return PluginServices.getMDIManager().getActiveWindow() instanceof View;
 	}

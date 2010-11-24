@@ -35,7 +35,7 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class FormTOCMenuEntry extends AbstractTocContextMenuAction{
 
-	@Override
+
 	public String getText() {
 		// TODO Auto-generated method stub
 		return "Formulario EIEL";

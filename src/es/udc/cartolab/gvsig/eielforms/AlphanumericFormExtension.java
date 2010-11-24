@@ -32,7 +32,7 @@ public class AlphanumericFormExtension extends Extension {
 
 	private HashMap<String, Integer> formHeights;
 
-	@Override
+
 	public void initialize() {
 
 		formHeights = new HashMap<String, Integer>();
@@ -40,7 +40,7 @@ public class AlphanumericFormExtension extends Extension {
 
 	}
 
-	@Override
+
 	public void execute(String actionCommand) {
 		AlphanumericForm af = new AlphanumericForm(actionCommand);
 		af.open();
@@ -52,12 +52,12 @@ public class AlphanumericFormExtension extends Extension {
 
 	}
 
-	@Override
+
 	public boolean isEnabled() {
 		return true;
 	}
 
-	@Override
+
 	public boolean isVisible() {
 		DBSession dbs = DBSession.getCurrentSession();
 		Constants cts = Constants.getCurrentConstants();
