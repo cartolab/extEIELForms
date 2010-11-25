@@ -214,8 +214,9 @@ public class NucleosRelationWindow extends AlphanumericForm {
 
 				try {
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
-					for (int i=table.getSelectedRowCount()-1; i>=0; i--) {
-						TableElement te = getElementFromTable(i);
+					int[] selectedRows = table.getSelectedRows();
+					for (int i=selectedRows.length-1; i>=0; i--) {
+						TableElement te = getElementFromTable(selectedRows[i]);
 						if (currentTableElements.contains(te)) {
 							currentTableElements.remove(te);
 						}
