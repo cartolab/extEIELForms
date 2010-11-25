@@ -141,7 +141,9 @@ public class EIELNavTable extends AbstractNavTable {
 		}
 
 		FieldInterface field = getFocusField();
-		field.getComponent().requestFocusInWindow();
+		if (field != null) {
+			field.getComponent().requestFocusInWindow();
+		}
 
 		setChangedValues(false);
 		enableSaveButton(false);
@@ -221,8 +223,8 @@ public class EIELNavTable extends AbstractNavTable {
 
 	public void open() {
 		PluginServices.getMDIManager().addCentredWindow(this);
-		FieldInterface field = getFocusField();
-		field.getComponent().requestFocusInWindow();
+//		FieldInterface field = getFocusField();
+//		field.getComponent().requestFocusInWindow();
 	}
 
 }

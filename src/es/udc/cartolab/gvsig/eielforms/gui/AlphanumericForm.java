@@ -220,7 +220,9 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 			viewInfo.setTitle(form.getName());
 
 			FieldInterface field = getFocusField();
-			field.getComponent().requestFocusInWindow();
+			if (field != null) {
+				field.getComponent().requestFocusInWindow();
+			}
 
 		} catch (FormException e) {
 			System.out.println("Error en el formulario: " + e.getMessage());
