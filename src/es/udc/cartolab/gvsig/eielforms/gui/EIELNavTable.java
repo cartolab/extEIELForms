@@ -73,8 +73,8 @@ public class EIELNavTable extends AbstractNavTable {
 			add(getCenterPanel());
 			add(getSouthPanel());
 
-			getButton(BUTTON_COPY_PREVIOUS).setVisible(false);
-			getButton(BUTTON_COPY_SELECTED).setVisible(false);
+//			getButton(BUTTON_COPY_PREVIOUS).setVisible(false);
+//			getButton(BUTTON_COPY_SELECTED).setVisible(false);
 
 			currentPosition = 0;
 
@@ -229,6 +229,26 @@ public class EIELNavTable extends AbstractNavTable {
 		PluginServices.getMDIManager().addCentredWindow(this);
 //		FieldInterface field = getFocusField();
 //		field.getComponent().requestFocusInWindow();
+	}
+
+	protected void copyPrevious() {
+		HashMap<String, String> currentKey = (HashMap<String, String>) key.clone();
+		super.copyPrevious();
+		key = currentKey;
+		form.fillFields(currentKey);
+		form.refreshGUI();
+	}
+
+	protected boolean copySelected() {
+		HashMap<String, String> currentKey = (HashMap<String, String>) key.clone();
+		if (super.copySelected()) {
+			key = currentKey;
+			form.fillFields(currentKey);
+			form.refreshGUI();
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

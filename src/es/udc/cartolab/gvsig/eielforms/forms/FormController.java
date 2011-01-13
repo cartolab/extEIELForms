@@ -573,6 +573,34 @@ public class FormController extends Subject
 		}
 	}
 
+	/**
+	 * Fills some fields with the given values. It doesn't save on DB.
+	 * @param values hashmap (key:fieldname, value:value).
+	 */
+	public void fillFields(HashMap<String, String> values) {
+
+
+		ArrayList fields = getFields();
+		HashMap<FieldController, String> aux = new HashMap<FieldController, String>();
+		for (int i=0; i<fields.size(); i++) {
+			FieldController field = (FieldController) fields.get(i);
+			if (values.containsKey(field.getName())) {
+				aux.put(field, values.get(field.getName()));
+			}
+		}
+
+		if (aux.size() == values.size()) {
+			Set<FieldController> keyset = aux.keySet();
+			Iterator<FieldController> iterator = keyset.iterator();
+			while (iterator.hasNext()) {
+				FieldController field = iterator.next();
+				field.setValue(aux.get(field));
+			}
+		}
+
+
+	}
+
 	public HashMap<String, String> getFieldValues(List<String> fieldNames) {
 
 		HashMap<String, String> fieldValues = new HashMap<String, String>();
@@ -855,6 +883,10 @@ public class FormController extends Subject
 			}
 		}
 
+	}
+
+	public void refreshGUI() {
+		this.formInterface.loadData();
 	}
 
 	//  public void addEntitiesPanel(SelectEntityPanel selectEntityPanel) {
