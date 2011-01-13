@@ -88,6 +88,28 @@ public class EIELNavTable extends AbstractNavTable {
 		}
 	}
 
+	private void fillGeomFields() throws ReadDriverException {
+		// Length and area
+		IGeometry g;
+		ReadableVectorial source = (layer).getSource();
+		source.start();
+		g = source.getShape(new Long(currentPosition).intValue());
+		source.stop();
+		Geometry geom = g.toJTSGeometry();
+		if (geom instanceof LineString || geom instanceof MultiLineString) {
+			form.setLengthValue(geom.getLength());
+		}
+		if (geom instanceof Polygon || geom instanceof MultiPolygon) {
+			form.setAreaValue(geom.getArea());
+			Envelope envelope = geom.getEnvelopeInternal();
+			double maxLength = envelope.getMaxX() - envelope.getMinX();
+			if (envelope.getMaxY() - envelope.getMinY() > maxLength) {
+				maxLength = envelope.getMaxY() - envelope.getMinY();
+			}
+			form.setLengthValue(maxLength);
+		}
+	}
+
 	@Override
 	public void fillValues() {
 		ArrayList keyFields = form.getKey();
@@ -109,25 +131,7 @@ public class EIELNavTable extends AbstractNavTable {
 				}
 			}
 
-			// Length and area
-			IGeometry g;
-			ReadableVectorial source = (layer).getSource();
-			source.start();
-			g = source.getShape(new Long(currentPosition).intValue());
-			source.stop();
-			Geometry geom = g.toJTSGeometry();
-			if (geom instanceof LineString || geom instanceof MultiLineString) {
-				form.setLengthValue(geom.getLength());
-			}
-			if (geom instanceof Polygon || geom instanceof MultiPolygon) {
-				form.setAreaValue(geom.getArea());
-				Envelope envelope = geom.getEnvelopeInternal();
-				double maxLength = envelope.getMaxX() - envelope.getMinX();
-				if (envelope.getMaxY() - envelope.getMinY() > maxLength) {
-					maxLength = envelope.getMaxY() - envelope.getMinY();
-				}
-				form.setLengthValue(maxLength);
-			}
+			fillGeomFields();
 
 			setChangedValues(false);
 		} catch (ReadDriverException e) {

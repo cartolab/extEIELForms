@@ -437,6 +437,14 @@ public class FormController extends Subject
 		return round(value, numDecimal);
 	}
 
+	public double getAreaValue() {
+		return area;
+	}
+
+	public double getLengthValue() {
+		return length;
+	}
+
 	public void setLengthValue(double length) {
 		this.length = length;
 	}
@@ -527,13 +535,18 @@ public class FormController extends Subject
 		return esValido;
 	}
 
-	public void fillForm(HashMap keys) {
-
+	private ArrayList<String> getFieldNames() {
 		ArrayList fields = getFields();
 		ArrayList<String> fieldNames = new ArrayList<String>();
 		for (int i=0; i<fields.size(); i++){
 			fieldNames.add(((FieldController) fields.get(i)).getName());
 		}
+		return fieldNames;
+	}
+
+	public void fillForm(HashMap keys) {
+
+		ArrayList<String> fieldNames = getFieldNames();
 
 		//	  ArrayList dep = getDependencies();
 		//	  for (int i=0; i<dep.size(); i++) {
