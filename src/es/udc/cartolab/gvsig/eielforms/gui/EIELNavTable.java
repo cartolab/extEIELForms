@@ -22,14 +22,16 @@ package es.udc.cartolab.gvsig.eielforms.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
+import com.hardcode.gdbms.engine.values.NullValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueWriter;
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
@@ -49,6 +51,7 @@ import es.udc.cartolab.gvsig.eielforms.forms.FormController;
 import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeEvent;
 import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeListener;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
+import es.udc.cartolab.gvsig.navtable.ToggleEditing;
 
 public class EIELNavTable extends AbstractNavTable {
 
@@ -115,6 +118,7 @@ public class EIELNavTable extends AbstractNavTable {
 		ArrayList keyFields = form.getKey();
 		key = new HashMap();
 		boolean foundAll = true;
+		boolean noNull = true;
 		try {
 			for (int i=0; i<keyFields.size(); i++) {
 				FieldController fc = (FieldController) keyFields.get(i);
@@ -122,9 +126,14 @@ public class EIELNavTable extends AbstractNavTable {
 				idx = recordset.getFieldIndexByName(fc.getName());
 				if (idx > -1) {
 					Value val = recordset.getFieldValue(currentPosition, idx);
-					String strVal = val.getStringValue(ValueWriter.internalValueWriter);
-					strVal = strVal.trim().replaceAll("'", "");
-					key.put(fc.getName(), strVal);
+					if (val instanceof NullValue) {
+						noNull = false;
+						break;
+					} else {
+						String strVal = val.getStringValue(ValueWriter.internalValueWriter);
+						strVal = strVal.trim().replaceAll("'", "");
+						key.put(fc.getName(), strVal);
+					}
 				} else {
 					foundAll = false;
 					break;
@@ -138,9 +147,12 @@ public class EIELNavTable extends AbstractNavTable {
 			foundAll = false;
 			e.printStackTrace();
 		}
-		if (foundAll) {
+		if (foundAll && noNull) {
 			form.fillForm(key);
 		} else {
+			if (!noNull) {
+				form.fillFieldsDefault();
+			}
 			//lanzar excepcion?
 		}
 
@@ -162,13 +174,48 @@ public class EIELNavTable extends AbstractNavTable {
 	@Override
 	protected boolean saveRecord() {
 		if (form.validate()) {
-			form.update(key);
+
+			HashMap<String, String> values = form.getFieldValues();
+			ToggleEditing te = new ToggleEditing();
+			Set<String> keySet = values.keySet();
+			Iterator<String> iterator = keySet.iterator();
+			int total = values.size();
+			int[] positions = new int[total];
+			String[] strValues = new String[total];
 			try {
-				layer.reload();
-			} catch (ReloadLayerException e) {
+
+				boolean allfound = true;
+				int i = 0;
+				while (iterator.hasNext() && allfound) {
+					String attName = iterator.next();
+					int p;
+					p = this.recordset.getFieldIndexByName(attName);
+					if (p > -1) {
+						positions[i] = p;
+						strValues[i] = values.get(attName);
+						i++;
+					} else {
+						allfound = false;
+					}
+				}
+
+				if (allfound) {
+					int cp = (new Long(currentPosition)).intValue();
+					te.modifyValues(layer, cp, positions, strValues);
+					return true;
+				} else {
+					return false;
+				}
+			} catch (ReadDriverException e) {
 				return false;
 			}
-			return true;
+
+			//			form.update(key);
+			//			try {
+			//				layer.reload();
+			//			} catch (ReloadLayerException e) {
+			//				return false;
+			//			}
 		} else {
 			return false;
 		}

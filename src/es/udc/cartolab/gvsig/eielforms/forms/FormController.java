@@ -461,7 +461,7 @@ public class FormController extends Subject
 		this.formInterface.startInsertion();
 	}
 
-	private HashMap<String, String> getFieldValues() {
+	public HashMap<String, String> getFieldValues() {
 		ArrayList<String> idFields = new ArrayList<String>();
 		idFields.add("id");
 		idFields.add("gid");
@@ -571,6 +571,19 @@ public class FormController extends Subject
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void fillFieldsDefault() {
+
+		ArrayList fields = getFields();
+		for (int i=0; i<fields.size(); i++) {
+			FieldController field = (FieldController) fields.get(i);
+			String defVal = field.getDefaultValue();
+			field.setValue(defVal);
+		}
+
+		this.formInterface.loadData();
+
 	}
 
 	/**

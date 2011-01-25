@@ -72,7 +72,7 @@ public class FormExtension extends Extension {
 			return false;
 		}
 		else if (layers.getActives().length > 0) {
-			return layers.getActives()[0] instanceof FLyrVect && !layers.getActives()[0].isEditing();
+			return layers.getActives()[0] instanceof FLyrVect; // && !layers.getActives()[0].isEditing();
 		} else {
 			return false;
 		}
