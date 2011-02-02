@@ -177,14 +177,19 @@ public class EIELNavTable extends AbstractNavTable {
 
 			HashMap<String, String> values = form.getFieldValues();
 			ToggleEditing te = new ToggleEditing();
+			boolean close = false;
+			if (!layer.isEditing()) {
+				te.startEditing(layer);
+				close = true;
+			}
 			Set<String> keySet = values.keySet();
 			Iterator<String> iterator = keySet.iterator();
 			int total = values.size();
 			int[] positions = new int[total];
 			String[] strValues = new String[total];
+			boolean allfound = true;
 			try {
 
-				boolean allfound = true;
 				int i = 0;
 				while (iterator.hasNext() && allfound) {
 					String attName = iterator.next();
@@ -202,13 +207,11 @@ public class EIELNavTable extends AbstractNavTable {
 				if (allfound) {
 					int cp = (new Long(currentPosition)).intValue();
 					te.modifyValues(layer, cp, positions, strValues);
-					return true;
-				} else {
-					return false;
 				}
 			} catch (ReadDriverException e) {
-				return false;
+				allfound = false;
 			}
+
 
 			//			form.update(key);
 			//			try {
@@ -216,6 +219,11 @@ public class EIELNavTable extends AbstractNavTable {
 			//			} catch (ReloadLayerException e) {
 			//				return false;
 			//			}
+			if (close) {
+				te.stopEditing(layer, false);
+			}
+
+			return allfound;
 		} else {
 			return false;
 		}
