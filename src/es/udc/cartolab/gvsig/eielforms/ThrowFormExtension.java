@@ -36,7 +36,6 @@ import es.udc.cartolab.gvsig.eielforms.gui.EIELNavTable;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.navtable.AutoNavTableExtension;
 import es.udc.cartolab.gvsig.navtable.NavTable;
-import es.udc.cartolab.gvsig.navtable.ToggleEditing;
 
 public class ThrowFormExtension extends Extension implements EndGeometryListener {
 
@@ -108,10 +107,10 @@ public class ThrowFormExtension extends Extension implements EndGeometryListener
 
 	public void endGeometry(FLayer layer) {
 
-		if (layer.isEditing()) {
-			ToggleEditing te = new ToggleEditing();
-			te.stopEditing(layer, false);
-		}
+//		if (layer.isEditing()) {
+//			ToggleEditing te = new ToggleEditing();
+//			te.stopEditing(layer, false);
+//		}
 
 		if (layer instanceof FLyrVect) {
 			FLyrVect l = (FLyrVect) layer;
@@ -136,6 +135,10 @@ public class ThrowFormExtension extends Extension implements EndGeometryListener
 
 		//pulsa/suelta el botón dependiendo de las preferencias
 		toggleButton(formsEnabled);
+		if (formsEnabled) {
+			CADListenerManager.addEndGeometryListener("es.udc.cartolab.eielforms", this);
+			NotificationManager.addInfo("Formularios automáticos activados");
+		}
 	}
 
 }
