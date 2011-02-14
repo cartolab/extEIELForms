@@ -35,7 +35,7 @@
 		</extension>
 		<extension class-name="es.udc.cartolab.gvsig.eielforms.FormPointExtension" description="throw_form" active="true">
 			<tool-bar name="NavTable">
-				<action-tool icon="view-query-information" tooltip="Consulta EIEL"
+				<action-tool icon="view-eiel-information" tooltip="Consulta EIEL"
 					action-command="info_form" position="1512" name="info_form"/>
 			</tool-bar>
 		</extension>

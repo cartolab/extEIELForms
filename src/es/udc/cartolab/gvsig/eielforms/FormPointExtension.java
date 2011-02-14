@@ -29,13 +29,13 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class FormPointExtension extends Extension {
+	private final String iconPath = "images/information.png";
+	private final String iconCode = "view-eiel-information";
 
-	
 	public void initialize() {
-
+		registerIcon();
 	}
 
-	
 	public void execute(String actionCommand) {
 		View view = (View) PluginServices.getMDIManager().getActiveWindow();
 		MapControl mc = view.getMapControl();
@@ -47,7 +47,6 @@ public class FormPointExtension extends Extension {
 		mc.setTool("formPoint");
 	}
 
-	
 	public boolean isEnabled() {
 
 		View view = (View) PluginServices.getMDIManager().getActiveWindow();
@@ -56,10 +55,15 @@ public class FormPointExtension extends Extension {
 
 	}
 
-	
 	public boolean isVisible() {
 
-		return PluginServices.getMDIManager().getActiveWindow() instanceof View && DBSession.getCurrentSession()!=null;
+		return PluginServices.getMDIManager().getActiveWindow() instanceof View
+				&& DBSession.getCurrentSession() != null;
+	}
+
+	private void registerIcon() {
+		PluginServices.getIconTheme().registerDefault(iconCode,
+				this.getClass().getClassLoader().getResource(iconPath));
 	}
 
 }
