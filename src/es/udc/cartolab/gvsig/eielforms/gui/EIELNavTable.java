@@ -20,6 +20,7 @@
 
 package es.udc.cartolab.gvsig.eielforms.gui;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ import com.hardcode.gdbms.engine.values.NullValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueWriter;
 import com.iver.andami.PluginServices;
+import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
@@ -50,6 +52,7 @@ import es.udc.cartolab.gvsig.eielforms.formgenerator.FormGenerator;
 import es.udc.cartolab.gvsig.eielforms.forms.FormController;
 import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeEvent;
 import es.udc.cartolab.gvsig.eielforms.forms.listener.FormChangeListener;
+import es.udc.cartolab.gvsig.eielutils.misc.EIELValues;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.navtable.ToggleEditing;
 
@@ -61,13 +64,16 @@ public class EIELNavTable extends AbstractNavTable {
 	public EIELNavTable(FLyrVect layer) {
 		super(layer);
 		key = new HashMap();
+
 	}
 
+	protected File getHeaderFile() {
+		return EIELValues.getHeaderFileNT();
+	}
 
 	public Object getWindowProfile() {
 		return null;
 	}
-
 
 	public boolean init() {
 		JPanel centerPanel = getCenterPanel();
@@ -282,8 +288,17 @@ public class EIELNavTable extends AbstractNavTable {
 
 	public void open() {
 		PluginServices.getMDIManager().addCentredWindow(this);
-//		FieldInterface field = getFocusField();
-//		field.getComponent().requestFocusInWindow();
+
+		WindowInfo viewInfo = super.getWindowInfo();
+		File header = getHeaderFile();
+		if (viewInfo != null && header.exists()) {
+			int ntHeight = viewInfo.getHeight();
+			int imgHeight = EIELValues.getHeaderNT().getIconHeight();
+			viewInfo.setHeight(ntHeight + imgHeight);
+		}
+
+		// FieldInterface field = getFocusField();
+		// field.getComponent().requestFocusInWindow();
 	}
 
 	protected void copyPrevious() {

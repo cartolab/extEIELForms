@@ -20,6 +20,7 @@
 
 package es.udc.cartolab.gvsig.eielforms.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,7 +32,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -53,6 +56,7 @@ import es.udc.cartolab.gvsig.eielforms.formgenerator.FormGenerator;
 import es.udc.cartolab.gvsig.eielforms.forms.FormController;
 import es.udc.cartolab.gvsig.eielforms.util.FormsDAO;
 import es.udc.cartolab.gvsig.eielutils.constants.Constants;
+import es.udc.cartolab.gvsig.eielutils.misc.EIELValues;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class AlphanumericForm extends JPanel implements IWindow, ActionListener {
@@ -64,7 +68,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 	protected FormController form;
 	protected HashMap<String, String> key = new HashMap();
 	private JButton editButton, newButton, closeButton;
-
+	private JPanel upperPanel;
 
 	public AlphanumericForm(String formName) {
 		this.formName = formName;
@@ -182,6 +186,22 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		return southPanel;
 	}
 
+	protected JPanel getUpperPanel() {
+
+		ImageIcon headerImg = EIELValues.getHeader();
+		Color bgColor = EIELValues.HEADER_COLOR;
+
+		if (upperPanel == null) {
+			upperPanel = new JPanel();
+			if (headerImg != null && bgColor != null) {
+				upperPanel.setBackground(bgColor);
+				JLabel icon = new JLabel();
+				icon.setIcon(headerImg);
+				upperPanel.add(icon);
+			}
+		}
+		return upperPanel;
+	}
 
 	public Object getWindowProfile() {
 		// TODO Auto-generated method stub
@@ -209,6 +229,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 	public void open() {
 
 		try {
+			add(getUpperPanel());
 			add(getCenterPanel());
 			add(getButtonsPanel());
 			if (setKey()) {
