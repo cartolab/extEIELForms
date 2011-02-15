@@ -68,7 +68,7 @@ public class EIELNavTable extends AbstractNavTable {
 	}
 
 	protected File getHeaderFile() {
-		return EIELValues.getHeaderFileNT();
+		return EIELValues.getInstance().getHeaderFileNT();
 	}
 
 	public Object getWindowProfile() {
@@ -293,7 +293,8 @@ public class EIELNavTable extends AbstractNavTable {
 		File header = getHeaderFile();
 		if (viewInfo != null && header.exists()) {
 			int ntHeight = viewInfo.getHeight();
-			int imgHeight = EIELValues.getHeaderNT().getIconHeight();
+			int imgHeight = EIELValues.getInstance().getHeaderNT()
+					.getIconHeight();
 			viewInfo.setHeight(ntHeight + imgHeight);
 		}
 
