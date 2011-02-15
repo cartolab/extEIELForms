@@ -294,7 +294,7 @@ public class EIELNavTable extends AbstractNavTable {
 			int ntHeight = viewInfo.getHeight();
 			int imgHeight = EIELValues.getInstance().getHeaderNT()
 					.getIconHeight();
-			viewInfo.setHeight(ntHeight + imgHeight);
+			viewInfo.setHeight(ntHeight + imgHeight + 35);
 		}
 
 		// FieldInterface field = getFocusField();
