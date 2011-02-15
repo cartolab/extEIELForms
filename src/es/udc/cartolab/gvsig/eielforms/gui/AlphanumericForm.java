@@ -76,76 +76,76 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		this.setFocusCycleRoot(true);
 	}
 
+	public WindowInfo getWindowInfo() {
+		if (viewInfo == null) {
+			viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+					| WindowInfo.RESIZABLE | WindowInfo.PALETTE);
+			viewInfo.setTitle("Alphanumeric form");
+			Dimension dim = getPreferredSize();
+			MDIFrame a = (MDIFrame) PluginServices.getMainFrame();
+			int maxHeight = a.getHeight() - 175;
+			int maxWidth = a.getWidth() - 15;
 
-	 public WindowInfo getWindowInfo() {
-         if (viewInfo == null){
-                 viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG | WindowInfo.RESIZABLE | WindowInfo.PALETTE);
-                 viewInfo.setTitle("Alphanumeric form");
-                 Dimension dim = getPreferredSize();
-                 MDIFrame a = (MDIFrame) PluginServices.getMainFrame();
-                 int maxHeight =  a.getHeight()-175;
-                 int maxWidth =  a.getWidth()-15;
-
-                 int width,heigth = 0;
-                 if (dim.getHeight()> maxHeight){
-                         heigth = maxHeight;
-                 }else{
-                         heigth = new Double(dim.getHeight()).intValue();
-                 }
-                 if (dim.getWidth()> maxWidth){
-                         width = maxWidth;
-                 }else{
-                         width = new Double(dim.getWidth()).intValue();
-                 }
-                 viewInfo.setWidth(width+20);
-                 viewInfo.setHeight(heigth+15);
-         }
-         return viewInfo;
- }
-
+			int width, heigth = 0;
+			if (dim.getHeight() > maxHeight) {
+				heigth = maxHeight;
+			} else {
+				heigth = new Double(dim.getHeight()).intValue();
+			}
+			if (dim.getWidth() > maxWidth) {
+				width = maxWidth;
+			} else {
+				width = new Double(dim.getWidth()).intValue();
+			}
+			viewInfo.setWidth(width + 20);
+			viewInfo.setHeight(heigth + 15);
+		}
+		return viewInfo;
+	}
 
 	/**
 	 * Adds a listener to the Primary Key field
+	 * 
 	 * @throws FormException
 	 */
 	protected void addPKChangeListener() throws FormException {
 		ArrayList keyFields = form.getKey();
-		if (keyFields.size()!=1) {
+		if (keyFields.size() != 1) {
 			throw new FormException("Clave mal formada");
 		}
 		final String keyName = ((FieldController) keyFields.get(0)).getName();
-		ArrayList fields = ((Dependency)form.getDependencies().get(0)).getFieldsInterface();
-//		ArrayList fields = form.getFieldsInterface();
+		ArrayList fields = ((Dependency) form.getDependencies().get(0))
+				.getFieldsInterface();
+		// ArrayList fields = form.getFieldsInterface();
 		boolean found = false;
-		for (int i=0; i<fields.size(); i++) {
+		for (int i = 0; i < fields.size(); i++) {
 			FieldInterface fi = (FieldInterface) fields.get(i);
 			String fieldName = fi.getField().getName();
 			if (fieldName.equals(keyName)) {
 				if (fi.getComponent() instanceof JTextField) {
 					final JTextField tf = (JTextField) fi.getComponent();
-					tf.getDocument().addDocumentListener(new DocumentListener() {
+					tf.getDocument().addDocumentListener(
+							new DocumentListener() {
 
+								public void changedUpdate(DocumentEvent arg0) {
+									key.put(keyName, tf.getText());
 
-						public void changedUpdate(DocumentEvent arg0) {
-							key.put(keyName, tf.getText());
+								}
 
-						}
+								public void insertUpdate(DocumentEvent arg0) {
+									key.put(keyName, tf.getText());
+								}
 
+								public void removeUpdate(DocumentEvent arg0) {
+									key.put(keyName, tf.getText());
+								}
 
-						public void insertUpdate(DocumentEvent arg0) {
-							key.put(keyName, tf.getText());
-						}
-
-
-						public void removeUpdate(DocumentEvent arg0) {
-							key.put(keyName, tf.getText());
-						}
-
-					});
+							});
 					found = true;
 					break;
 				} else {
-					throw new FormException("El campo de la clave no es un textfield!");
+					throw new FormException(
+							"El campo de la clave no es un textfield!");
 				}
 
 			}
@@ -164,7 +164,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 				addPKChangeListener();
 			}
 			centerPanel = new JScrollPane(form.getInterface());
-			centerPanel.setBorder(new EmptyBorder(0,0,0,0));
+			centerPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		}
 		return centerPanel;
@@ -188,8 +188,8 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 
 	protected JPanel getUpperPanel() {
 
-		ImageIcon headerImg = EIELValues.getHeader();
-		Color bgColor = EIELValues.HEADER_COLOR;
+		ImageIcon headerImg = EIELValues.getInstance().getHeader();
+		Color bgColor = EIELValues.getInstance().getHeaderColor();
 
 		if (upperPanel == null) {
 			upperPanel = new JPanel();
@@ -254,7 +254,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		ArrayList fields = form.getFieldsInterface();
 		boolean found = false;
 		FieldInterface focusField = null;
-		for (int i=0; i<fields.size(); i++) {
+		for (int i = 0; i < fields.size(); i++) {
 			FieldInterface field = (FieldInterface) fields.get(i);
 			if (field.getField().getEditable()) {
 				if (!found || field instanceof DependencyMasterField) {
@@ -273,8 +273,9 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		ArrayList keyFields = form.getKey();
 		key = new HashMap();
 
-		if (keyFields.size()!=1) {
-			throw new FormException("Clave primaria mal formada en el formulario");
+		if (keyFields.size() != 1) {
+			throw new FormException(
+					"Clave primaria mal formada en el formulario");
 		}
 		FieldController fc = (FieldController) keyFields.get(0);
 		String fieldName = fc.getName();
@@ -287,15 +288,15 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 
 		return edit;
 
-
 	}
 
 	private String getWhereClause() throws SQLException {
 		DBSession dbs = DBSession.getCurrentSession();
-		String where =" WHERE ";
+		String where = " WHERE ";
 		Constants c = Constants.getCurrentConstants();
-		if (dbs!=null && c.constantsSelected()) {
-			List<String> cols = Arrays.asList(dbs.getColumns(form.getDataBase(), form.getTable()));
+		if (dbs != null && c.constantsSelected()) {
+			List<String> cols = Arrays.asList(dbs.getColumns(
+					form.getDataBase(), form.getTable()));
 
 			ArrayList<String> upperCols = new ArrayList<String>();
 			for (String column : cols) {
@@ -312,14 +313,15 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 			int constn = 0;
 			for (String constant : constants) {
 				int pos = upperCols.indexOf(constant);
-				if (pos>-1 && c.getValue(constant) != null) {
+				if (pos > -1 && c.getValue(constant) != null) {
 					constn++;
-					where = where + cols.get(pos) + "='" + c.getValue(constant) + "' AND ";
+					where = where + cols.get(pos) + "='" + c.getValue(constant)
+							+ "' AND ";
 				}
 			}
 
-			if (constn>0) {
-				where = where.substring(0, where.length()-5);
+			if (constn > 0) {
+				where = where.substring(0, where.length() - 5);
 			} else {
 				where = "";
 			}
@@ -327,19 +329,19 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		return where;
 	}
 
-
 	private String getFirstKey(String keyName) throws FormException {
 
 		FormsDAO fdao = new FormsDAO();
 		ArrayList<String> fields = new ArrayList<String>();
 		fields.add(keyName);
-		HashMap<String, String> values = fdao.getKeyValues(key, form.getDataBase(), form.getTable(), fields);
+		HashMap<String, String> values = fdao.getKeyValues(key,
+				form.getDataBase(), form.getTable(), fields);
 		return values.get(keyName);
 
 	}
 
 	private void enableEdit(boolean enable) {
-		if (editButton!=null) {
+		if (editButton != null) {
 			editButton.setEnabled(enable);
 		}
 	}
@@ -353,14 +355,14 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		PluginServices.getMDIManager().closeWindow(this);
 	}
 
-
 	public void actionPerformed(ActionEvent arg0) {
 
 		if (arg0.getSource() == editButton) {
 			Iterator<String> it = key.keySet().iterator();
 			String keyName = it.next();
 			int pos = Integer.valueOf(key.get(keyName));
-			EditAlphanumericForm eaf = new EditAlphanumericForm(this, formName, pos);
+			EditAlphanumericForm eaf = new EditAlphanumericForm(this, formName,
+					pos);
 			eaf.open();
 		}
 

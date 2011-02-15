@@ -82,8 +82,8 @@ public class EIELNavTable extends AbstractNavTable {
 			add(getCenterPanel());
 			add(getSouthPanel());
 
-//			getButton(BUTTON_COPY_PREVIOUS).setVisible(false);
-//			getButton(BUTTON_COPY_SELECTED).setVisible(false);
+			// getButton(BUTTON_COPY_PREVIOUS).setVisible(false);
+			// getButton(BUTTON_COPY_SELECTED).setVisible(false);
 
 			currentPosition = 0;
 
@@ -126,7 +126,7 @@ public class EIELNavTable extends AbstractNavTable {
 		boolean foundAll = true;
 		boolean noNull = true;
 		try {
-			for (int i=0; i<keyFields.size(); i++) {
+			for (int i = 0; i < keyFields.size(); i++) {
 				FieldController fc = (FieldController) keyFields.get(i);
 				int idx;
 				idx = recordset.getFieldIndexByName(fc.getName());
@@ -136,7 +136,8 @@ public class EIELNavTable extends AbstractNavTable {
 						noNull = false;
 						break;
 					} else {
-						String strVal = val.getStringValue(ValueWriter.internalValueWriter);
+						String strVal = val
+								.getStringValue(ValueWriter.internalValueWriter);
 						strVal = strVal.trim().replaceAll("'", "");
 						key.put(fc.getName(), strVal);
 					}
@@ -159,7 +160,7 @@ public class EIELNavTable extends AbstractNavTable {
 			if (!noNull) {
 				form.fillFieldsDefault();
 			}
-			//lanzar excepcion?
+			// lanzar excepcion?
 		}
 
 		FieldInterface field = getFocusField();
@@ -218,13 +219,12 @@ public class EIELNavTable extends AbstractNavTable {
 				allfound = false;
 			}
 
-
-			//			form.update(key);
-			//			try {
-			//				layer.reload();
-			//			} catch (ReloadLayerException e) {
-			//				return false;
-			//			}
+			// form.update(key);
+			// try {
+			// layer.reload();
+			// } catch (ReloadLayerException e) {
+			// return false;
+			// }
 			if (close) {
 				te.stopEditing(layer, false);
 			}
@@ -243,7 +243,6 @@ public class EIELNavTable extends AbstractNavTable {
 					FormGenerator fg = new FormGenerator();
 					form = fg.createFormController(layer.getName());
 					form.addFormChangeListener(new FormChangeListener() {
-
 
 						public void formChanged(FormChangeEvent e) {
 							setChangedValues(true);
@@ -274,7 +273,7 @@ public class EIELNavTable extends AbstractNavTable {
 		ArrayList fields = form.getFieldsInterface();
 		boolean found = false;
 		FieldInterface focusField = null;
-		for (int i=0; i<fields.size(); i++) {
+		for (int i = 0; i < fields.size(); i++) {
 			FieldInterface field = (FieldInterface) fields.get(i);
 			if (field.getField().getEditable()) {
 				if (!found || field instanceof DependencyMasterField) {
@@ -303,7 +302,8 @@ public class EIELNavTable extends AbstractNavTable {
 	}
 
 	protected void copyPrevious() {
-		HashMap<String, String> currentKey = (HashMap<String, String>) key.clone();
+		HashMap<String, String> currentKey = (HashMap<String, String>) key
+				.clone();
 		super.copyPrevious();
 		key = currentKey;
 		form.fillFields(currentKey);
@@ -311,7 +311,8 @@ public class EIELNavTable extends AbstractNavTable {
 	}
 
 	protected boolean copySelected() {
-		HashMap<String, String> currentKey = (HashMap<String, String>) key.clone();
+		HashMap<String, String> currentKey = (HashMap<String, String>) key
+				.clone();
 		if (super.copySelected()) {
 			key = currentKey;
 			form.fillFields(currentKey);
