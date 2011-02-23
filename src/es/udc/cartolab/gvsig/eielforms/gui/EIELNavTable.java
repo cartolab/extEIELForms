@@ -290,7 +290,7 @@ public class EIELNavTable extends AbstractNavTable {
 
 		WindowInfo viewInfo = super.getWindowInfo();
 		File header = getHeaderFile();
-		if (viewInfo != null && header.exists()) {
+		if (viewInfo != null && header != null && header.exists()) {
 			int ntHeight = viewInfo.getHeight();
 			int imgHeight = EIELValues.getInstance().getHeaderNT()
 					.getIconHeight();
