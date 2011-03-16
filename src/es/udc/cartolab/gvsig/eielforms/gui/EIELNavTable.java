@@ -20,6 +20,7 @@
 
 package es.udc.cartolab.gvsig.eielforms.gui;
 
+import java.awt.BorderLayout;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +28,9 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import net.miginfocom.swing.MigLayout;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.NullValue;
@@ -60,6 +64,9 @@ public class EIELNavTable extends AbstractNavTable {
 
 	FormController form;
 	HashMap<String, String> key;
+	private JPanel CenterPanel;
+	private JPanel SouthPanel;
+	private JPanel NorthPanel;
 
 	public EIELNavTable(FLyrVect layer) {
 		super(layer);
@@ -75,12 +82,54 @@ public class EIELNavTable extends AbstractNavTable {
 		return null;
 	}
 
+	private JPanel getThisNorthPanel() {
+		if (NorthPanel == null) {
+			NorthPanel = new JPanel();
+		}
+		return NorthPanel;
+	}
+
+	private JPanel getThisSouthPanel() {
+		if (SouthPanel == null) {
+			SouthPanel = new JPanel();
+		}
+		return SouthPanel;
+	}
+
+	private JPanel getThisCenterPanel() {
+		if (CenterPanel == null) {
+			CenterPanel = new JPanel();
+			BorderLayout CenterPanelLayout = new BorderLayout();
+			CenterPanel.setLayout(CenterPanelLayout);
+		}
+		return CenterPanel;
+	}
+
+	private void initGUI() {
+		MigLayout thisLayout = new MigLayout("inset 0, align center", "[grow]",
+				"[][grow][]");
+		this.setLayout(thisLayout);
+		this.add(getThisNorthPanel(), "shrink, wrap, align center");
+		this.add(getThisCenterPanel(), "shrink, growx, growy, wrap");
+		this.add(getThisSouthPanel(), "shrink, align center");
+	}
+
 	public boolean init() {
+
+		initGUI();
+
+		// Getting NavTable parent panels and add them on the tableLayoutPanels
+
 		JPanel centerPanel = getCenterPanel();
 		if (centerPanel != null) {
-			add(getNorthPanel());
-			add(getCenterPanel());
-			add(getSouthPanel());
+
+			JPanel northPanel = getNorthPanel();
+			getThisNorthPanel().add(northPanel);
+
+			getThisCenterPanel().add(centerPanel);
+
+			JPanel southPanel = getSouthPanel();
+			getThisSouthPanel().add(southPanel);
 
 			// getButton(BUTTON_COPY_PREVIOUS).setVisible(false);
 			// getButton(BUTTON_COPY_SELECTED).setVisible(false);
@@ -251,7 +300,11 @@ public class EIELNavTable extends AbstractNavTable {
 
 					});
 				}
-				centerPanel = form.getInterface();
+
+				centerPanel = new JPanel(new BorderLayout());
+				JScrollPane pane = new JScrollPane(form.getInterface());
+				// centerPanel = form.getInterface();
+				centerPanel.add(pane);
 				centerPanel.setFocusCycleRoot(true);
 
 			} catch (FormException fe) {
