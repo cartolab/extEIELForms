@@ -22,9 +22,7 @@ package es.udc.cartolab.gvsig.eielforms;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
@@ -33,8 +31,7 @@ import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.navtable.NavTable;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
-public class FormTOCMenuEntry extends AbstractTocContextMenuAction{
-
+public class FormTOCMenuEntry extends AbstractTocContextMenuAction {
 
 	public String getText() {
 		// TODO Auto-generated method stub
@@ -44,11 +41,10 @@ public class FormTOCMenuEntry extends AbstractTocContextMenuAction{
 	@Override
 	public void execute(ITocItem item, FLayer[] selectedItems) {
 
-		View v = (View) PluginServices.getMDIManager().getActiveWindow();
-		FLyrVect l = (FLyrVect) v.getMapControl().getMapContext().getLayers().getActives()[0];
+		FLyrVect l = (FLyrVect) selectedItems[0];
 		AbstractNavTable nt = new EIELNavTable(l);
 		if (nt.init()) {
-			((EIELNavTable)nt).open();
+			((EIELNavTable) nt).open();
 		} else {
 			nt = new NavTable(l);
 			if (nt.init()) {
@@ -58,16 +54,20 @@ public class FormTOCMenuEntry extends AbstractTocContextMenuAction{
 
 	}
 
-	public boolean isEnabled() {
-		View v = (View) PluginServices.getMDIManager().getActiveWindow();
-		FLayers layers = v.getMapControl().getMapContext().getLayers();
-		if (DBSession.getCurrentSession() == null){
-			return false;
-		}
-		else if (layers.getActives().length > 0) {
-			return layers.getActives()[0] instanceof FLyrVect && !layers.getActives()[0].isEditing();
+	public boolean isEnabled(ITocItem item, FLayer[] selectedItems) {
+		if (selectedItems.length == 1) {
+			return selectedItems[0].isAvailable()
+					&& selectedItems[0] instanceof FLyrVect;
 		} else {
 			return false;
+		}
+	}
+
+	public boolean isVisible(ITocItem item, FLayer[] selectedItems) {
+		if (DBSession.getCurrentSession() == null) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 
