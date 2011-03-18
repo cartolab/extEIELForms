@@ -105,8 +105,12 @@ public class SingleFieldGroup extends FieldGroup
       this.panel.add(fieldInterface.getComponent());
     } else {
       this.gridbagconst.gridx = 0;
+      this.gridbagconst.weightx = 0;
+      this.gridbagconst.fill = GridBagConstraints.NONE;
       this.panel.add(fieldInterface.getLabel(), this.gridbagconst);
       this.gridbagconst.gridx = 1;
+      this.gridbagconst.weightx = 1.0;
+      this.gridbagconst.fill = GridBagConstraints.HORIZONTAL;
       this.panel.add(fieldInterface.getComponent(), this.gridbagconst);
       updateLayout();
     }
@@ -123,6 +127,7 @@ public class SingleFieldGroup extends FieldGroup
 
       this.gridbagconst.gridy = 0;
       this.gridbagconst.gridx = 0;
+      this.gridbagconst.fill = GridBagConstraints.HORIZONTAL;
     }
   }
 

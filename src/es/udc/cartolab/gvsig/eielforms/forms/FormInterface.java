@@ -174,6 +174,7 @@ public class FormInterface extends JPanel
 			this.gridbagconst.gridy = 1;
 			this.gridbagconst.weightx = 0.5D;
 			this.gridbagconst.weighty = 0.5D;
+			this.gridbagconst.fill = GridBagConstraints.BOTH;
 		}
 	}
 

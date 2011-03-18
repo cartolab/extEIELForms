@@ -58,6 +58,8 @@ public class SinglePaneGroupInterface extends ComplexFieldGroup
 			this.gridbagconst = new GridBagConstraints();
 
 			this.gridbagconst.gridy = 0;
+			this.gridbagconst.fill = GridBagConstraints.HORIZONTAL;
+			this.gridbagconst.weightx = 1.0;
 		}
 	}
 
