@@ -579,10 +579,19 @@ public class FormController extends Subject
 		for (int i=0; i<fields.size(); i++) {
 			FieldController field = (FieldController) fields.get(i);
 			String defVal = field.getDefaultValue();
+			if (field.getIsConstant()) {
+		    	  Constants c = Constants.getCurrentConstants();
+		    	  String value = c.getValue(field.getName());
+		    	  if (value != null) {
+		    		  defVal = value;
+		    	  }
+			}
 			field.setValue(defVal);
 		}
+		
 
 		this.formInterface.loadData();
+		updateDependencyFields(getAllFieldValues());
 
 	}
 

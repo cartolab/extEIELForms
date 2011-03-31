@@ -417,7 +417,10 @@ public class FormsDAO {
 			condition = "WHERE ";
 			while (claveIterator.hasNext()) {
 				String oneKey = (String)claveIterator.next();
-				condition = condition + oneKey + " = '" + key.get(oneKey) + "' and ";
+				String oneValue = key.get(oneKey).toString();
+				if (!oneKey.equals(oneValue)) {
+					condition = condition + oneKey + " = '" + key.get(oneKey) + "' and ";
+				}
 			}
 			condition = condition.substring(0, condition.length() - 5);
 		}
