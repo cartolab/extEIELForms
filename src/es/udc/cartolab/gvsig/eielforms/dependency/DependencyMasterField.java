@@ -39,12 +39,14 @@ public class DependencyMasterField extends ComboFieldInterface
 	private String visibleFieldName;
 	private String foreignField;
 	private Collection secondaryFields;
+	private ComboFieldChangeAction changeAction;
 
 	public DependencyMasterField(FieldController fieldController, Dependency dependency, LinkedHashMap dependencyValues, String visibleFieldName, Collection secondaryFields, String foreignField)
 	{
 		super(fieldController);
 		this.dependencyValues = dependencyValues;
-		this.comboField.addActionListener(new ComboFieldChangeAction());
+		this.changeAction = new ComboFieldChangeAction();
+		this.comboField.addActionListener(this.changeAction);
 		this.dependency = dependency;
 		this.visibleFieldName = visibleFieldName;
 
@@ -104,13 +106,19 @@ public class DependencyMasterField extends ComboFieldInterface
 		ArrayList domainValues = newDomain.getValues();
 
 		this.dependencyValues = dependencyValues;
+
+		//fill combobox
+		this.comboField.removeActionListener(changeAction);
 		this.comboField.removeAllItems();
 
 		Iterator itemIterator = dependencyValues.keySet().iterator();
+		
 
 		while (itemIterator.hasNext()) {
 			this.comboField.addItem(dependencyDomain.get(itemIterator.next()));
 		}
+		
+		this.comboField.addActionListener(changeAction);
 	}
 
 	private class ComboFieldChangeAction
@@ -122,7 +130,8 @@ public class DependencyMasterField extends ComboFieldInterface
 					DependencyMasterField.this.comboField.getSelectedIndex() < 0) {
 				return;
 			}
-			String selectedValue = DependencyMasterField.this.getIndexKey(DependencyMasterField.this.comboField.getSelectedIndex());
+			int idx = comboField.getSelectedIndex();
+			String selectedValue = DependencyMasterField.this.getIndexKey(idx);
 			HashMap values = (HashMap)DependencyMasterField.this.dependencyValues.get(selectedValue);
 			try {
 				DependencyMasterField.this.dependency.updateSlaveFields(values);

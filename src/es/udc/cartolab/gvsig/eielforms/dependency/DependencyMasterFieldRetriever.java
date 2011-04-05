@@ -104,19 +104,34 @@ public void updateMasterFields(Dependency dependency, HashMap valoresCampos)
 
           String masterFieldKey = "";
           for (int j = 0; j < masterFieldNames.size(); ++j) {
-            if (((String)masterFieldNames.get(j)).compareTo(masterFieldMainFieldName) == 0)
-              masterFieldKey = masterFieldKey + dependencyRowValues.get(dependency.getDependencyMasterField().getForeignField()) + " ";
-            else {
-              masterFieldKey = masterFieldKey + dependencyRowValues.get(masterFieldNames.get(j)) + " ";
-            }
+//            if (((String)masterFieldNames.get(j)).compareTo(masterFieldMainFieldName) == 0)
+//              masterFieldKey = masterFieldKey + dependencyRowValues.get(dependency.getDependencyMasterField().getForeignField()) + " ";
+//            else {
+//              masterFieldKey = masterFieldKey + dependencyRowValues.get(masterFieldNames.get(j)) + " ";
+//            }
+        	  masterFieldKey = masterFieldKey + dependencyRowValues.get(visibleField) + " ";
           }
           masterFieldKey = masterFieldKey.substring(0, masterFieldKey.length() - 1);
 
           dependencyDomainValues.put(masterFieldKey, dependencyRowValues.get(dependency.getDependencyMasterField().getVisibleFieldName()));
           dependencyValuesHashMap.put(masterFieldKey, dependencyRowValues);
         }
-
+        
         dependency.getDependencyMasterField().setDependencyValues(dependencyValuesHashMap, dependencyDomainValues);
+
+        //set combobox value
+        String[] visibleFields = visibleField.split(" \\|\\| ");
+        String depValue = "";
+        for (String f : visibleFields) {
+        	String key = dependency.getName() + ".." + f;
+        	if (valoresCampos.get(key)!=null) {
+        		depValue = depValue + valoresCampos.get(key).toString() + " - ";
+        	}
+        }
+        if (!depValue.equals("")) {
+        	depValue = depValue.substring(0, depValue.length() - 3);
+        }
+        dependency.getDependencyMasterField().setValue(depValue);
       }
     } catch (Exception e) {
       e.printStackTrace();
