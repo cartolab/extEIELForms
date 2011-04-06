@@ -24,7 +24,9 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.gui.preferencespage.SymbologyPage;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
+import com.iver.utiles.XMLEntity;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
@@ -40,6 +42,11 @@ public class FormExtension extends Extension {
 
 		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
 		extensionPoints.add("View_TocActions", "EIELForm", new FormTOCMenuEntry());
+		
+		// We set symbology's random color on
+		PluginServices ps = PluginServices.getPluginServices(new SymbologyPage());
+		XMLEntity xml = ps.getPersistentXML();
+		xml.putProperty("AleatoryFillColor",true);
 
 	}
 
