@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import es.udc.cartolab.gvsig.eielforms.dependency.DependencyMasterField;
 import es.udc.cartolab.gvsig.eielforms.field.FieldController;
 import es.udc.cartolab.gvsig.eielforms.field.FieldInterface;
 
@@ -169,8 +170,12 @@ public class SingleFieldGroup extends FieldGroup
 
   public void loadData()
   {
-    for (int i = 0; i < this.fields.size(); ++i)
-      ((FieldInterface)this.fields.get(i)).loadValue();
+    for (int i = 0; i < this.fields.size(); ++i) {
+    	FieldInterface field = (FieldInterface)this.fields.get(i);
+    	if (!(field instanceof DependencyMasterField)) {
+    		field.loadValue();
+    	}
+    }
   }
 
   public void saveInMemory()
