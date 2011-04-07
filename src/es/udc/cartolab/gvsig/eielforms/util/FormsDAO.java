@@ -417,8 +417,8 @@ public class FormsDAO {
 			condition = "WHERE ";
 			while (claveIterator.hasNext()) {
 				String oneKey = (String)claveIterator.next();
-				String oneValue = key.get(oneKey).toString();
-				if (!oneKey.equals(oneValue)) {
+				String oneValue = key.get(oneKey).toString().trim();
+				if (!oneKey.equals(oneValue) && !oneValue.equals("")) {
 					condition = condition + oneKey + " = '" + key.get(oneKey) + "' and ";
 				}
 			}
