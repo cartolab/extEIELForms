@@ -589,7 +589,6 @@ public class FormController extends Subject
 			field.setValue(defVal);
 		}
 		
-
 		this.formInterface.loadData();
 		updateDependencyFields(getAllFieldValues());
 
