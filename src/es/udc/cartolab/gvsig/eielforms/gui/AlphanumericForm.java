@@ -232,9 +232,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 			add(getUpperPanel());
 			add(getCenterPanel());
 			add(getButtonsPanel());
-			if (setKey()) {
-				fillValues();
-			}
+			form.fillFieldsDefault();
 
 			PluginServices.getMDIManager().addCentredWindow(this);
 
@@ -347,8 +345,13 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 	}
 
 	public void fillValues() {
-
-		form.fillForm(key);
+		ArrayList fields = ((Dependency)form.getDependencies().get(0)).getFieldsInterface();
+		for (int i=0; i<fields.size(); i++) {
+			FieldInterface field = (FieldInterface) fields.get(i);
+			if (field instanceof DependencyMasterField) {
+				((DependencyMasterField) field).loadValue();
+			}
+		}
 	}
 
 	public void close() {

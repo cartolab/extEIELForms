@@ -100,18 +100,7 @@ public class FieldGenerator
 				while (defaultValueTypeNode != null) {
 					if (defaultValueTypeNode.getNodeName().compareTo("SingleValue") == 0) {
 						bool_constant_value = false;
-						Constants cts = Constants.getCurrentConstants();
-						boolean constant = false;
-						if (cts!=null) {
-							String value = cts.getValue(name);
-							if (value!=null) {
-								defaultValue = value;
-								constant = true;
-							}
-						}
-						if (!constant) {
-							defaultValue = defaultValueTypeNode.getFirstChild().getNodeValue();
-						}
+						defaultValue = defaultValueTypeNode.getFirstChild().getNodeValue();
 					}
 					else if (defaultValueTypeNode.getNodeName().compareTo("ConstantValue") == 0) {
 						bool_constant_value = true;
