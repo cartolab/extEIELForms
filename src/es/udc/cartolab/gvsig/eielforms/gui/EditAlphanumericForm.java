@@ -46,7 +46,8 @@ public class EditAlphanumericForm extends AlphanumericForm {
 		this.pos = pos;
 	}
 
-	public EditAlphanumericForm(AlphanumericForm source, String formName, int pos) {
+	public EditAlphanumericForm(AlphanumericForm source, String formName,
+			int pos) {
 		this(formName, pos);
 		this.source = source;
 	}
@@ -71,7 +72,7 @@ public class EditAlphanumericForm extends AlphanumericForm {
 
 	private boolean save() {
 		if (form.validate()) {
-			if (pos<0) {
+			if (pos < 0) {
 				form.insert();
 			} else {
 				form.update(key);
@@ -103,8 +104,9 @@ public class EditAlphanumericForm extends AlphanumericForm {
 	protected boolean setKey() throws FormException {
 		ArrayList keyFields = form.getKey();
 		key = new HashMap();
-		if (keyFields.size()!=1) {
-			throw new FormException("Clave primaria mal formada en el formulario");
+		if (keyFields.size() != 1) {
+			throw new FormException(
+					"Clave primaria mal formada en el formulario");
 		}
 		FieldController fc = (FieldController) keyFields.get(0);
 		String position = Integer.toString(pos);
@@ -117,14 +119,14 @@ public class EditAlphanumericForm extends AlphanumericForm {
 	}
 
 	protected void addPKChangeListener() {
-		//here we don't want to listen pk changes, it won't change.
+		// here we don't want to listen pk changes, it won't change.
 	}
 
 	public void close() {
 		super.close();
-		if (source!=null) {
+		if (source != null) {
 			boolean fill = true;
-			if (pos==-1) {
+			if (pos == -1) {
 				try {
 					fill = source.setKey();
 				} catch (FormException e) {
@@ -135,6 +137,20 @@ public class EditAlphanumericForm extends AlphanumericForm {
 				source.fillValues();
 			}
 		}
+	}
+
+	public void open() {
+
+		super.open();
+		try {
+			if (setKey()) {
+				form.fillForm(key);
+			}
+		} catch (FormException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }

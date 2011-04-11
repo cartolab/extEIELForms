@@ -152,7 +152,9 @@ public void updateMasterFields(Dependency dependency, HashMap valoresCampos)
         		depValue = depValue.substring(0, depValue.length() - 3);
         	}
         	dependency.getDependencyMasterField().setValue(depValue);
-        } 
+        } else {
+        	dependency.getDependencyMasterField().setValue("");
+        }
 
       }
     } catch (Exception e) {
