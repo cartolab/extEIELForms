@@ -269,13 +269,13 @@ public class ObtenerDominioDAO
 			}
 		}
 		queryString = queryString + ")";
+		System.out.println("Insercion subformulario: " + queryString);
 		try
 		{
 			connection = dbs.getJavaConnection();
-
 			preparedStatement = connection.prepareStatement(queryString);
-
 			preparedStatement.executeUpdate();
+			connection.commit();
 		}
 		catch (Exception e)
 		{
