@@ -61,7 +61,7 @@ public class AlphanumericFormExtension extends Extension {
 	public boolean isVisible() {
 		DBSession dbs = DBSession.getCurrentSession();
 		Constants cts = Constants.getCurrentConstants();
-		return dbs!=null && cts.getNucCod()!=null;
+		return dbs!=null && cts.getNucCod()!=null && cts.constantsSelected();
 	}
 
 }

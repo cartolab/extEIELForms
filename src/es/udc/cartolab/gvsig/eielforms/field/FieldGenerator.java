@@ -106,7 +106,7 @@ public class FieldGenerator
 						bool_constant_value = true;
 						Constants cts = Constants.getCurrentConstants();
 						boolean constant = false;
-						if (cts!=null) {
+						if (cts!=null && cts.constantsSelected()) {
 							String value = cts.getValue(name);
 							if (value!=null) {
 								defaultValue = value;

@@ -581,9 +581,11 @@ public class FormController extends Subject
 			String defVal = field.getDefaultValue();
 			if (field.getIsConstant()) {
 		    	  Constants c = Constants.getCurrentConstants();
-		    	  String value = c.getValue(field.getName());
-		    	  if (value != null) {
-		    		  defVal = value;
+		    	  if (c.constantsSelected()) {
+		    		  String value = c.getValue(field.getName());
+		    		  if (value != null) {
+		    			  defVal = value;
+		    		  }
 		    	  }
 			}
 			field.setValue(defVal);
