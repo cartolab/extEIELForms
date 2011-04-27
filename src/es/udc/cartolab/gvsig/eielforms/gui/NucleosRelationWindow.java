@@ -33,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
@@ -112,6 +113,8 @@ public class NucleosRelationWindow extends AlphanumericForm {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		PluginServices.getMDIManager().restoreCursor();
 	}
 
 	private void enableAddButton() throws FormException {

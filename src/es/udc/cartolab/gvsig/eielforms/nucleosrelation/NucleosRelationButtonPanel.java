@@ -32,6 +32,8 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import com.iver.andami.PluginServices;
+
 import es.udc.cartolab.gvsig.eielforms.formgenerator.FormException;
 import es.udc.cartolab.gvsig.eielforms.forms.FormInterface;
 import es.udc.cartolab.gvsig.eielforms.gui.NucleosRelationWindow;
@@ -61,6 +63,8 @@ public class NucleosRelationButtonPanel extends JPanel {
 				for (String fieldName : tableFieldNames) {
 					relationValues.put(fields.get(fieldName), tableValues.get(fieldName));
 				}
+				
+				PluginServices.getMDIManager().setWaitCursor();
 
 				NucleosRelationWindow w;
 				try {
