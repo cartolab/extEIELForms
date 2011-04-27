@@ -41,6 +41,7 @@ import es.udc.cartolab.gvsig.eielforms.gui.NucleosRelationWindow;
 public class NucleosRelationButtonPanel extends JPanel {
 
 	FormInterface formInterface;
+	private JButton nucButton;
 
 
 	public NucleosRelationButtonPanel(FormInterface formInterface) {
@@ -49,8 +50,8 @@ public class NucleosRelationButtonPanel extends JPanel {
 	}
 
 	private void addButton() {
-		JButton button = new JButton("Núcleos");
-		button.addActionListener(new ActionListener() {
+		nucButton = new JButton("Núcleos");
+		nucButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 
@@ -93,7 +94,12 @@ public class NucleosRelationButtonPanel extends JPanel {
 
 		});
 	    setLayout(new FlowLayout());
-	    add(button, 0);
+	    nucButton.setEnabled(false);
+	    add(nucButton, 0);
+	}
+	
+	public void setEnabled(boolean enabled) {
+		nucButton.setEnabled(enabled);
 	}
 
 }

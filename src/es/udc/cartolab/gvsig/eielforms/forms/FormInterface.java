@@ -81,6 +81,7 @@ public class FormInterface extends JPanel
 		this.layout = layout.toUpperCase();
 		this.visible = false;
 		this.pollButton = new JButton("Encuestar");
+		this.pollButton.setEnabled(false);
 		setTitle(title);
 		initFormInterface();
 		configureLayout();
@@ -441,5 +442,11 @@ public class FormInterface extends JPanel
 
 	public NucleosRelation getNucleosRelation() {
 		return nucleosRelation;
+	}
+	
+	public void enableNucleosRelationButton(boolean enabled) {
+		if (nucleosRelationPanel!=null) {
+			nucleosRelationPanel.setEnabled(enabled);
+		}
 	}
 }

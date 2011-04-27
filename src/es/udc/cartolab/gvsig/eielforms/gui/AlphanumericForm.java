@@ -128,16 +128,22 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 							new DocumentListener() {
 
 								public void changedUpdate(DocumentEvent arg0) {
-									key.put(keyName, tf.getText());
-
+									change();
 								}
 
 								public void insertUpdate(DocumentEvent arg0) {
-									key.put(keyName, tf.getText());
+									change();
 								}
 
 								public void removeUpdate(DocumentEvent arg0) {
+									change();
+								}
+								
+								private void change() {
 									key.put(keyName, tf.getText());
+									form.getInterface().enablePollButton(true);
+									form.getInterface().enableNucleosRelationButton(true);
+									editButton.setEnabled(true);
 								}
 
 							});
@@ -174,6 +180,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		if (southPanel == null) {
 			southPanel = new JPanel();
 			editButton = new JButton("Editar");
+			editButton.setEnabled(false);
 			editButton.addActionListener(this);
 			southPanel.add(editButton);
 			newButton = new JButton("Nuevo registro");
