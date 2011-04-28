@@ -46,7 +46,7 @@ public class FormDBReader extends FormReader {
 		Connection connection = null;
 
 		String queryString = "select definicion from \"" + this.aplicationSchemaName + "\".formularios ";
-		queryString = queryString + "where capa = ?";
+		queryString = queryString + "where UPPER(capa) = ?";
 		String formXMLDefinition = null;
 		DBSession dbs = DBSession.getCurrentSession();
 		if (dbs != null) {
@@ -58,7 +58,7 @@ public class FormDBReader extends FormReader {
 				preparedStatement = connection.prepareStatement(queryString);
 
 				int i = 1;
-				preparedStatement.setString(i++, formName);
+				preparedStatement.setString(i++, formName.toUpperCase());
 
 				resultSet = preparedStatement.executeQuery();
 				if (resultSet.next()) {
