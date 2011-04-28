@@ -358,9 +358,9 @@ public class FormController extends Subject
 					masterFieldNames.add(oneDependencyMasterField.getField().getName());
 
 					for (int j = 0; j < masterFieldNames.size(); ++j) {
-						masterFieldKey = masterFieldKey + (String)fields.get(new StringBuilder().append(oneDependency.getName()).append("..").append(masterFieldNames.get(j)).toString()) + " ";
+						masterFieldKey = masterFieldKey + (String)fields.get(new StringBuilder().append(oneDependency.getName()).append("..").append(masterFieldNames.get(j)).toString()) + " - ";
 					}
-					masterFieldKey = masterFieldKey.substring(0, masterFieldKey.length() - 1);
+					masterFieldKey = masterFieldKey.substring(0, masterFieldKey.length() - 3);
 
 					FieldController oneField = oneDependencyMasterField.getField();
 					oneField.setValue(masterFieldKey);
@@ -565,8 +565,8 @@ public class FormController extends Subject
 
 			map.putAll(getDependenciesFields(map));
 
-			updateDependencyFields(map);
 			executeQuery(map);
+			updateDependencyFields(map);
 		} catch (FormException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
