@@ -593,6 +593,15 @@ public class FormController extends Subject
 		
 		this.formInterface.loadData();
 		updateDependencyFields(getAllFieldValues());
+		
+		//set initial values to null in orderlisteners
+		Set<FieldController> keyset = orderListeners.keySet();
+		Iterator<FieldController> it = keyset.iterator();
+		while (it.hasNext()) {
+			FieldController fc = it.next();
+			OrderDependencyListener lis = orderListeners.get(fc);
+			lis.setInitialValue(null);
+		}
 
 	}
 
