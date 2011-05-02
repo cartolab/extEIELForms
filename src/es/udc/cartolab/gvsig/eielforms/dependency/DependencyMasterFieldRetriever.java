@@ -102,9 +102,15 @@ public void updateMasterFields(Dependency dependency, HashMap valoresCampos)
         
         String[] visibleFields = visibleField.split(" \\|\\| ");
         for (String f : visibleFields) {
-        	String key = dependency.getName() + ".." + f.trim();
+        	String fieldName = f.trim();
+        	String key = dependency.getName() + ".." + fieldName;
         	if (valoresCampos.containsKey(key)) {
         		depFields.add(key);
+        	} else {
+        		if (valoresCampos.containsKey(fieldName) && !valoresCampos.get(fieldName).equals("")) {
+        			valoresCampos.put(key, valoresCampos.get(fieldName));
+        			depFields.add(key);
+        		}
         	}
         }
 
