@@ -37,7 +37,7 @@ public class DependencyMasterFieldRetriever
   }
 
   @SuppressWarnings("unchecked")
-public void updateMasterFields(Dependency dependency, HashMap valoresCampos)
+public void updateMasterFields(Dependency dependency, HashMap valoresCampos, boolean alpha)
   {
     try
     {
@@ -107,7 +107,7 @@ public void updateMasterFields(Dependency dependency, HashMap valoresCampos)
         	if (valoresCampos.containsKey(key)) {
         		depFields.add(key);
         	} else {
-        		if (valoresCampos.containsKey(fieldName) && !valoresCampos.get(fieldName).equals("")) {
+        		if (!alpha && valoresCampos.containsKey(fieldName)) {
         			valoresCampos.put(key, valoresCampos.get(fieldName));
         			depFields.add(key);
         		}

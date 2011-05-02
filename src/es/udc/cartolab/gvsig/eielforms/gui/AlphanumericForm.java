@@ -167,6 +167,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 			if (form == null) {
 				FormGenerator fg = new FormGenerator();
 				form = fg.createFormController(formName);
+				form.setAlpha(true);
 				addPKChangeListener();
 			}
 			centerPanel = new JScrollPane(form.getInterface());

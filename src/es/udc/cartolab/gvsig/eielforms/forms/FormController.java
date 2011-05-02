@@ -89,6 +89,7 @@ public class FormController extends Subject
 	DecimalFormat df;
 	private double length;
 	double area;
+	boolean alpha = false;
 
 	public FormController(String layer, String dataBase, String table, String layout, String name, String title)
 	{
@@ -157,6 +158,10 @@ public class FormController extends Subject
 
 	public void addNucleosRelationButton(NucleosRelation relation) {
 		this.formInterface.addNucleosRelationButton(relation);
+	}
+	
+	public void setAlpha(boolean alpha) {
+		this.alpha = alpha;
 	}
 
 	//  public void setModal(boolean modal)
@@ -657,7 +662,7 @@ public class FormController extends Subject
 
 		for (int i = 0; i < dependencies.size(); ++i) {
 			if (((Dependency)dependencies.get(i)).getDependencyMasterField() != null) {
-				this.dependencyMasterFieldRetriever.updateMasterFields((Dependency)dependencies.get(i), fields);
+				this.dependencyMasterFieldRetriever.updateMasterFields((Dependency)dependencies.get(i), fields, alpha);
 			} else {
 				this.dependencyMasterFieldRetriever.updateFields((Dependency)dependencies.get(i), fields);
 			}
