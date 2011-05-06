@@ -46,10 +46,11 @@
 			<menu text="EIEL/Formularios/Infraestructuras transportes/Calles"
 				action-command="Calles"
 				position="1002"/>
-
+<!--
 			<menu text="EIEL/Formularios/Servicios urbanos/Alumbrado"
 				action-command="Alumbrado"
 				position="1101"/>
+-->
 			<menu text="EIEL/Formularios/Servicios urbanos/Municipio recogida residuos"
 				action-command="Municipio Recogida Residuos"
 				position="1102"/>
