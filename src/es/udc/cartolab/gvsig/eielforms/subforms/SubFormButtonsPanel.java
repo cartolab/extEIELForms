@@ -62,7 +62,7 @@ public class SubFormButtonsPanel extends JPanel
 		{
 			try
 			{
-				SubFormButtonsPanel.this.subformInterface.mostrarDatos(false);
+				SubFormButtonsPanel.this.subformInterface.mostrarDatos(true);
 			}
 			catch (Exception e) {
 				System.out.println("Ocurrio algún error inesperado...");
