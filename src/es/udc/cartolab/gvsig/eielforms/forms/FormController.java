@@ -567,15 +567,19 @@ public class FormController extends Subject
 		HashMap map;
 		try {
 			map = fdao.getKeyValues(keys, getDataBase(), getTable(), fieldNames);
-
-			map.putAll(getDependenciesFields(map));
-
-			executeQuery(map);
-			updateDependencyFields(map);
+			fillFormWithValues(map);
 		} catch (FormException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void fillFormWithValues(HashMap values) {
+
+	    values.putAll(getDependenciesFields(values));
+	    executeQuery(values);
+	    updateDependencyFields(values);
+
 	}
 
 	public void fillFieldsDefault() {

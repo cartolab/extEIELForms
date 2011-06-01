@@ -25,6 +25,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JPanel;
@@ -67,6 +68,7 @@ public class EIELNavTable extends AbstractNavTable {
 	private JPanel CenterPanel;
 	private JPanel SouthPanel;
 	private JPanel NorthPanel;
+	private List<String> keyNames;
 
 	public EIELNavTable(FLyrVect layer) {
 		super(layer);
@@ -167,34 +169,46 @@ public class EIELNavTable extends AbstractNavTable {
 			form.setLengthValue(maxLength);
 		}
 	}
-
+	
+	private List<String> getKeyNames() {
+	    if (keyNames == null) {
+		ArrayList aux = form.getKey();
+		keyNames = new ArrayList<String>();
+		for (int i=0; i<aux.size();i++) {
+		    FieldController fc = (FieldController) aux.get(i);
+		    keyNames.add(fc.getName());
+		}
+	    }
+	    return keyNames;
+	}
+	
 	@Override
 	public void fillValues() {
-		ArrayList keyFields = form.getKey();
+	    List<String> keyNames = getKeyNames();
 		key = new HashMap();
 		boolean foundAll = true;
 		boolean noNull = true;
+		HashMap values = new HashMap(); 
 		try {
-			for (int i = 0; i < keyFields.size(); i++) {
-				FieldController fc = (FieldController) keyFields.get(i);
-				int idx;
-				idx = recordset.getFieldIndexByName(fc.getName());
-				if (idx > -1) {
-					Value val = recordset.getFieldValue(currentPosition, idx);
-					if (val instanceof NullValue) {
-						noNull = false;
-						break;
-					} else {
-						String strVal = val
-								.getStringValue(ValueWriter.internalValueWriter);
-						strVal = strVal.trim().replaceAll("'", "");
-						key.put(fc.getName(), strVal);
-					}
-				} else {
-					foundAll = false;
-					break;
-				}
+		    int found = 0;
+		    for (int i=0; i<recordset.getFieldCount(); i++) {
+			String fieldName = recordset.getFieldName(i);
+			Value v = recordset.getFieldValue(currentPosition, i);
+			String value;
+			if (v instanceof NullValue) {
+			    value = null;
+			} else {
+			value = v.getStringValue(ValueWriter.internalValueWriter).trim().replaceAll("'", "");
 			}
+			values.put(fieldName, value);
+			
+			//primary key
+			if (keyNames.contains(fieldName)) {
+			    key.put(fieldName, value);
+			    found++;
+			}
+		    }
+		    foundAll = found==keyNames.size();
 
 			fillGeomFields();
 
@@ -204,7 +218,7 @@ public class EIELNavTable extends AbstractNavTable {
 			e.printStackTrace();
 		}
 		if (foundAll && noNull) {
-			form.fillForm(key);
+		    form.fillFormWithValues(values);
 		} else {
 			if (!noNull) {
 				form.fillFieldsDefault();
