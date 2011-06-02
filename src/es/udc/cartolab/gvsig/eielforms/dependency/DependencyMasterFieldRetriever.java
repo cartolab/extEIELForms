@@ -45,122 +45,123 @@ public void updateMasterFields(Dependency dependency, HashMap valoresCampos, boo
 
       if (dependency.getDependencyMasterField() != null)
       {
-        ArrayList masterFieldNames = new ArrayList(dependency.getDependencyMasterField().getSecondaryFields());
+	ArrayList<String> masterFieldNames = new ArrayList(dependency.getDependencyMasterField().getSecondaryFields());
 
-        String masterFieldMainFieldName = dependency.getDependencyMasterField().getField().getName();
+	String masterFieldMainFieldName = dependency.getDependencyMasterField().getField().getName();
 
-        masterFieldNames.add(masterFieldMainFieldName);
-        String visibleField = dependency.getDependencyMasterField().getVisibleFieldName();
+	masterFieldNames.add(masterFieldMainFieldName);
+	String visibleField = dependency.getDependencyMasterField().getVisibleFieldName();
 
-        ArrayList dependencyForeignKey = dependency.getForeignKey();
+	ArrayList dependencyForeignKey = dependency.getForeignKey();
 
-        ArrayList dependencyFields = dependency.getFields();
-        ArrayList dependencyFieldsNames = new ArrayList();
+	ArrayList dependencyFields = dependency.getFields();
+	ArrayList dependencyFieldsNames = new ArrayList();
 
-        for (int i = 0; i < dependencyFields.size(); ++i) {
-          FieldController oneDependencyField = (FieldController)dependencyFields.get(i);
+	for (int i = 0; i < dependencyFields.size(); ++i) {
+	  FieldController oneDependencyField = (FieldController)dependencyFields.get(i);
 
-          if (oneDependencyField.getName().compareTo(masterFieldMainFieldName) == 0) {
-            if (!(dependencyFieldsNames.contains(dependency.getDependencyMasterField().getForeignField()))) {
-              dependencyFieldsNames.add(dependency.getDependencyMasterField().getForeignField());
-            }
-          }
-          else if (!(dependencyFieldsNames.contains(oneDependencyField.getName()))) {
-            dependencyFieldsNames.add(oneDependencyField.getName());
-          }
+	  if (oneDependencyField.getName().compareTo(masterFieldMainFieldName) == 0) {
+	    if (!(dependencyFieldsNames.contains(dependency.getDependencyMasterField().getForeignField()))) {
+	      dependencyFieldsNames.add(dependency.getDependencyMasterField().getForeignField());
+	    }
+	  }
+	  else if (!(dependencyFieldsNames.contains(oneDependencyField.getName()))) {
+	    dependencyFieldsNames.add(oneDependencyField.getName());
+	  }
 
-          if ((!(dependencyForeignKey.contains(oneDependencyField.getName()))) || ((masterFieldNames.contains(oneDependencyField.getName())) && (oneDependencyField.getIsConstant() != true)) ||
-            (oneDependencyField.getName().compareTo(masterFieldMainFieldName) == 0))
-            continue;
-//          if ((valoresCampos.get(oneDependencyField.getName()) == null) && (oneDependencyField.getIsConstant() == true))
-//            applicationDAOCondition.put(oneDependencyField.getName(), "");
-//          else {
-            applicationDAOCondition.put(oneDependencyField.getName(), valoresCampos.get(oneDependencyField.getName()));
-//          }
+	  if (!(dependencyForeignKey.contains(oneDependencyField.getName())))
+	    continue;
+	  //          if ((valoresCampos.get(oneDependencyField.getName()) == null) && (oneDependencyField.getIsConstant() == true))
+	  //            applicationDAOCondition.put(oneDependencyField.getName(), "");
+	  //          else {
+	  applicationDAOCondition.put(oneDependencyField.getName(), valoresCampos.get(oneDependencyField.getName()));
+	  //          }
 
-        }
+	}
 
-        for (int i = 0; i < masterFieldNames.size(); ++i) {
-          if (((String)masterFieldNames.get(i)).compareTo(masterFieldMainFieldName) == 0) {
-            if (!(dependencyFieldsNames.contains(dependency.getDependencyMasterField().getForeignField()))) {
-              dependencyFieldsNames.add(dependency.getDependencyMasterField().getForeignField());
-            }
-          }
-          else if (!(dependencyFieldsNames.contains(masterFieldNames.get(i)))) {
-            dependencyFieldsNames.add(masterFieldNames.get(i));
-          }
-        }
+	for (int i = 0; i < masterFieldNames.size(); ++i) {
+	  if (((String)masterFieldNames.get(i)).compareTo(masterFieldMainFieldName) == 0) {
+	    if (!(dependencyFieldsNames.contains(dependency.getDependencyMasterField().getForeignField()))) {
+	      dependencyFieldsNames.add(dependency.getDependencyMasterField().getForeignField());
+	    }
+	  }
+	  else if (!(dependencyFieldsNames.contains(masterFieldNames.get(i)))) {
+	    dependencyFieldsNames.add(masterFieldNames.get(i));
+	  }
+	}
 
-        dependencyFieldsNames.add(visibleField);
+	dependencyFieldsNames.add(visibleField);
 
-        ArrayList allDependencyPosibleValues = this.formsDAO.getFieldsCollection(applicationDAOCondition, dependency.getDataBase(), dependency.getTable(), dependencyFieldsNames);
+	ArrayList allDependencyPosibleValues = this.formsDAO.getFieldsCollection(applicationDAOCondition, dependency.getDataBase(), dependency.getTable(), dependencyFieldsNames);
 
-        HashMap dependencyRowValues = new HashMap();
-        LinkedHashMap dependencyDomainValues = new LinkedHashMap();
-        LinkedHashMap dependencyValuesHashMap = new LinkedHashMap();
-        ArrayList<String> depFields = new ArrayList<String>();
-        
-        String[] visibleFields = visibleField.split(" \\|\\| ");
-        for (String f : visibleFields) {
-        	String fieldName = f.trim();
-        	String key = dependency.getName() + ".." + fieldName;
-        	if (valoresCampos.containsKey(key)) {
-        		depFields.add(key);
-        	} else {
-        		if (!alpha && valoresCampos.containsKey(fieldName)) {
-        			valoresCampos.put(key, valoresCampos.get(fieldName));
-        			depFields.add(key);
-        		}
-        	}
-        }
+	HashMap dependencyRowValues = new HashMap();
+	LinkedHashMap dependencyDomainValues = new LinkedHashMap();
+	LinkedHashMap dependencyValuesHashMap = new LinkedHashMap();
+	ArrayList<String> depFields = new ArrayList<String>();
 
-        for (int i = 0; i < allDependencyPosibleValues.size(); ++i) {
-          dependencyRowValues = (HashMap)allDependencyPosibleValues.get(i);
+	//String[] visibleFields = visibleField.split(" \\|\\| ");
+	for (String f : masterFieldNames) {
+	  String key = dependency.getName() + ".." + f.trim();
+	  if (valoresCampos.containsKey(key)) {
+	    depFields.add(key);
+	  } else if (valoresCampos.containsKey(f.trim())) {
+	    depFields.add(f.trim());
+	    if (!alpha) {
+	      valoresCampos.put(key, valoresCampos.get(f.trim()));
+	    }
+	  }
+	}
 
-          String masterFieldKey = "";
-          if (depFields.size()>0) {
-        	  for (String f : depFields) {
-        		  String key = f.substring(f.indexOf("..") + 2);
-        		  if (dependencyRowValues.containsKey(key)) {
-        			  masterFieldKey = masterFieldKey + dependencyRowValues.get(key) + " - "; 
-        		  }
-        	  }
-        	  if (!masterFieldKey.equals("")) {
-        		  masterFieldKey = masterFieldKey.substring(0, masterFieldKey.length() - 3);
-        	  }
-          } else {
-        	  for (int j = 0; j < masterFieldNames.size(); ++j) {
-//            if (((String)masterFieldNames.get(j)).compareTo(masterFieldMainFieldName) == 0)
-//              masterFieldKey = masterFieldKey + dependencyRowValues.get(dependency.getDependencyMasterField().getForeignField()) + " ";
-//            else {
-//              masterFieldKey = masterFieldKey + dependencyRowValues.get(masterFieldNames.get(j)) + " ";
-//            }
-        		  masterFieldKey = masterFieldKey + dependencyRowValues.get(visibleField) + " - ";
-        	  }
-        	  masterFieldKey = masterFieldKey.substring(0, masterFieldKey.length() - 1);
-          }
+	for (int i = 0; i < allDependencyPosibleValues.size(); ++i) {
+	  dependencyRowValues = (HashMap)allDependencyPosibleValues.get(i);
 
-          dependencyDomainValues.put(masterFieldKey, dependencyRowValues.get(dependency.getDependencyMasterField().getVisibleFieldName()));
-          dependencyValuesHashMap.put(masterFieldKey, dependencyRowValues);
-        }
-        
-        dependency.getDependencyMasterField().setDependencyValues(dependencyValuesHashMap, dependencyDomainValues);
+	  String masterFieldKey = "";
+	  if (depFields.size()>0) {
+	    for (String f : depFields) {
+	      String key = f;
+	      if (f.contains(".."))
+		key = f.substring(f.indexOf("..") + 2);
+	      if (dependencyRowValues.containsKey(key)) {
+		masterFieldKey = masterFieldKey + dependencyRowValues.get(key) + " "; 
+	      }
+	    }
+	    if (!masterFieldKey.equals("")) {
+	      masterFieldKey = masterFieldKey.substring(0, masterFieldKey.length() - 1);
+	    }
+	  } else {
+	    for (int j = 0; j < masterFieldNames.size(); ++j) {
+	      //            if (((String)masterFieldNames.get(j)).compareTo(masterFieldMainFieldName) == 0)
+	      //              masterFieldKey = masterFieldKey + dependencyRowValues.get(dependency.getDependencyMasterField().getForeignField()) + " ";
+	      //            else {
+	      //              masterFieldKey = masterFieldKey + dependencyRowValues.get(masterFieldNames.get(j)) + " ";
+	      //            }
+	      masterFieldKey = masterFieldKey + dependencyRowValues.get(visibleField) + " ";
+	    }
+	    masterFieldKey = masterFieldKey.substring(0, masterFieldKey.length() - 1);
+	  }
 
-        //set combobox value
-        String depValue = "";
-        if (depFields.size()>0) {
-        	for (String f : depFields) {
-        		if (valoresCampos.get(f)!=null) {
-        			depValue = depValue + valoresCampos.get(f).toString() + " - ";
-        		}
-        	}
-        	if (!depValue.equals("")) {
-        		depValue = depValue.substring(0, depValue.length() - 3);
-        	}
-        	dependency.getDependencyMasterField().setValue(depValue);
-        } else {
-        	dependency.getDependencyMasterField().setValue("");
-        }
+	  dependencyDomainValues.put(masterFieldKey, dependencyRowValues.get(dependency.getDependencyMasterField().getVisibleFieldName()));
+	  dependencyValuesHashMap.put(masterFieldKey, dependencyRowValues);
+	}
+
+	dependency.getDependencyMasterField().setDependencyValues(dependencyValuesHashMap, dependencyDomainValues);
+
+	//set combobox value
+	String depValue = "";
+	if (depFields.size()>0) {
+	  for (String f : depFields) {
+	    Object valor = valoresCampos.get(f);
+	    if (valor!=null) {
+	      depValue = depValue + valor.toString() + " ";
+	    }
+	  }
+	  if (!depValue.equals("")) {
+	    depValue = depValue.substring(0, depValue.length() - 1);
+	  }
+	  dependency.getDependencyMasterField().setValue(depValue);
+	} else {
+	  dependency.getDependencyMasterField().setValue("");
+	}
 
       }
     } catch (Exception e) {
