@@ -134,7 +134,9 @@ public class EditAlphanumericForm extends AlphanumericForm {
 				}
 			}
 			if (fill) {
-				source.fillValues();
+				source.fillValuesFromKey();
+			} else {
+			    	source.fillDefault();
 			}
 		}
 	}

@@ -66,7 +66,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 	private JPanel southPanel;
 	private JScrollPane centerPanel;
 	protected FormController form;
-	protected HashMap<String, String> key = new HashMap();
+	protected HashMap<String, String> key = new HashMap<String, String>();
 	private JButton editButton, newButton, closeButton;
 	private JPanel upperPanel;
 
@@ -255,6 +255,10 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 			System.out.println("Error en el formulario: " + e.getMessage());
 		}
 	}
+	
+	public void fillDefault() {
+	    form.fillFieldsDefault();
+	}
 
 	private FieldInterface getFocusField() {
 		ArrayList fields = form.getFieldsInterface();
@@ -273,7 +277,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 	}
 
 	/**
-	 * To get first key of the table, only used in open.
+	 * Sets the last key of the table, only used after closing edition panel.
 	 */
 	protected boolean setKey() throws FormException {
 		ArrayList keyFields = form.getKey();
@@ -285,7 +289,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		}
 		FieldController fc = (FieldController) keyFields.get(0);
 		String fieldName = fc.getName();
-		String fieldValue = getFirstKey(fieldName);
+		String fieldValue = getLastKey(fieldName);
 		boolean edit = fieldValue != null;
 		enableEdit(edit);
 		if (edit) {
@@ -335,15 +339,10 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		return where;
 	}
 
-	private String getFirstKey(String keyName) throws FormException {
-
-		FormsDAO fdao = new FormsDAO();
-		ArrayList<String> fields = new ArrayList<String>();
-		fields.add(keyName);
-		HashMap<String, String> values = fdao.getKeyValues(key,
-				form.getDataBase(), form.getTable(), fields);
-		return values.get(keyName);
-
+	private String getLastKey(String keyName) throws FormException {
+	    FormsDAO fdao = new FormsDAO();
+	    ArrayList<String> fields = new ArrayList<String>();
+	    return fdao.getHighestValue(key, form.getDataBase(), form.getTable(), keyName);	    
 	}
 
 	private void enableEdit(boolean enable) {
@@ -360,6 +359,10 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 				((DependencyMasterField) field).loadValue();
 			}
 		}
+	}
+	
+	public void fillValuesFromKey() {
+	    	form.fillForm(key);
 	}
 
 	public void close() {
