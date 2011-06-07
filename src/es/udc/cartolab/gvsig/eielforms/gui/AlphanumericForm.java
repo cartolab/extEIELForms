@@ -143,7 +143,8 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 									key.put(keyName, tf.getText());
 									form.getInterface().enablePollButton(true);
 									form.getInterface().enableNucleosRelationButton(true);
-									editButton.setEnabled(true);
+									if (editButton != null)
+										editButton.setEnabled(true);
 								}
 
 							});
