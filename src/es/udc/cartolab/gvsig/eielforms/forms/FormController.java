@@ -868,25 +868,16 @@ public class FormController extends Subject
 
 			DBSession dbs = DBSession.getCurrentSession();
 			if (dbs != null) {
-
-				ArrayList<String> keyNames = new ArrayList<String>();
-				for (int i=0; i<key.size();i++) {
-					FieldController fc = (FieldController) key.get(i);
-					keyNames.add(fc.getName());
+			    HashMap<String, String> fieldValues = getFieldValues(getFieldNames());
+			    FormsDAO fdao = new FormsDAO();
+			    try {
+				HashMap<String, String> val = fdao.getKeyValues(fieldValues, dbs.getSchema(), pollTable, getFieldNames());
+				if (!val.isEmpty()) {
+				    polled = true;
 				}
-
-				HashMap<String, String> keyValues = getFieldValues(keyNames);
-
-				FormsDAO fdao = new FormsDAO();
-				try {
-					HashMap<String, String> val = fdao.getKeyValues(keyValues, dbs.getSchema(), pollTable, keyNames);
-					if (!val.isEmpty()) {
-						polled = true;
-					}
-				} catch (FormException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			    } catch (FormException e) {
+				e.printStackTrace();
+			    }
 			}
 		}
 
