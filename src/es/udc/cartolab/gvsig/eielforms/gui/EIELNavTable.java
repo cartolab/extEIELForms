@@ -81,7 +81,7 @@ public class EIELNavTable extends AbstractNavTable {
 	}
 
 	public Object getWindowProfile() {
-		return null;
+		return WindowInfo.PROPERTIES_PROFILE;
 	}
 
 	private JPanel getThisNorthPanel() {
@@ -355,13 +355,12 @@ public class EIELNavTable extends AbstractNavTable {
 	public void open() {
 		PluginServices.getMDIManager().addCentredWindow(this);
 
-		WindowInfo viewInfo = super.getWindowInfo();
 		File header = getHeaderFile();
 		if (viewInfo != null && header != null && header.exists()) {
 			int ntHeight = viewInfo.getHeight();
 			int imgHeight = EIELValues.getInstance().getHeaderNT()
 					.getIconHeight();
-			viewInfo.setHeight(ntHeight + imgHeight + 35);
+			viewInfo.setHeight(ntHeight + imgHeight + 10);
 		}
 
 		// FieldInterface field = getFocusField();
@@ -390,4 +389,26 @@ public class EIELNavTable extends AbstractNavTable {
 		}
 	}
 
+	public WindowInfo getWindowInfo() {
+		if (viewInfo == null) {
+		    viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+			    | WindowInfo.RESIZABLE | WindowInfo.PALETTE);
+		    viewInfo.setTitle(PluginServices.getText(this, "NavTable"));
+		    // [NachoV] This Frame is just a trick to get the packed size
+		    // IWindow
+		    java.awt.Frame f = new java.awt.Frame();
+		    f.setLayout(new BorderLayout());
+		    f.add(getNorthPanel(), BorderLayout.NORTH);
+		    f.pack();
+		    viewInfo.setWidth(f.getWidth() + 50);
+		    f.add(getSouthPanel(), BorderLayout.SOUTH);
+		    JPanel centerPanel = getCenterPanel();
+		    if (centerPanel != null) {
+			f.add(centerPanel, BorderLayout.CENTER);
+		    }
+		    f.pack();
+		    viewInfo.setHeight(f.getHeight()+45);
+		}
+		return viewInfo;
+	    }
 }

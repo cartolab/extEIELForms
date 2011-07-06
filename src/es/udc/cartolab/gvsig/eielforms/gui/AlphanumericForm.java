@@ -97,8 +97,8 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 			} else {
 				width = new Double(dim.getWidth()).intValue();
 			}
-			viewInfo.setWidth(width + 20);
-			viewInfo.setHeight(heigth + 15);
+			viewInfo.setWidth(width + 25);
+			viewInfo.setHeight(heigth + 40);
 		}
 		return viewInfo;
 	}
@@ -214,7 +214,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 
 	public Object getWindowProfile() {
 		// TODO Auto-generated method stub
-		return null;
+		return WindowInfo.PROPERTIES_PROFILE;
 	}
 
 	/**
