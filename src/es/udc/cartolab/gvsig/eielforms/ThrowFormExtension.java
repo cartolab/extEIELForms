@@ -81,18 +81,29 @@ public class ThrowFormExtension extends Extension implements EndGeometryListener
 
 	private void toggleButton(boolean pushed) {
 		String tooltip;
-		if (!pushed) {
-			((MDIFrame)PluginServices.getMainFrame()).setSelectedTool("auto-navtable", "empty");
+		
+		try {
+		    MDIFrame f = ((MDIFrame)PluginServices.getMainFrame());
+		    if (f.getSelectedTools() == null) {
+			f.setSelectedTools(f.getInitialSelectedTools());
+		    }
+		    if (!pushed) {
+			f.setSelectedTool("auto-navtable", "empty");
 			tooltip = "Activar formularios automáticos";
-		} else {
-			((MDIFrame)PluginServices.getMainFrame()).setSelectedTool("auto-navtable", "auto-navtable");
+		    } else {
+			f.setSelectedTool("auto-navtable", "auto-navtable");
 			tooltip = "Desactivar formularios automáticos";
-		}
-		JToolBarToggleButton throwNTButton = (JToolBarToggleButton) PluginServices.getMainFrame().getComponentByName("throw-form");
-		if (throwNTButton!=null) {
+		    }
+		    JToolBarToggleButton throwNTButton = (JToolBarToggleButton) f.getComponentByName("throw-form");
+		    if (throwNTButton!=null) {
 			throwNTButton.setToolTip(tooltip);
+		    }
+		} catch (ClassCastException e) {
+		    e.printStackTrace();
 		}
 	}
+	
+	
 
 
 	public boolean isEnabled() {
