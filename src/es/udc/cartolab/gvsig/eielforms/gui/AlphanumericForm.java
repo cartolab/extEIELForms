@@ -35,6 +35,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -67,7 +68,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 	private JScrollPane centerPanel;
 	protected FormController form;
 	protected HashMap<String, String> key = new HashMap<String, String>();
-	private JButton editButton, newButton, closeButton;
+	private JButton editButton, newButton, closeButton, delButton;
 	private JPanel upperPanel;
 
 	public AlphanumericForm(String formName) {
@@ -145,6 +146,8 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 									form.getInterface().enableNucleosRelationButton(true);
 									if (editButton != null)
 										editButton.setEnabled(true);
+									if (delButton != null)
+										delButton.setEnabled(true);
 								}
 
 							});
@@ -185,6 +188,10 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 			editButton.setEnabled(false);
 			editButton.addActionListener(this);
 			southPanel.add(editButton);
+			delButton = new JButton("Eliminar");
+			delButton.setEnabled(false);
+			delButton.addActionListener(this);
+			southPanel.add(delButton);
 			newButton = new JButton("Nuevo registro");
 			newButton.addActionListener(this);
 			southPanel.add(newButton);
@@ -294,7 +301,7 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 		if (fieldValue.equals(""))
 			fieldValue = null;
 		boolean edit = fieldValue != null;
-		enableEdit(edit);
+		enableEditDel(edit);
 		if (edit) {
 			key.put(fieldName, fieldValue);
 		}
@@ -348,9 +355,12 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 	    return fdao.getHighestValue(key, form.getDataBase(), form.getTable(), keyName);	    
 	}
 
-	private void enableEdit(boolean enable) {
+	private void enableEditDel(boolean enable) {
 		if (editButton != null) {
 			editButton.setEnabled(enable);
+		}
+		if (delButton != null) {
+			delButton.setEnabled(enable);
 		}
 	}
 
@@ -381,6 +391,31 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 			EditAlphanumericForm eaf = new EditAlphanumericForm(this, formName,
 					pos);
 			eaf.open();
+		}
+
+		if (arg0.getSource() == delButton) {
+			Object[] options = {
+			    	PluginServices.getText(this, "eielForms_deleteButtonTooltip"),
+			    	PluginServices.getText(this, "eielForms_cancelButton") };
+			int response = JOptionPane.showOptionDialog(this,
+			    	PluginServices.getText(this, "eielForms_deleteRowMessage"),
+			    	PluginServices.getText(this, "eielForms_deleteRowTitle"),
+			    	JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+			    	null, // do not use a custom Icon
+			    	options, // the titles of buttons
+			    	options[1]); // default button title
+			switch (response){
+			    	case 0:
+			    		try {
+			    		  	FormGenerator fg = new FormGenerator();
+			    		  	form.delete(key);
+			    		  	fillDefault();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+			    	case 1:
+			    		break;
+			}
 		}
 
 		if (arg0.getSource() == newButton) {

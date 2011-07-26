@@ -521,6 +521,18 @@ public class FormController extends Subject
 
 	}
 
+	public void delete(HashMap key)
+	{
+		FormsDAO fdao = new FormsDAO();
+		try {
+		  	fdao.deleteEntity(key, dataBase, table);
+		} catch (FormException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	public boolean validate()
 	{
 		ArrayList grupos = getGroups();

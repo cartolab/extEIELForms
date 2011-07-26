@@ -255,11 +255,12 @@ public class FormsDAO {
 				statement = connection.createStatement();
 				int updatedRows = statement.executeUpdate(deleteString);
 
-				System.out.println("SENTENCIA DELETE EJECUTADA >>>>>>>>> \n" + deleteString);
+				if (updatedRows > 0)
+					System.out.println("SENTENCIA DELETE EJECUTADA CON ÉXITO ELIMINANDO " + updatedRows + " REGISTRO(S) >>>>>>>>> \n" + deleteString);
+				else
+					System.out.println("SENTENCIA DELETE EJECUTADA SIN ELIMINAR NINGÚN REGISTRO >>>>>>>>> \n" + deleteString);
 
-				int i = updatedRows;
-
-				return i;
+				return updatedRows;
 			} else {
 				throw new FormException("La sesion no se ha iniciado");
 			}
