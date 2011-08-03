@@ -241,11 +241,11 @@ public class FormsDAO {
 		String deleteString = "";
 
 		if (!schemaName.equals("")) {
-			deleteString = "DELETE FROM \"" + schemaName + "\"." + table + "\n";
+			deleteString = "BEGIN; DELETE FROM \"" + schemaName + "\"." + table + "\n";
 		} else {
-			deleteString = "DELETE FROM " + table + "\n";
+			deleteString = "BEGIN; DELETE FROM " + table + "\n";
 		}
-		deleteString = deleteString + condition;
+		deleteString = deleteString + condition + "; END;";
 		try
 		{
 			DBSession dbs = DBSession.getCurrentSession();
@@ -254,6 +254,7 @@ public class FormsDAO {
 
 				statement = connection.createStatement();
 				int updatedRows = statement.executeUpdate(deleteString);
+				statement.close();
 
 				if (updatedRows > 0)
 					System.out.println("SENTENCIA DELETE EJECUTADA CON ÉXITO ELIMINANDO " + updatedRows + " REGISTRO(S) >>>>>>>>> \n" + deleteString);
