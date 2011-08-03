@@ -128,7 +128,8 @@ public class DependencyMasterField extends ComboFieldInterface
 		{
 			if (DependencyMasterField.this.comboField.getItemCount() <= 0 ||
 					DependencyMasterField.this.comboField.getSelectedIndex() < 0) {
-				return;
+			  	DependencyMasterField.this.dependency.resetSlaveFields();
+			  	return;
 			}
 			int idx = comboField.getSelectedIndex();
 			String selectedValue = DependencyMasterField.this.getIndexKey(idx);

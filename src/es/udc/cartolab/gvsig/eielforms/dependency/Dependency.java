@@ -150,6 +150,21 @@ public class Dependency extends SingleFieldGroup
 		fireDependencyChanged();
 	}
 
+	protected void resetSlaveFields() {
+		ArrayList allFields = getFields();
+
+		for (int i = 0; i < allFields.size(); ++i)
+		{
+			FieldController oneFieldController = (FieldController)allFields.get(i);
+			if (oneFieldController.getDomain().getName().compareTo("dependencyMasterDomain") != 0) {
+				oneFieldController.setValue("");
+			}
+		}
+
+		loadData();
+		fireDependencyChanged();
+	}
+
 	public Dependency clonar() {
 		Dependency dependency = new Dependency(this.groupName, this.layout, this.table, this.dataBase, this.foreignKey);
 		dependency.setMasterFieldName(this.masterFieldName);
