@@ -69,6 +69,9 @@
 			<menu text="EIEL/Formularios/Servicios urbanos/Vertederos"
 				action-command="Vertederos_alfanumericos"
 				position="1107" />
+			<menu text="EIEL/Formularios/Servicios urbanos/Recogida de Basura"
+				action-command="Recogida_Basura"
+				position="1108" />
 
 
 
