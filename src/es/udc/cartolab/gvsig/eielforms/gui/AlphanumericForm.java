@@ -375,7 +375,10 @@ public class AlphanumericForm extends JPanel implements IWindow, ActionListener 
 	}
 	
 	public void fillValuesFromKey() {
-	    	form.fillForm(key);
+		String oldKey = ((Dependency) form.getDependencies().get(0)).getDependencyMasterField().getField().getValue();
+		fillDefault();
+		((Dependency) form.getDependencies().get(0)).getDependencyMasterField().getField().setValue(oldKey);
+		((Dependency) form.getDependencies().get(0)).getDependencyMasterField().loadValue();
 	}
 
 	public void close() {
